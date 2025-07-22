@@ -48,14 +48,35 @@ public class WhitelistCommand implements CommandExecutor {
             }
         }
         if (args.length == 2) {
+            String playerName = args[1];
+            if (playerName.length() > 16) {
+                sender.sendMessage(prefix.append(mm.deserialize("<red>Le pseudo ne doit pas dépasser 16 caractères.")));
+                return true;
+            }
             if (args[0].equalsIgnoreCase("add")) {
-                boolean success = whitelistListener.add(args[1]);
-                sender.sendMessage(prefix.append(mm.deserialize("<#ffc369>Le joueur <bold>" + args[1] + "</bold> a été ajouté à la whitelist.")));
+                if (whitelistListener.isWhitelisted(playerName)) {
+                    sender.sendMessage(prefix.append(mm.deserialize("<red>Ce joueur est déjà dans la whitelist.")));
+                    return true;
+                }
+                boolean success = whitelistListener.add(playerName);
+                if (success) {
+                    sender.sendMessage(prefix.append(mm.deserialize("<#ffc369>Le joueur <bold>" + playerName + "</bold> a été ajouté à la whitelist.")));
+                } else {
+                    sender.sendMessage(prefix.append(mm.deserialize("<red>Impossible d'ajouter le joueur.")));
+                }
                 return true;
             }
             if (args[0].equalsIgnoreCase("remove")) {
-                boolean success = whitelistListener.remove(args[1]);
-                sender.sendMessage(prefix.append(mm.deserialize("<#ffc369>Le joueur <bold>" + args[1] + "</bold> a été retiré de la whitelist.")));
+                if (!whitelistListener.isWhitelisted(playerName)) {
+                    sender.sendMessage(prefix.append(mm.deserialize("<red>Ce joueur n'est pas dans la whitelist.")));
+                    return true;
+                }
+                boolean success = whitelistListener.remove(playerName);
+                if (success) {
+                    sender.sendMessage(prefix.append(mm.deserialize("<#ffc369>Le joueur <bold>" + playerName + "</bold> a été retiré de la whitelist.")));
+                } else {
+                    sender.sendMessage(prefix.append(mm.deserialize("<red>Impossible de retirer le joueur.")));
+                }
                 return true;
             }
         }

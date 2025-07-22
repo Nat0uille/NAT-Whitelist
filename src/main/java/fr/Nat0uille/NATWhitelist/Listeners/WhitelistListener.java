@@ -42,6 +42,10 @@ public class WhitelistListener {
         return false;
     }
 
+    public boolean isWhitelisted(String playerName) {
+        return config.contains("players." + playerName);
+    }
+
     private void save() {
         try {
             config.save(file);
