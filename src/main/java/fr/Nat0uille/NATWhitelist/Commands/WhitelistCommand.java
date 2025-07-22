@@ -35,7 +35,7 @@ public class WhitelistCommand implements CommandExecutor {
 
         if (args.length == 1) {
             if (args[0].equalsIgnoreCase("list")) {
-                sender.sendMessage(prefix.append(mm.deserialize("<#ffc369><bold>LISTE</bold> <newline> ajout fonction ici")));
+                sender.sendMessage(prefix.append(mm.deserialize("<#ffc369><bold>LISTE</bold> <newline>" + whitelistListener.listWhitelistedPlayers())));
                 return true;
             }
             if (args[0].equalsIgnoreCase("add")) {

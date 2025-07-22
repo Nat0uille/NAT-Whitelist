@@ -7,6 +7,8 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
+import java.util.List;
+import java.util.ArrayList;
 
 public class WhitelistListener {
     private final JavaPlugin plugin;
@@ -44,6 +46,15 @@ public class WhitelistListener {
 
     public boolean isWhitelisted(String playerName) {
         return config.contains("players." + playerName);
+    }
+
+    public List<String> getWhitelistedPlayers() {
+        return new ArrayList<>(config.getConfigurationSection("players").getKeys(false));
+    }
+
+    public String listWhitelistedPlayers() {
+        List<String> players = getWhitelistedPlayers();
+        return String.join(", ", players);
     }
 
     private void save() {
