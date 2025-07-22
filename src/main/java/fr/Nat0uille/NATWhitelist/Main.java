@@ -2,7 +2,7 @@ package fr.Nat0uille.NATWhitelist;
 
  import fr.Nat0uille.NATWhitelist.Commands.*;
  import fr.Nat0uille.NATWhitelist.TabCompleter.*;
- import fr.Nat0uille.NATWhitelist.Listeners.WhitelistListener;
+ import fr.Nat0uille.NATWhitelist.Listeners.*;
  import org.bukkit.Bukkit;
  import org.bukkit.plugin.java.JavaPlugin;
 
@@ -22,6 +22,8 @@ public final class Main extends JavaPlugin {
         getCommand("wl").setTabCompleter(tabCompleter);
 
         Bukkit.getScheduler().runTaskTimer(this, tabCompleter::updateCache, 0L, 20L);
+
+        getServer().getPluginManager().registerEvents(new PlayerListener(whitelistListener), this);
     }
 
     @Override

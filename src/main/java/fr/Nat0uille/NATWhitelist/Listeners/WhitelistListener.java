@@ -14,6 +14,7 @@ public class WhitelistListener {
     private final JavaPlugin plugin;
     private final File file;
     private final YamlConfiguration config;
+    private boolean enabled;
 
     public WhitelistListener(JavaPlugin plugin) {
         this.plugin = plugin;

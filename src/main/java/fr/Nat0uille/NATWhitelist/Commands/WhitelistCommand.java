@@ -46,6 +46,16 @@ public class WhitelistCommand implements CommandExecutor {
                 sender.sendMessage(prefix.append(mm.deserialize("<#ffc369>/whitelist remove <player>")));
                 return true;
             }
+            if (args[0].equalsIgnoreCase("on")) {
+                whitelistListener.setEnabled(true);
+                sender.sendMessage(prefix.append(mm.deserialize("<#ffc369>La whitelist est maintenant <green>activée</green>.")));
+                return true;
+            }
+            if (args[0].equalsIgnoreCase("off")) {
+                whitelistListener.setEnabled(false);
+                sender.sendMessage(prefix.append(mm.deserialize("<#ffc369>La whitelist est maintenant <red>désactivée</red>.")));
+                return true;
+            }
         }
         if (args.length == 2) {
             String playerName = args[1];
