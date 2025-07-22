@@ -6,12 +6,13 @@ public final class Main extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        // Plugin startup logic
+        getLogger().info(getDescription().getName() + " Par " + String.join(", ", getDescription().getAuthors()));
+        getLogger().info("Version: " + getDescription().getVersion());
 
     }
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
+        getLogger().info(getDescription().getName() + " désactivé !");
     }
 }
