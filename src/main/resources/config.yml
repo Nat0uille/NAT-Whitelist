@@ -1,0 +1,9 @@
+#############################################
+# Fichier de configuration NAT-Whitelist    #
+# Par Nat0uille                             #
+#############################################
+# Tous les textes utilise le format MiniMessage, si vous utilisez autre chose ça fonctionner pas !!!
+# Pour créer vos messages, vous pouvez utiliser le site https://webui.advntr.dev/
+
+prefix: "<bold><gradient:#C70000:#951919>NAT-Whitelist</gradient></bold> <gray>• "
+nopermission: "<#C70000><bold>✖</bold> Vous n'avez pas la permission d'exécuter cette commande."

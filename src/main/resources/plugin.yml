@@ -1,6 +1,13 @@
 name: NAT-Whitelist
-version: '1.0-ALPHA'
+version: ${version}
 main: fr.Nat0uille.NATWhitelist.Main
 api-version: '1.21'
 load: STARTUP
 authors: [ Nat0uille ]
+Commands:
+  whitelist:
+    alias: wl
+    usage: /<command>
+Permissions:
+  NatWhitelist.Use:
+    default: op
