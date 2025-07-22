@@ -19,6 +19,7 @@ public class WhitelistListener {
         this.plugin = plugin;
         this.file = new File(plugin.getDataFolder(), "whitelist.yml");
         this.config = YamlConfiguration.loadConfiguration(file);
+        this.enabled = config.getBoolean("enabled", false);
     }
 
     public boolean add(String playerName) {
@@ -63,5 +64,19 @@ public class WhitelistListener {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+        config.set("enabled", enabled);
+        save();
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void toggleEnabled() {
+        setEnabled(!enabled);
     }
 }

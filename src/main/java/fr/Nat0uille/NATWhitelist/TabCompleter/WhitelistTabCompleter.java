@@ -25,7 +25,7 @@ public class WhitelistTabCompleter implements TabCompleter {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         if (args.length == 1) {
-            return Arrays.asList("add", "remove", "list");
+            return Arrays.asList("add", "remove", "list", "on", "off");
         }
         if (args.length == 2 && args[0].equalsIgnoreCase("remove")) {
             return cachedPlayers;
