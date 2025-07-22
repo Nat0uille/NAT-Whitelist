@@ -4,10 +4,10 @@ main: fr.Nat0uille.NATWhitelist.Main
 api-version: '1.21'
 load: STARTUP
 authors: [ Nat0uille ]
-Commands:
+commands:
   whitelist:
-    alias: wl
-    usage: /<command>
-Permissions:
+    aliases: wl
+    usage: /<command> <add|remove|list|> [<player>]
+permissions:
   NatWhitelist.Use:
     default: op
