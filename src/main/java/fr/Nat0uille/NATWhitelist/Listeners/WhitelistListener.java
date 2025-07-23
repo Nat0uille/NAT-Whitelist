@@ -1,11 +1,15 @@
 package fr.Nat0uille.NATWhitelist.Listeners;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import fr.Nat0uille.NATWhitelist.Main;
 
 import java.io.File;
 import java.io.IOException;
@@ -101,5 +105,16 @@ public class WhitelistListener {
             }
         } catch (Exception ignored) {}
         return null;
+    }
+
+    public void kickNonWhitelistedPlayers(Main main) {
+        MiniMessage mm = MiniMessage.miniMessage();
+        Component prefix = mm.deserialize(main.getConfig().getString("prefix"));
+        Component kickmessage = mm.deserialize(main.getConfig().getString("kickmessage"));
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            if (!isWhitelisted(player.getName())) {
+                player.kick(prefix.append(kickmessage));
+            }
+        }
     }
 }

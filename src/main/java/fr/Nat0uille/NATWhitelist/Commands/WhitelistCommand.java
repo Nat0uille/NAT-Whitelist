@@ -48,6 +48,7 @@ public class WhitelistCommand implements CommandExecutor {
             }
             if (args[0].equalsIgnoreCase("on")) {
                 whitelistListener.setEnabled(true);
+                whitelistListener.kickNonWhitelistedPlayers(main);
                 sender.sendMessage(prefix.append(mm.deserialize("<#ffc369>La whitelist est maintenant <#63c74d>activée<#ffc369>.")));
                 return true;
             }
