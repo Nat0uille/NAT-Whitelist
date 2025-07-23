@@ -53,45 +53,45 @@ public class WhitelistCommand implements CommandExecutor {
             }
             if (args[0].equalsIgnoreCase("off")) {
                 whitelistListener.setEnabled(false);
-                sender.sendMessage(prefix.append(mm.deserialize("<#ffc369>La whitelist est maintenant <red>désactivée</red>.")));
+                sender.sendMessage(prefix.append(mm.deserialize("<#ffc369>La whitelist est maintenant <#C70000>désactivée.")));
                 return true;
             }
         }
         if (args.length == 2) {
             String playerName = args[1];
             if (playerName.length() > 16) {
-                sender.sendMessage(prefix.append(mm.deserialize("<red>Le pseudo ne doit pas dépasser 16 caractères.")));
+                sender.sendMessage(prefix.append(mm.deserialize("<#C70000>Le pseudo ne doit pas dépasser 16 caractères.")));
                 return true;
             }
             if (args[0].equalsIgnoreCase("add")) {
                 org.bukkit.OfflinePlayer offlinePlayer = main.getServer().getOfflinePlayer(playerName);
                 String correctName = whitelistListener.getCorrectUsernameFromMojang(playerName);
                 if (correctName == null) {
-                    sender.sendMessage(prefix.append(mm.deserialize("<red>Ce pseudo n'existe pas.")));
+                    sender.sendMessage(prefix.append(mm.deserialize("<#C70000>Ce pseudo n'existe pas.")));
                     return true;
                 }
                 if (whitelistListener.isWhitelisted(correctName)) {
-                    sender.sendMessage(prefix.append(mm.deserialize("<red>Ce joueur est déjà dans la whitelist.")));
+                    sender.sendMessage(prefix.append(mm.deserialize("<#C70000>Ce joueur est déjà dans la whitelist.")));
                     return true;
                 }
                 boolean success = whitelistListener.add(correctName);
                 if (success) {
                     sender.sendMessage(prefix.append(mm.deserialize("<#ffc369>Le joueur <bold>" + correctName + "</bold> a été ajouté à la whitelist.")));
                 } else {
-                    sender.sendMessage(prefix.append(mm.deserialize("<red>Impossible d'ajouter le joueur.")));
+                    sender.sendMessage(prefix.append(mm.deserialize("<#C70000>Impossible d'ajouter le joueur.")));
                 }
                 return true;
             }
             if (args[0].equalsIgnoreCase("remove")) {
                 if (!whitelistListener.isWhitelisted(playerName)) {
-                    sender.sendMessage(prefix.append(mm.deserialize("<red>Ce joueur n'est pas dans la whitelist.")));
+                    sender.sendMessage(prefix.append(mm.deserialize("<#C70000>Ce joueur n'est pas dans la whitelist.")));
                     return true;
                 }
                 boolean success = whitelistListener.remove(playerName);
                 if (success) {
                     sender.sendMessage(prefix.append(mm.deserialize("<#ffc369>Le joueur <bold>" + playerName + "</bold> a été retiré de la whitelist.")));
                 } else {
-                    sender.sendMessage(prefix.append(mm.deserialize("<red>Impossible de retirer le joueur.")));
+                    sender.sendMessage(prefix.append(mm.deserialize("<#C70000>Impossible de retirer le joueur.")));
                 }
                 return true;
             }
