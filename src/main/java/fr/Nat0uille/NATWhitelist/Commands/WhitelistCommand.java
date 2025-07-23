@@ -64,13 +64,19 @@ public class WhitelistCommand implements CommandExecutor {
                 return true;
             }
             if (args[0].equalsIgnoreCase("add")) {
-                if (whitelistListener.isWhitelisted(playerName)) {
+                org.bukkit.OfflinePlayer offlinePlayer = main.getServer().getOfflinePlayer(playerName);
+                String correctName = whitelistListener.getCorrectUsernameFromMojang(playerName);
+                if (correctName == null) {
+                    sender.sendMessage(prefix.append(mm.deserialize("<red>Ce pseudo n'existe pas.")));
+                    return true;
+                }
+                if (whitelistListener.isWhitelisted(correctName)) {
                     sender.sendMessage(prefix.append(mm.deserialize("<red>Ce joueur est déjà dans la whitelist.")));
                     return true;
                 }
-                boolean success = whitelistListener.add(playerName);
+                boolean success = whitelistListener.add(correctName);
                 if (success) {
-                    sender.sendMessage(prefix.append(mm.deserialize("<#ffc369>Le joueur <bold>" + playerName + "</bold> a été ajouté à la whitelist.")));
+                    sender.sendMessage(prefix.append(mm.deserialize("<#ffc369>Le joueur <bold>" + correctName + "</bold> a été ajouté à la whitelist.")));
                 } else {
                     sender.sendMessage(prefix.append(mm.deserialize("<red>Impossible d'ajouter le joueur.")));
                 }

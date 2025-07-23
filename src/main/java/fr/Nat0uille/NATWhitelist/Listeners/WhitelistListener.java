@@ -4,8 +4,14 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.UUID;
 import java.util.List;
 import java.util.ArrayList;
@@ -47,7 +53,7 @@ public class WhitelistListener {
     }
 
     public boolean isWhitelisted(String playerName) {
-        List<String> whitelistedPlayers = getWhitelistedPlayers(); // recharge à chaque appel
+        List<String> whitelistedPlayers = getWhitelistedPlayers();
         return whitelistedPlayers.contains(playerName);
     }
 
@@ -84,5 +90,22 @@ public class WhitelistListener {
 
     public void toggleEnabled() {
         setEnabled(!enabled);
+    }
+
+    public static String getCorrectUsernameFromMojang(String username) {
+        try {
+            URL url = new URL("https://api.mojang.com/users/profiles/minecraft/" + username);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            connection.setConnectTimeout(3000);
+            connection.setReadTimeout(3000);
+
+            if (connection.getResponseCode() == 200) {
+                JSONParser parser = new JSONParser();
+                JSONObject response = (JSONObject) parser.parse(new InputStreamReader(connection.getInputStream()));
+                return (String) response.get("name");
+            }
+        } catch (Exception ignored) {}
+        return null;
     }
 }
