@@ -65,7 +65,7 @@ public class WhitelistCommand implements CommandExecutor {
             }
             if (args[0].equalsIgnoreCase("add")) {
                 org.bukkit.OfflinePlayer offlinePlayer = main.getServer().getOfflinePlayer(playerName);
-                String correctName = whitelistListener.getCorrectUsernameFromMojang(playerName);
+                String correctName = WhitelistListener.getCorrectUsernameFromMojang(playerName);
                 if (correctName == null) {
                     sender.sendMessage(prefix.append(mm.deserialize("<#C70000>Ce pseudo n'existe pas.")));
                     return true;
