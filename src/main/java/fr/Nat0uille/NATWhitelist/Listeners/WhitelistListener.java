@@ -17,13 +17,11 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class WhitelistListener {
-    private final JavaPlugin plugin;
     private final File file;
     private final YamlConfiguration config;
     private boolean enabled;
 
     public WhitelistListener(JavaPlugin plugin) {
-        this.plugin = plugin;
         this.file = new File(plugin.getDataFolder(), "whitelist.yml");
         this.config = YamlConfiguration.loadConfiguration(file);
         this.enabled = config.getBoolean("enabled", false);
@@ -86,10 +84,6 @@ public class WhitelistListener {
 
     public boolean isEnabled() {
         return enabled;
-    }
-
-    public void toggleEnabled() {
-        setEnabled(!enabled);
     }
 
     public static String getCorrectUsernameFromMojang(String username) {
