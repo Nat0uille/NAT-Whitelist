@@ -89,6 +89,7 @@ public class WhitelistCommand implements CommandExecutor {
                 }
                 boolean success = whitelistListener.remove(playerName);
                 if (success) {
+                    whitelistListener.kickNonWhitelistedPlayers(main);
                     sender.sendMessage(prefix.append(mm.deserialize("<#ffc369>Le joueur <bold>" + playerName + "</bold> a été retiré de la whitelist.")));
                 } else {
                     sender.sendMessage(prefix.append(mm.deserialize("<#C70000>Impossible de retirer le joueur.")));
