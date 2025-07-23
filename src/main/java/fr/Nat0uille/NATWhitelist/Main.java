@@ -23,7 +23,7 @@ public final class Main extends JavaPlugin {
 
         Bukkit.getScheduler().runTaskTimer(this, tabCompleter::updateCache, 0L, 20L);
 
-        getServer().getPluginManager().registerEvents(new PlayerListener(whitelistListener), this);
+        getServer().getPluginManager().registerEvents(new PlayerListener(whitelistListener, this), this);
     }
 
     @Override

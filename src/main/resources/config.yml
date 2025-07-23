@@ -7,3 +7,4 @@
 
 prefix: "<bold><gradient:#C70000:#951919>NAT-Whitelist</gradient></bold> <gray>• "
 nopermission: "<#C70000><bold>✖</bold> Vous n'avez pas la permission d'exécuter cette commande."
+kickmessage: "<#C70000><bold>✖</bold> Vous n'êtes pas whitelist sur ce serveur."
