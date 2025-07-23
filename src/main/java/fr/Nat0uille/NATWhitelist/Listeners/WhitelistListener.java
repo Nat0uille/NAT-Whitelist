@@ -47,11 +47,16 @@ public class WhitelistListener {
     }
 
     public boolean isWhitelisted(String playerName) {
-        return config.contains("players." + playerName);
+        List<String> whitelistedPlayers = getWhitelistedPlayers(); // recharge à chaque appel
+        return whitelistedPlayers.contains(playerName);
     }
 
     public List<String> getWhitelistedPlayers() {
-        return new ArrayList<>(config.getConfigurationSection("players").getKeys(false));
+        YamlConfiguration freshConfig = YamlConfiguration.loadConfiguration(file);
+        if (freshConfig.contains("players")) {
+            return new ArrayList<>(freshConfig.getConfigurationSection("players").getKeys(false));
+        }
+        return new ArrayList<>();
     }
 
     public String listWhitelistedPlayers() {
