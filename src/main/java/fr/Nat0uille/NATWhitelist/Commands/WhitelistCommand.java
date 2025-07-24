@@ -47,15 +47,27 @@ public class WhitelistCommand implements CommandExecutor {
                 return true;
             }
             if (args[0].equalsIgnoreCase("on")) {
+                if (whitelistListener.isEnabled()) {
+                    sender.sendMessage(prefix.append(mm.deserialize("<#C70000>La whitelist est déjà activée.")));
+                    return true;
+                }
+                else {
                 whitelistListener.setEnabled(true);
                 whitelistListener.kickNonWhitelistedPlayers(main);
                 sender.sendMessage(prefix.append(mm.deserialize("<#ffc369>La whitelist est maintenant <#63c74d>activée<#ffc369>.")));
                 return true;
+                }
             }
             if (args[0].equalsIgnoreCase("off")) {
-                whitelistListener.setEnabled(false);
-                sender.sendMessage(prefix.append(mm.deserialize("<#ffc369>La whitelist est maintenant <#C70000>désactivée<#ffc369>.")));
-                return true;
+                if (!whitelistListener.isEnabled()) {
+                    sender.sendMessage(prefix.append(mm.deserialize("<#C70000>La whitelist est déjà désactivée.")));
+                    return true;
+                }
+                else {
+                    whitelistListener.setEnabled(false);
+                    sender.sendMessage(prefix.append(mm.deserialize("<#ffc369>La whitelist est maintenant <#C70000>désactivée<#ffc369>.")));
+                    return true;
+                }
             }
         }
         if (args.length == 2) {
