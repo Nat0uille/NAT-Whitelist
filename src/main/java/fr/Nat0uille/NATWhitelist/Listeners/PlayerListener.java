@@ -6,6 +6,7 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.event.Listener;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerLoginEvent;
+import java.sql.SQLException;
 
 public class PlayerListener implements Listener {
     private final WhitelistListener whitelistListener;
@@ -22,8 +23,13 @@ public class PlayerListener implements Listener {
         Component prefix = mm.deserialize(main.getConfig().getString("prefix"));
         Component kickmessage = mm.deserialize(main.getConfig().getString("kickmessage"));
         String playerName = event.getPlayer().getName();
-        if (whitelistListener.isEnabled() && !whitelistListener.isWhitelisted(playerName)) {
-            event.disallow(PlayerLoginEvent.Result.KICK_WHITELIST, prefix.append(kickmessage));
+        try {
+            if (whitelistListener.isEnabled() && !whitelistListener.isWhitelisted(playerName)) {
+                event.disallow(PlayerLoginEvent.Result.KICK_WHITELIST, prefix.append(kickmessage));
+            }
+        } catch (SQLException e) {
+            event.disallow(PlayerLoginEvent.Result.KICK_WHITELIST, prefix.append(mm.deserialize("<red>Erreur SQL</red>")));
+            e.printStackTrace();
         }
     }
 }

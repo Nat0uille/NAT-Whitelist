@@ -5,6 +5,16 @@
 # Tous les textes utilise le format MiniMessage, si vous utilisez autre chose ça fonctionner pas !!!
 # Pour créer vos messages, vous pouvez utiliser le site https://webui.advntr.dev/
 
+database:
+  # Format : MySQL / SQLite
+  type: "SQLite"
+    # Pour MySQL, remplissez les champs suivants
+  host: "localhost"
+  port: 3306
+  database: "nat_whitelist"
+  username: ""
+  password: ""
+
 prefix: "<bold><gradient:#C70000:#951919>NAT-Whitelist</gradient></bold> <gray>• "
 nopermission: "<#C70000><bold>✖</bold> Vous n'avez pas la permission d'exécuter cette commande."
 kickmessage: "<#C70000><bold>✖</bold> Vous n'êtes pas whitelist sur ce serveur."

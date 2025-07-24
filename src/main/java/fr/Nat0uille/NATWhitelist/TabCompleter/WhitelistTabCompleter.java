@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.ArrayList;
 import fr.Nat0uille.NATWhitelist.Listeners.WhitelistListener;
 import org.bukkit.entity.Player;
+import java.sql.SQLException;
 
 public class WhitelistTabCompleter implements TabCompleter {
     private final WhitelistListener whitelistListener;
@@ -21,7 +22,12 @@ public class WhitelistTabCompleter implements TabCompleter {
     }
 
     public void updateCache() {
-        cachedPlayers = whitelistListener.getWhitelistedPlayers();
+        try {
+            cachedPlayers = whitelistListener.getWhitelistedPlayers();
+        } catch (SQLException e) {
+            cachedPlayers = new ArrayList<>();
+            e.printStackTrace();
+        }
     }
 
     @Override

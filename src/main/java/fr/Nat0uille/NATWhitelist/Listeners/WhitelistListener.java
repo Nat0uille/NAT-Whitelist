@@ -5,85 +5,69 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import fr.Nat0uille.NATWhitelist.Main;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import java.sql.*;
 import java.util.UUID;
 import java.util.List;
 import java.util.ArrayList;
 
 public class WhitelistListener {
-    private final File file;
-    private final YamlConfiguration config;
-    private boolean enabled;
+    private final Connection conn;
+    private boolean enabled = false;
 
-    public WhitelistListener(JavaPlugin plugin) {
-        this.file = new File(plugin.getDataFolder(), "whitelist.yml");
-        this.config = YamlConfiguration.loadConfiguration(file);
-        this.enabled = config.getBoolean("enabled", false);
+    public WhitelistListener(Connection conn) {
+        this.conn = conn;
     }
 
-    public boolean add(String playerName) {
+    public boolean add(String playerName) throws SQLException {
         OfflinePlayer player = Bukkit.getOfflinePlayer(playerName);
         UUID uuid = player.getUniqueId();
-        String path = "players." + playerName;
-
-        if (!config.contains(path)) {
-            config.set(path, uuid.toString());
-            save();
-            return true;
+        String sql = "INSERT OR IGNORE INTO nat_whitelist (player_name, uuid) VALUES (?, ?)";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, playerName);
+            stmt.setString(2, uuid.toString());
+            return stmt.executeUpdate() > 0;
         }
-        return false;
     }
 
-    public boolean remove(String playerName) {
-        String path = "players." + playerName;
-        if (config.contains(path)) {
-            config.set(path, null);
-            save();
-            return true;
+    public boolean remove(String playerName) throws SQLException {
+        String sql = "DELETE FROM nat_whitelist WHERE player_name = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, playerName);
+            return stmt.executeUpdate() > 0;
         }
-        return false;
     }
 
-    public boolean isWhitelisted(String playerName) {
-        List<String> whitelistedPlayers = getWhitelistedPlayers();
-        return whitelistedPlayers.contains(playerName);
-    }
-
-    public List<String> getWhitelistedPlayers() {
-        YamlConfiguration freshConfig = YamlConfiguration.loadConfiguration(file);
-        if (freshConfig.contains("players")) {
-            return new ArrayList<>(freshConfig.getConfigurationSection("players").getKeys(false));
+    public boolean isWhitelisted(String playerName) throws SQLException {
+        String sql = "SELECT 1 FROM nat_whitelist WHERE player_name = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, playerName);
+            try (ResultSet rs = stmt.executeQuery()) {
+                return rs.next();
+            }
         }
-        return new ArrayList<>();
     }
 
-    public String listWhitelistedPlayers() {
+    public List<String> getWhitelistedPlayers() throws SQLException {
+        List<String> players = new ArrayList<>();
+        String sql = "SELECT player_name FROM nat_whitelist";
+        try (Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                players.add(rs.getString("player_name"));
+            }
+        }
+        return players;
+    }
+
+    public String listWhitelistedPlayers() throws SQLException {
         List<String> players = getWhitelistedPlayers();
         return String.join(", ", players);
     }
 
-    private void save() {
-        try {
-            config.save(file);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
-        config.set("enabled", enabled);
-        save();
     }
 
     public boolean isEnabled() {
@@ -92,22 +76,22 @@ public class WhitelistListener {
 
     public static String getCorrectUsernameFromMojang(String username) {
         try {
-            URL url = new URL("https://api.mojang.com/users/profiles/minecraft/" + username);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            java.net.URL url = new java.net.URL("https://api.mojang.com/users/profiles/minecraft/" + username);
+            java.net.HttpURLConnection connection = (java.net.HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
             connection.setConnectTimeout(3000);
             connection.setReadTimeout(3000);
 
             if (connection.getResponseCode() == 200) {
-                JSONParser parser = new JSONParser();
-                JSONObject response = (JSONObject) parser.parse(new InputStreamReader(connection.getInputStream()));
+                org.json.simple.parser.JSONParser parser = new org.json.simple.parser.JSONParser();
+                org.json.simple.JSONObject response = (org.json.simple.JSONObject) parser.parse(new java.io.InputStreamReader(connection.getInputStream()));
                 return (String) response.get("name");
             }
         } catch (Exception ignored) {}
         return null;
     }
 
-    public void kickNonWhitelistedPlayers(Main main) {
+    public void kickNonWhitelistedPlayers(Main main) throws SQLException {
         MiniMessage mm = MiniMessage.miniMessage();
         Component prefix = mm.deserialize(main.getConfig().getString("prefix"));
         Component kickmessage = mm.deserialize(main.getConfig().getString("kickmessage"));
