@@ -32,26 +32,29 @@ public class WhitelistTabCompleter implements TabCompleter {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+        updateCache();
         if (args.length == 1) {
             return Arrays.asList("add", "remove", "list", "on", "off");
         }
-        if (args.length == 2) {
-            String prefix = args[1].toLowerCase();
-            if (args[0].equalsIgnoreCase("remove")) {
-                List<String> result = new ArrayList<>();
-                for (String player : cachedPlayers) {
-                    if (player.toLowerCase().startsWith(prefix)) {
-                        result.add(player);
-                    }
-                }
-                return result;
-            }
+        if (args.length >= 2) {
+            String prefix = args[args.length - 1].toLowerCase();
+            List<String> alreadyTyped = Arrays.asList(Arrays.copyOfRange(args, 1, args.length - 1));
+            List<String> result = new ArrayList<>();
             if (args[0].equalsIgnoreCase("add")) {
-                List<String> result = new ArrayList<>();
                 for (Player player : Bukkit.getOnlinePlayers()) {
                     String name = player.getName();
-                    if (!cachedPlayers.contains(name) && name.toLowerCase().startsWith(prefix)) {
+                    if (!cachedPlayers.contains(name) && !alreadyTyped.contains(name) &&
+                            (prefix.isEmpty() || name.toLowerCase().startsWith(prefix))) {
                         result.add(name);
+                    }
+                }
+
+                return result;
+            }
+            if (args[0].equalsIgnoreCase("remove")) {
+                for (String player : cachedPlayers) {
+                    if (!alreadyTyped.contains(player) && (prefix.isEmpty() || player.toLowerCase().startsWith(prefix))) {
+                        result.add(player);
                     }
                 }
                 return result;

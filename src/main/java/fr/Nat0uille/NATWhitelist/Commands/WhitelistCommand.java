@@ -80,6 +80,7 @@ public class WhitelistCommand implements CommandExecutor {
                 }
             }
         }
+
         if (args.length == 2) {
             String playerName = args[1];
             if (playerName.length() > 16) {
@@ -129,6 +130,57 @@ public class WhitelistCommand implements CommandExecutor {
                 return true;
             }
         }
+
+        if (args.length >= 2 && (args[0].equalsIgnoreCase("add") || args[0].equalsIgnoreCase("remove"))) {
+            for (int i = 1; i < args.length; i++) {
+                String playerName = args[i];
+                if (playerName.length() > 16) {
+                    sender.sendMessage(prefix.append(mm.deserialize("<#C70000>Le pseudo " + playerName + " ne doit pas dépasser 16 caractères.")));
+                    continue;
+                }
+                if (args[0].equalsIgnoreCase("add")) {
+                    String correctName = WhitelistListener.getCorrectUsernameFromMojang(playerName);
+                    if (correctName == null) {
+                        sender.sendMessage(prefix.append(mm.deserialize("<#C70000>Le pseudo " + playerName + " n'existe pas.")));
+                        continue;
+                    }
+                    try {
+                        if (whitelistListener.isWhitelisted(correctName)) {
+                            sender.sendMessage(prefix.append(mm.deserialize("<#C70000>Le joueur " + correctName + " est déjà dans la whitelist.")));
+                            continue;
+                        }
+                        boolean success = whitelistListener.add(correctName);
+                        if (success) {
+                            sender.sendMessage(prefix.append(mm.deserialize("<#ffc369>Le joueur <bold>" + correctName + "</bold> a été ajouté à la whitelist.")));
+                        } else {
+                            sender.sendMessage(prefix.append(mm.deserialize("<#C70000>Impossible d'ajouter le joueur " + correctName + ".")));
+                        }
+                    } catch (SQLException e) {
+                        sender.sendMessage(prefix.append(mm.deserialize("<#C70000>Erreur SQL lors de l'ajout de " + correctName + ".")));
+                        e.printStackTrace();
+                    }
+                } else if (args[0].equalsIgnoreCase("remove")) {
+                    try {
+                        if (!whitelistListener.isWhitelisted(playerName)) {
+                            sender.sendMessage(prefix.append(mm.deserialize("<#C70000>Le joueur " + playerName + " n'est pas dans la whitelist.")));
+                            continue;
+                        }
+                        boolean success = whitelistListener.remove(playerName);
+                        if (success) {
+                            whitelistListener.kickNonWhitelistedPlayers(main);
+                            sender.sendMessage(prefix.append(mm.deserialize("<#ffc369>Le joueur <bold>" + playerName + "</bold> a été retiré de la whitelist.")));
+                        } else {
+                            sender.sendMessage(prefix.append(mm.deserialize("<#C70000>Impossible de retirer le joueur " + playerName + ".")));
+                        }
+                    } catch (SQLException e) {
+                        sender.sendMessage(prefix.append(mm.deserialize("<#C70000>Erreur SQL lors du retrait de " + playerName + ".")));
+                        e.printStackTrace();
+                    }
+                }
+            }
+            return true;
+        }
+
         return false;
     }
 }
