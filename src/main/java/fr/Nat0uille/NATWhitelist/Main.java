@@ -32,6 +32,11 @@ public final class Main extends JavaPlugin {
                 Class.forName("com.mysql.cj.jdbc.Driver");
                 String url = "jdbc:mysql://" + host + ":" + port + "/" + dbName;
                 sqlConnection = DriverManager.getConnection(url, username, password);
+                try (Statement stmt = sqlConnection.createStatement()) {
+                    stmt.executeUpdate("CREATE TABLE IF NOT EXISTS nat_whitelist (player_name VARCHAR(16) PRIMARY KEY, uuid VARCHAR(36))");
+                } catch (SQLException e) {
+                    getLogger().severe("Erreur lors de la création de la table nat_whitelist : " + e.getMessage());
+                }
             } else {
                 Class.forName("org.sqlite.JDBC");
                 if (!getDataFolder().exists()) {
