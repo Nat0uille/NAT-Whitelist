@@ -1,11 +1,15 @@
 package fr.Nat0uille.NATWhitelist.Listeners;
 
+import com.google.gson.JsonParser;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import fr.Nat0uille.NATWhitelist.Main;
+import java.net.URL;
+import java.net.HttpURLConnection;
+import com.google.gson.JsonObject;
 
 import java.sql.*;
 import java.util.UUID;
@@ -76,16 +80,17 @@ public class WhitelistListener {
 
     public static String getCorrectUsernameFromMojang(String username) {
         try {
-            java.net.URL url = new java.net.URL("https://api.mojang.com/users/profiles/minecraft/" + username);
-            java.net.HttpURLConnection connection = (java.net.HttpURLConnection) url.openConnection();
+            URL url = new URL("https://api.mojang.com/users/profiles/minecraft/" + username);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
             connection.setConnectTimeout(3000);
             connection.setReadTimeout(3000);
 
             if (connection.getResponseCode() == 200) {
-                org.json.simple.parser.JSONParser parser = new org.json.simple.parser.JSONParser();
-                org.json.simple.JSONObject response = (org.json.simple.JSONObject) parser.parse(new java.io.InputStreamReader(connection.getInputStream()));
-                return (String) response.get("name");
+                JsonObject response = new JsonParser()
+                    .parse(new java.io.InputStreamReader(connection.getInputStream()))
+                    .getAsJsonObject();
+                return response.get("name").getAsString();
             }
         } catch (Exception ignored) {}
         return null;
