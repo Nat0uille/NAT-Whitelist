@@ -27,7 +27,12 @@ public class WhitelistListener {
     public boolean add(String playerName) throws SQLException {
         OfflinePlayer player = Bukkit.getOfflinePlayer(playerName);
         UUID uuid = player.getUniqueId();
-        String sql = "INSERT OR IGNORE INTO nat_whitelist (player_name, uuid) VALUES (?, ?)";
+        String sql;
+        if (isMySQL) {
+            sql = "INSERT IGNORE INTO nat_whitelist (player_name, uuid) VALUES (?, ?)";
+        } else {
+            sql = "INSERT OR IGNORE INTO nat_whitelist (player_name, uuid) VALUES (?, ?)";
+        }
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, playerName);
             stmt.setString(2, uuid.toString());
