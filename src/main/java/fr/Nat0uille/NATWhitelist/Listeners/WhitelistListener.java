@@ -18,17 +18,20 @@ import java.util.ArrayList;
 
 public class WhitelistListener {
     private final Connection conn;
+    private Main main;
     private boolean enabled = false;
 
-    public WhitelistListener(Connection conn) {
+    public WhitelistListener(Main main, Connection conn) {
+        this.main = main;
         this.conn = conn;
     }
 
     public boolean add(String playerName) throws SQLException {
         OfflinePlayer player = Bukkit.getOfflinePlayer(playerName);
         UUID uuid = player.getUniqueId();
+        String type = main.getConfig().getString("database.type");
         String sql;
-        if (isMySQL) {
+        if ("MySQL".equalsIgnoreCase(type)) {
             sql = "INSERT IGNORE INTO nat_whitelist (player_name, uuid) VALUES (?, ?)";
         } else {
             sql = "INSERT OR IGNORE INTO nat_whitelist (player_name, uuid) VALUES (?, ?)";

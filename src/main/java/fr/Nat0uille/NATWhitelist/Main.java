@@ -51,7 +51,7 @@ public final class Main extends JavaPlugin {
                     getLogger().severe("Erreur lors de la création de la table nat_whitelist : " + e.getMessage());
                 }
             }
-            whitelistListener = new WhitelistListener(sqlConnection);
+            whitelistListener = new WhitelistListener(this, sqlConnection);
         } catch (Exception e) {
             getLogger().severe("Impossible de se connecter à la base SQL : " + e.getMessage());
             getServer().getPluginManager().disablePlugin(this);
