@@ -2,7 +2,7 @@
 # Fichier de configuration NAT-Whitelist    #
 # Par Nat0uille                             #
 #############################################
-# Tous les textes utilise le format MiniMessage, si vous utilisez autre chose ça fonctionner pas !!!
+# Tous les textes utilise le format MiniMessage, si vous utilisez autre chose ça ne fonctionnera pas !!!
 # Pour créer vos messages, vous pouvez utiliser le site https://webui.advntr.dev/
 
 database:

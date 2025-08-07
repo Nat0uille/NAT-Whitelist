@@ -62,8 +62,6 @@ public final class Main extends JavaPlugin {
 
         getCommand("whitelist").setExecutor(new WhitelistCommand(this, whitelistListener));
         getCommand("whitelist").setTabCompleter(tabCompleter);
-        getCommand("wl").setExecutor(new WhitelistCommand(this, whitelistListener));
-        getCommand("wl").setTabCompleter(tabCompleter);
 
         Bukkit.getScheduler().runTaskTimer(this, tabCompleter::updateCache, 0L, 20L);
 
