@@ -33,3 +33,4 @@ erroraddingwhitelist: "<#C70000>Une erreur est survenue lors de l'ajout du joueu
 notinwhitelist: "<#C70000>Le joueur {player} n'est pas dans la whitelist."
 removeinwhoitelist: "<#ffc369>Le joueur <bold>{player}</bold> a été retiré de la whitelist."
 errorremovingwhitelist: "<#C70000>Impossible de retirer le joueur {player}."
+reload: "<#ffc369>La configuration a été rechargée avec succès."

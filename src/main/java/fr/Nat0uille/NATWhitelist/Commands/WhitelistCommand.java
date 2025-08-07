@@ -25,11 +25,6 @@ public class WhitelistCommand implements CommandExecutor {
         Component prefix = mm.deserialize(main.getConfig().getString("prefix"));
         Component noPermission = mm.deserialize(main.getConfig().getString("nopermission"));
 
-        if (!sender.hasPermission("NATWhitelist.use")) {
-            sender.sendMessage(prefix.append(noPermission));
-            return true;
-        }
-
         if (args.length == 0) {
             sender.sendMessage(prefix.append(mm.deserialize(main.getConfig().getString("help"))));
             return true;
@@ -46,18 +41,31 @@ public class WhitelistCommand implements CommandExecutor {
                 return true;
             }
             if (args[0].equalsIgnoreCase("add")) {
+                if (!sender.hasPermission("NATWhitelist.add")) {
+                    sender.sendMessage(prefix.append(noPermission));
+                    return true;
+                }
                 sender.sendMessage(prefix.append(mm.deserialize("<#ffc369>/whitelist add <player>")));
                 return true;
             }
             if (args[0].equalsIgnoreCase("remove")) {
+                if (!sender.hasPermission("NATWhitelist.remove")) {
+                    sender.sendMessage(prefix.append(noPermission));
+                    return true;
+                }
                 sender.sendMessage(prefix.append(mm.deserialize("<#ffc369>/whitelist remove <player>")));
                 return true;
             }
             if (args[0].equalsIgnoreCase("on")) {
+                if (!sender.hasPermission("NATWhitelist.on")) {
+                    sender.sendMessage(prefix.append(noPermission));
+                    return true;
+                }
                 if (whitelistListener.isEnabled()) {
                     sender.sendMessage(prefix.append(mm.deserialize(main.getConfig().getString("whitelistalreadyon"))));
                     return true;
                 } else {
+
                     whitelistListener.setEnabled(true);
                     try {
                         whitelistListener.kickNonWhitelistedPlayers(main);
@@ -70,6 +78,10 @@ public class WhitelistCommand implements CommandExecutor {
                 }
             }
             if (args[0].equalsIgnoreCase("off")) {
+                if (!sender.hasPermission("NATWhitelist.off")) {
+                    sender.sendMessage(prefix.append(noPermission));
+                    return true;
+                }
                 if (!whitelistListener.isEnabled()) {
                     sender.sendMessage(prefix.append(mm.deserialize(main.getConfig().getString("whitelistalreadyoff"))));
                     return true;
@@ -78,6 +90,15 @@ public class WhitelistCommand implements CommandExecutor {
                     sender.sendMessage(prefix.append(mm.deserialize(main.getConfig().getString("whitelistoff"))));
                     return true;
                 }
+            }
+            if (args[0].equalsIgnoreCase("reload")) {
+                if (!sender.hasPermission("NATWhitelist.reload")) {
+                    sender.sendMessage(prefix.append(noPermission));
+                    return true;
+                }
+                main.reloadConfig();
+                sender.sendMessage(prefix.append(mm.deserialize(main.getConfig().getString("reload"))));
+                return true;
             }
         }
 
@@ -88,6 +109,10 @@ public class WhitelistCommand implements CommandExecutor {
                 return true;
             }
             if (args[0].equalsIgnoreCase("add")) {
+                if (!sender.hasPermission("NATWhitelist.add")) {
+                    sender.sendMessage(prefix.append(noPermission));
+                    return true;
+                }
                 String correctName = WhitelistListener.getCorrectUsernameFromMojang(playerName);
                 if (correctName == null) {
                     sender.sendMessage(prefix.append(mm.deserialize(main.getConfig().getString("playernotfound"))));
@@ -111,6 +136,10 @@ public class WhitelistCommand implements CommandExecutor {
                 return true;
             }
             if (args[0].equalsIgnoreCase("remove")) {
+                if (!sender.hasPermission("NATWhitelist.remove")) {
+                    sender.sendMessage(prefix.append(noPermission));
+                    return true;
+                }
                 try {
                     if (!whitelistListener.isWhitelisted(playerName)) {
                         sender.sendMessage(prefix.append(mm.deserialize(main.getConfig().getString("notinwhitelist").replace("{player}", playerName))));
@@ -139,6 +168,10 @@ public class WhitelistCommand implements CommandExecutor {
                     continue;
                 }
                 if (args[0].equalsIgnoreCase("add")) {
+                    if (!sender.hasPermission("NATWhitelist.add")) {
+                        sender.sendMessage(prefix.append(noPermission));
+                        continue;
+                    }
                     String correctName = WhitelistListener.getCorrectUsernameFromMojang(playerName);
                     if (correctName == null) {
                         sender.sendMessage(prefix.append(mm.deserialize(main.getConfig().getString("playernotfound"))));
@@ -160,6 +193,10 @@ public class WhitelistCommand implements CommandExecutor {
                         e.printStackTrace();
                     }
                 } else if (args[0].equalsIgnoreCase("remove")) {
+                    if (!sender.hasPermission("NATWhitelist.remove")) {
+                        sender.sendMessage(prefix.append(noPermission));
+                        continue;
+                    }
                     try {
                         if (!whitelistListener.isWhitelisted(playerName)) {
                             sender.sendMessage(prefix.append(mm.deserialize(main.getConfig().getString("notinwhitelist").replace("{player}", playerName))));

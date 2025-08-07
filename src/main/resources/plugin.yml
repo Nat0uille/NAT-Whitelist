@@ -11,5 +11,21 @@ commands:
       - nat-whitelist
     usage: /<command> <add|remove|list|> [<player>]
 permissions:
-  NatWhitelist.Use:
+  natwhitelist.reload:
     default: op
+  natwhitelist.add:
+    default: op
+  natwhitelist.remove:
+    default: op
+  natwhitelist.on:
+    default: op
+  natwhitelist.off:
+    default: op
+  natwhitelist.admin:
+    default: op
+    children:
+      natwhitelist.reload: true
+      natwhitelist.add: true
+      natwhitelist.remove: true
+      natwhitelist.on: true
+      natwhitelist.off: true
