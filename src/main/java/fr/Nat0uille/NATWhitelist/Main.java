@@ -35,7 +35,7 @@ public final class Main extends JavaPlugin {
                 try (Statement stmt = sqlConnection.createStatement()) {
                     stmt.executeUpdate("CREATE TABLE IF NOT EXISTS nat_whitelist (player_name VARCHAR(16) PRIMARY KEY, uuid VARCHAR(36))");
                 } catch (SQLException e) {
-                    getLogger().severe("Erreur lors de la création de la table nat_whitelist : " + e.getMessage());
+                    getLogger().severe("Error creating table nat_whitelist: " + e.getMessage());
                 }
             } else {
                 Class.forName("org.sqlite.JDBC");
@@ -48,12 +48,12 @@ public final class Main extends JavaPlugin {
                 try (Statement stmt = sqlConnection.createStatement()) {
                     stmt.executeUpdate("CREATE TABLE IF NOT EXISTS nat_whitelist (player_name TEXT PRIMARY KEY, uuid TEXT)");
                 } catch (SQLException e) {
-                    getLogger().severe("Erreur lors de la création de la table nat_whitelist : " + e.getMessage());
+                    getLogger().severe("Error creating table nat_whitelist: " + e.getMessage());
                 }
             }
             whitelistListener = new WhitelistListener(this, sqlConnection);
         } catch (Exception e) {
-            getLogger().severe("Impossible de se connecter à la base SQL : " + e.getMessage());
+            getLogger().severe("Unable to connect to the SQL database: " + e.getMessage());
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
