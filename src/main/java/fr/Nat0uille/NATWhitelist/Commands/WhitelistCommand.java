@@ -4,9 +4,11 @@ import fr.Nat0uille.NATWhitelist.Listeners.WhitelistListener;
 import fr.Nat0uille.NATWhitelist.Main;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.Command;
+import org.bukkit.entity.Player;
 
 import java.sql.SQLException;
 
@@ -115,8 +117,11 @@ public class WhitelistCommand implements CommandExecutor {
                 }
                 String correctName = WhitelistListener.getCorrectUsernameFromMojang(playerName);
                 if (correctName == null) {
-                    sender.sendMessage(prefix.append(mm.deserialize(main.getConfig().getString("playernotfound"))));
-                    return true;
+                    Player onlinePlayer = Bukkit.getPlayer(playerName);
+                    if (onlinePlayer == null) {
+                        sender.sendMessage(prefix.append(mm.deserialize(main.getConfig().getString("crackedneverconnected").replace("{player}", playerName))));
+                        return true;
+                    }
                 }
                 try {
                     if (whitelistListener.isWhitelisted(correctName)) {
@@ -174,8 +179,11 @@ public class WhitelistCommand implements CommandExecutor {
                     }
                     String correctName = WhitelistListener.getCorrectUsernameFromMojang(playerName);
                     if (correctName == null) {
-                        sender.sendMessage(prefix.append(mm.deserialize(main.getConfig().getString("playernotfound"))));
-                        continue;
+                        Player onlinePlayer = Bukkit.getPlayer(playerName);
+                        if (onlinePlayer == null) {
+                            sender.sendMessage(prefix.append(mm.deserialize(main.getConfig().getString("crackedneverconnected").replace("{player}", playerName))));
+                            return true;
+                        }
                     }
                     try {
                         if (whitelistListener.isWhitelisted(correctName)) {
