@@ -11,7 +11,7 @@
 # All texts use the MiniMessage format. If you use anything else, it will not work!!!                 #
 # To create your messages, you can use the website https://webui.advntr.dev/                          #
 #######################################################################################################
-# DATABASE SETTINGS                                                                                   #
+# SETTINGS                                                                                            #
 #######################################################################################################
 database:
   # Format: MySQL / SQLite
@@ -23,6 +23,8 @@ database:
   username: ""
   password: ""
 
+# If true, the player will be kicked when he is not whitelisted. If false, the player will be able to join.
+kickisnowhitelisted: true
 #######################################################################################################
 # MESSAGES                                                                                            #
 #######################################################################################################

@@ -118,6 +118,8 @@ public class WhitelistListener {
         MiniMessage mm = MiniMessage.miniMessage();
         Component prefix = mm.deserialize(main.getConfig().getString("prefix"));
         Component kickmessage = mm.deserialize(main.getConfig().getString("kickmessage"));
+        boolean kicknonwhitelisted = main.getConfig().getBoolean("kicknonwhitelisted");
+        if (!kicknonwhitelisted) return;
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (!isWhitelisted(player.getName())) {
                 player.kick(prefix.append(kickmessage));
