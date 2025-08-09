@@ -3,6 +3,7 @@ package fr.Nat0uille.NATWhitelist;
 import fr.Nat0uille.NATWhitelist.Commands.*;
 import fr.Nat0uille.NATWhitelist.TabCompleter.*;
 import fr.Nat0uille.NATWhitelist.Listeners.*;
+import fr.Nat0uille.NATWhitelist.CheckVersion;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -15,6 +16,7 @@ public final class Main extends JavaPlugin {
     private WhitelistListener whitelistListener;
     private WhitelistTabCompleter tabCompleter;
     private Connection sqlConnection;
+    private CheckVersion checkVersion;
 
     @Override
     public void onEnable() {
@@ -66,6 +68,9 @@ public final class Main extends JavaPlugin {
         Bukkit.getScheduler().runTaskTimer(this, tabCompleter::updateCache, 0L, 20L);
 
         getServer().getPluginManager().registerEvents(new PlayerListener(whitelistListener, this), this);
+
+        checkVersion = new CheckVersion();
+        CheckVersion.startVersionCheck(this, checkVersion);
     }
 
     @Override
@@ -75,5 +80,9 @@ public final class Main extends JavaPlugin {
 
     public Connection getSqlConnection() {
         return sqlConnection;
+    }
+
+    public CheckVersion getCheckVersion() {
+        return checkVersion;
     }
 }
