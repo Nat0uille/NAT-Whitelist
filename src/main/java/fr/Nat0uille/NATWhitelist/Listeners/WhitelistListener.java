@@ -20,6 +20,7 @@ public class WhitelistListener {
     private final Connection conn;
     private Main main;
     private boolean enabled = false;
+    private final List<String> removedPlayers = new ArrayList<>();
 
     public WhitelistListener(Main main, Connection conn) {
         this.main = main;
@@ -125,5 +126,21 @@ public class WhitelistListener {
                 player.kick(prefix.append(kickmessage));
             }
         }
+    }
+
+    public void removeNonWhitelistedPlayers(Main main) throws SQLException {
+        removedPlayers.clear();
+        for (String playerName : getWhitelistedPlayers()) {
+            Player player = Bukkit.getPlayerExact(playerName);
+            if (player == null || !player.isOnline()) {
+                remove(playerName);
+                removedPlayers.add(playerName);
+            }
+        }
+    }
+
+
+    public List<String> getRemovedPlayers() {
+        return removedPlayers;
     }
 }

@@ -11,6 +11,7 @@ import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 
 import java.sql.SQLException;
+import java.util.List;
 
 public class WhitelistCommand implements CommandExecutor {
     private final Main main;
@@ -43,7 +44,7 @@ public class WhitelistCommand implements CommandExecutor {
                 return true;
             }
             if (args[0].equalsIgnoreCase("add")) {
-                if (!sender.hasPermission("NATWhitelist.add")) {
+                if (!sender.hasPermission("natwhitelist.add")) {
                     sender.sendMessage(prefix.append(noPermission));
                     return true;
                 }
@@ -51,7 +52,7 @@ public class WhitelistCommand implements CommandExecutor {
                 return true;
             }
             if (args[0].equalsIgnoreCase("remove")) {
-                if (!sender.hasPermission("NATWhitelist.remove")) {
+                if (!sender.hasPermission("natwhitelist.remove")) {
                     sender.sendMessage(prefix.append(noPermission));
                     return true;
                 }
@@ -59,7 +60,7 @@ public class WhitelistCommand implements CommandExecutor {
                 return true;
             }
             if (args[0].equalsIgnoreCase("on")) {
-                if (!sender.hasPermission("NATWhitelist.on")) {
+                if (!sender.hasPermission("natwhitelist.on")) {
                     sender.sendMessage(prefix.append(noPermission));
                     return true;
                 }
@@ -80,7 +81,7 @@ public class WhitelistCommand implements CommandExecutor {
                 }
             }
             if (args[0].equalsIgnoreCase("off")) {
-                if (!sender.hasPermission("NATWhitelist.off")) {
+                if (!sender.hasPermission("natwhitelist.off")) {
                     sender.sendMessage(prefix.append(noPermission));
                     return true;
                 }
@@ -94,12 +95,27 @@ public class WhitelistCommand implements CommandExecutor {
                 }
             }
             if (args[0].equalsIgnoreCase("reload")) {
-                if (!sender.hasPermission("NATWhitelist.reload")) {
+                if (!sender.hasPermission("natwhitelist.reload")) {
                     sender.sendMessage(prefix.append(noPermission));
                     return true;
                 }
                 main.reloadConfig();
                 sender.sendMessage(prefix.append(mm.deserialize(main.getConfig().getString("reload"))));
+                return true;
+            }
+            if (args[0].equalsIgnoreCase("removeoffilne")) {
+                if (!sender.hasPermission("natwhitelist.removeoffline")) {
+                    sender.sendMessage(prefix.append(noPermission));
+                }
+                try {
+                     whitelistListener.removeNonWhitelistedPlayers(main);
+                    List<String> removed = whitelistListener.getRemovedPlayers();
+                    String removedList = removed.isEmpty() ? "No players retired." : String.join(", ", removed);
+                    sender.sendMessage(prefix.append(mm.deserialize(main.getConfig().getString("removeoffline").replace("{players}", removedList))));
+                } catch (SQLException e) {
+                    sender.sendMessage(prefix.append(mm.deserialize(main.getConfig().getString("sqlerror"))));
+                    e.printStackTrace();
+                }
                 return true;
             }
         }
@@ -111,7 +127,7 @@ public class WhitelistCommand implements CommandExecutor {
                 return true;
             }
             if (args[0].equalsIgnoreCase("add")) {
-                if (!sender.hasPermission("NATWhitelist.add")) {
+                if (!sender.hasPermission("natwhitelist.add")) {
                     sender.sendMessage(prefix.append(noPermission));
                     return true;
                 }
@@ -130,7 +146,7 @@ public class WhitelistCommand implements CommandExecutor {
                     }
                     boolean success = whitelistListener.add(correctName);
                     if (success) {
-                        sender.sendMessage(prefix.append(mm.deserialize(main.getConfig().getString("whitelistadd").replace("{player}", correctName))));
+                        sender.sendMessage(prefix.append(mm.deserialize(main.getConfig().getString("addinwhitelist").replace("{player}", correctName))));
                     } else {
                         sender.sendMessage(prefix.append(mm.deserialize(main.getConfig().getString("erroraddingwhitelist").replace("{player}", correctName))));
                     }
@@ -141,7 +157,7 @@ public class WhitelistCommand implements CommandExecutor {
                 return true;
             }
             if (args[0].equalsIgnoreCase("remove")) {
-                if (!sender.hasPermission("NATWhitelist.remove")) {
+                if (!sender.hasPermission("natwhitelist.remove")) {
                     sender.sendMessage(prefix.append(noPermission));
                     return true;
                 }
@@ -173,7 +189,7 @@ public class WhitelistCommand implements CommandExecutor {
                     continue;
                 }
                 if (args[0].equalsIgnoreCase("add")) {
-                    if (!sender.hasPermission("NATWhitelist.add")) {
+                    if (!sender.hasPermission("natwhitelist.add")) {
                         sender.sendMessage(prefix.append(noPermission));
                         continue;
                     }
@@ -201,7 +217,7 @@ public class WhitelistCommand implements CommandExecutor {
                         e.printStackTrace();
                     }
                 } else if (args[0].equalsIgnoreCase("remove")) {
-                    if (!sender.hasPermission("NATWhitelist.remove")) {
+                    if (!sender.hasPermission("natwhitelist.remove")) {
                         sender.sendMessage(prefix.append(noPermission));
                         continue;
                     }

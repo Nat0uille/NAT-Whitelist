@@ -69,6 +69,9 @@ notinwhitelist: "<#C70000>The player {player} is not in the whitelist."
 # message when the player is removed from the whitelist
 # variables : {player} = player name
 removeinwhoitelist: "<#ffc369>The player <bold>{player}</bold> has been removed from the whitelist."
+# message when /nat-whitelist removeoffline
+# variables : {players} = list of players removed
+removeoffline: "<#ffc369>The players <bold>{players}</bold> have been removed from the whitelist."
 # message when an error occurs when removing the player from the whitelist
 # variables : {player} = player name
 errorremovingwhitelist: "<#C70000>Unable to remove the player {player}."

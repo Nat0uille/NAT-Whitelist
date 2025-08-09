@@ -21,6 +21,8 @@ permissions:
     default: op
   natwhitelist.off:
     default: op
+  natwhitelist.removeoffline:
+    default: op
   natwhitelist.admin:
     default: op
     children:
@@ -29,3 +31,4 @@ permissions:
       natwhitelist.remove: true
       natwhitelist.on: true
       natwhitelist.off: true
+      natwhitelist.removeoffline: true
