@@ -74,3 +74,6 @@ removeinwhoitelist: "<#ffc369>The player <bold>{player}</bold> has been removed 
 errorremovingwhitelist: "<#C70000>Unable to remove the player {player}."
 # message when the config is reloaded
 reload: "<#ffc369>The configuration has been successfully reloaded."
+# message when the plugin is not in the last version
+# variables : {local-version} = plugin version in server, {latest-version} = latest plugin version
+outdated: "<#C70000>The plugin is not up to date. Local version: <bold>{local-version}</bold>, latest version: <bold>{latest-version}</bold>"

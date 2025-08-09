@@ -1,6 +1,7 @@
 package fr.Nat0uille.NATWhitelist.Listeners;
 
 import fr.Nat0uille.NATWhitelist.Main;
+import fr.Nat0uille.NATWhitelist.CheckVersion;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.event.Listener;
@@ -30,6 +31,13 @@ public class PlayerListener implements Listener {
         } catch (SQLException e) {
             event.disallow(PlayerLoginEvent.Result.KICK_WHITELIST, prefix.append(mm.deserialize("<red>Erreur SQL</red>")));
             e.printStackTrace();
+        }
+        if (event.getPlayer().hasPermission("natwhitelist.admin") || CheckVersion.isUpdateAvailable) {
+            Component updateMessage = mm.deserialize(main.getConfig().getString("updateMessage"));
+            if (CheckVersion.isUpdateAvailable) {
+                event.getPlayer().sendMessage(prefix.append(updateMessage));
+            }
+
         }
     }
 }
