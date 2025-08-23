@@ -90,11 +90,12 @@ public class WhitelistListener {
     }
 
     public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
+        main.getConfig().set("enabled", enabled);
+        main.saveConfig();
     }
 
     public boolean isEnabled() {
-        return enabled;
+        return main.getConfig().getBoolean("enabled", false);
     }
 
     public static String getCorrectUsernameFromMojang(String username) {

@@ -23,6 +23,8 @@ database:
   username: ""
   password: ""
 
+# If true, the whitelist is enabled.
+enabled: true
 # If true, the player will be kicked when he is not whitelisted. If false, the player will be able to join.
 kickisnowhitelisted: true
 #######################################################################################################
