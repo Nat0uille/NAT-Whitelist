@@ -9,6 +9,7 @@ import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.sql.SQLException;
+import java.util.UUID;
 
 public class PlayerListener implements Listener {
     private final WhitelistListener whitelistListener;
@@ -24,7 +25,7 @@ public class PlayerListener implements Listener {
         MiniMessage mm = MiniMessage.miniMessage();
         Component prefix = mm.deserialize(main.getConfig().getString("prefix"));
         Component kickmessage = mm.deserialize(main.getConfig().getString("kickmessage"));
-        String playerName = event.getPlayer().getName();
+        UUID playerUUID = event.getPlayer().getUniqueId();
 
         new BukkitRunnable() {
             @Override
@@ -37,11 +38,11 @@ public class PlayerListener implements Listener {
                     }
                 }
             }
-        }.runTaskLater(main, 60);
+        }.runTaskLater(main, 20);
 
         try {
             if (!event.getPlayer().hasPermission("natwhitelist.bypass")) {
-                if (whitelistListener.isEnabled() && !whitelistListener.isWhitelisted(playerName) ) {
+                if (whitelistListener.isEnabled() && !whitelistListener.isWhitelisted(playerUUID)) {
                     event.disallow(PlayerLoginEvent.Result.KICK_WHITELIST, prefix.append(kickmessage));
                 }
             }

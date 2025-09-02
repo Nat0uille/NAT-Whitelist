@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.UUID;
 
 public class WhitelistCommand implements CommandExecutor {
     private final Main main;
@@ -35,6 +36,10 @@ public class WhitelistCommand implements CommandExecutor {
 
         if (args.length == 1) {
             if (args[0].equalsIgnoreCase("list")) {
+                if (!sender.hasPermission("natwhitelist.list")) {
+                    sender.sendMessage(prefix.append(noPermission));
+                    return true;
+                }
                 try {
                     sender.sendMessage(prefix.append(mm.deserialize(main.getConfig().getString("list") + whitelistListener.listWhitelistedPlayers())));
                 } catch (SQLException e) {
@@ -126,29 +131,36 @@ public class WhitelistCommand implements CommandExecutor {
                 sender.sendMessage(prefix.append(mm.deserialize(main.getConfig().getString("playertoolong"))));
                 return true;
             }
+            UUID uuid = null;
+            String correctName = WhitelistListener.getCorrectUsernameFromMojang(playerName);
+            if (correctName != null) {
+                playerName = correctName;
+                uuid = Bukkit.getOfflinePlayer(correctName).getUniqueId();
+            } else {
+                Player onlinePlayer = Bukkit.getPlayer(playerName);
+                if (onlinePlayer != null) {
+                    uuid = onlinePlayer.getUniqueId();
+                    playerName = onlinePlayer.getName();
+                } else {
+                    sender.sendMessage(prefix.append(mm.deserialize(main.getConfig().getString("crackedneverconnected").replace("{player}", playerName))));
+                    return true;
+                }
+            }
             if (args[0].equalsIgnoreCase("add")) {
                 if (!sender.hasPermission("natwhitelist.add")) {
                     sender.sendMessage(prefix.append(noPermission));
                     return true;
                 }
-                String correctName = WhitelistListener.getCorrectUsernameFromMojang(playerName);
-                if (correctName == null) {
-                    Player onlinePlayer = Bukkit.getPlayer(playerName);
-                    if (onlinePlayer == null) {
-                        sender.sendMessage(prefix.append(mm.deserialize(main.getConfig().getString("crackedneverconnected").replace("{player}", playerName))));
-                        return true;
-                    }
-                }
                 try {
-                    if (whitelistListener.isWhitelisted(correctName)) {
-                        sender.sendMessage(prefix.append(mm.deserialize(main.getConfig().getString("alreadyinwhitelist").replace("{player}", correctName))));
+                    if (whitelistListener.isWhitelisted(uuid)) {
+                        sender.sendMessage(prefix.append(mm.deserialize(main.getConfig().getString("alreadyinwhitelist").replace("{player}", playerName))));
                         return true;
                     }
-                    boolean success = whitelistListener.add(correctName);
+                    boolean success = whitelistListener.add(uuid, playerName);
                     if (success) {
-                        sender.sendMessage(prefix.append(mm.deserialize(main.getConfig().getString("addinwhitelist").replace("{player}", correctName))));
+                        sender.sendMessage(prefix.append(mm.deserialize(main.getConfig().getString("addinwhitelist").replace("{player}", playerName))));
                     } else {
-                        sender.sendMessage(prefix.append(mm.deserialize(main.getConfig().getString("erroraddingwhitelist").replace("{player}", correctName))));
+                        sender.sendMessage(prefix.append(mm.deserialize(main.getConfig().getString("erroraddingwhitelist").replace("{player}", playerName))));
                     }
                 } catch (SQLException e) {
                     sender.sendMessage(prefix.append(mm.deserialize(main.getConfig().getString("sqlerror"))));
@@ -162,11 +174,11 @@ public class WhitelistCommand implements CommandExecutor {
                     return true;
                 }
                 try {
-                    if (!whitelistListener.isWhitelisted(playerName)) {
+                    if (!whitelistListener.isWhitelisted(uuid)) {
                         sender.sendMessage(prefix.append(mm.deserialize(main.getConfig().getString("notinwhitelist").replace("{player}", playerName))));
                         return true;
                     }
-                    boolean success = whitelistListener.remove(playerName);
+                    boolean success = whitelistListener.remove(uuid);
                     if (success) {
                         whitelistListener.kickNonWhitelistedPlayers(main);
                         sender.sendMessage(prefix.append(mm.deserialize(main.getConfig().getString("removeinwhoitelist").replace("{player}", playerName))));
@@ -188,29 +200,36 @@ public class WhitelistCommand implements CommandExecutor {
                     sender.sendMessage(prefix.append(mm.deserialize(main.getConfig().getString("playertoolong"))));
                     continue;
                 }
+                UUID uuid = null;
+                String correctName = WhitelistListener.getCorrectUsernameFromMojang(playerName);
+                if (correctName != null) {
+                    playerName = correctName;
+                    uuid = Bukkit.getOfflinePlayer(correctName).getUniqueId();
+                } else {
+                    Player onlinePlayer = Bukkit.getPlayer(playerName);
+                    if (onlinePlayer != null) {
+                        uuid = onlinePlayer.getUniqueId();
+                        playerName = onlinePlayer.getName();
+                    } else {
+                        sender.sendMessage(prefix.append(mm.deserialize(main.getConfig().getString("crackedneverconnected").replace("{player}", playerName))));
+                        continue;
+                    }
+                }
                 if (args[0].equalsIgnoreCase("add")) {
                     if (!sender.hasPermission("natwhitelist.add")) {
                         sender.sendMessage(prefix.append(noPermission));
                         continue;
                     }
-                    String correctName = WhitelistListener.getCorrectUsernameFromMojang(playerName);
-                    if (correctName == null) {
-                        Player onlinePlayer = Bukkit.getPlayer(playerName);
-                        if (onlinePlayer == null) {
-                            sender.sendMessage(prefix.append(mm.deserialize(main.getConfig().getString("crackedneverconnected").replace("{player}", playerName))));
-                            return true;
-                        }
-                    }
                     try {
-                        if (whitelistListener.isWhitelisted(correctName)) {
-                            sender.sendMessage(prefix.append(mm.deserialize(main.getConfig().getString("alreadyinwhitelist").replace("{player}", correctName))));
+                        if (whitelistListener.isWhitelisted(uuid)) {
+                            sender.sendMessage(prefix.append(mm.deserialize(main.getConfig().getString("alreadyinwhitelist").replace("{player}", playerName))));
                             continue;
                         }
-                        boolean success = whitelistListener.add(correctName);
+                        boolean success = whitelistListener.add(uuid, playerName);
                         if (success) {
-                            sender.sendMessage(prefix.append(mm.deserialize(main.getConfig().getString("addinwhitelist").replace("{player}", correctName))));
+                            sender.sendMessage(prefix.append(mm.deserialize(main.getConfig().getString("addinwhitelist").replace("{player}", playerName))));
                         } else {
-                            sender.sendMessage(prefix.append(mm.deserialize(main.getConfig().getString("erroraddingwhitelist").replace("{player}", correctName))));
+                            sender.sendMessage(prefix.append(mm.deserialize(main.getConfig().getString("erroraddingwhitelist").replace("{player}", playerName))));
                         }
                     } catch (SQLException e) {
                         sender.sendMessage(prefix.append(mm.deserialize(main.getConfig().getString("sqlerror"))));
@@ -222,11 +241,11 @@ public class WhitelistCommand implements CommandExecutor {
                         continue;
                     }
                     try {
-                        if (!whitelistListener.isWhitelisted(playerName)) {
+                        if (!whitelistListener.isWhitelisted(uuid)) {
                             sender.sendMessage(prefix.append(mm.deserialize(main.getConfig().getString("notinwhitelist").replace("{player}", playerName))));
                             continue;
                         }
-                        boolean success = whitelistListener.remove(playerName);
+                        boolean success = whitelistListener.remove(uuid);
                         if (success) {
                             whitelistListener.kickNonWhitelistedPlayers(main);
                             sender.sendMessage(prefix.append(mm.deserialize(main.getConfig().getString("removeinwhoitelist").replace("{player}", playerName))));

@@ -54,6 +54,18 @@ public class WhitelistListener {
         }
     }
 
+    public boolean add(UUID uuid, String playerName) throws SQLException {
+        String type = main.getConfig().getString("database.type");
+        String sql = "MySQL".equalsIgnoreCase(type)
+            ? "INSERT IGNORE INTO nat_whitelist (player_name, uuid) VALUES (?, ?)"
+            : "INSERT OR IGNORE INTO nat_whitelist (player_name, uuid) VALUES (?, ?)";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, playerName);
+            stmt.setString(2, uuid.toString());
+            return stmt.executeUpdate() > 0;
+        }
+    }
+
     public boolean remove(String playerName) throws SQLException {
         String sql = "DELETE FROM nat_whitelist WHERE player_name = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -62,10 +74,18 @@ public class WhitelistListener {
         }
     }
 
-    public boolean isWhitelisted(String playerName) throws SQLException {
-        String sql = "SELECT 1 FROM nat_whitelist WHERE player_name = ?";
+    public boolean remove(UUID uuid) throws SQLException {
+        String sql = "DELETE FROM nat_whitelist WHERE uuid = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, playerName);
+            stmt.setString(1, uuid.toString());
+            return stmt.executeUpdate() > 0;
+        }
+    }
+
+    public boolean isWhitelisted(UUID uuid) throws SQLException {
+        String sql = "SELECT 1 FROM nat_whitelist WHERE uuid = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, uuid.toString());
             try (ResultSet rs = stmt.executeQuery()) {
                 return rs.next();
             }
@@ -123,8 +143,12 @@ public class WhitelistListener {
         boolean kicknonwhitelisted = main.getConfig().getBoolean("kicknonwhitelisted");
         if (!kicknonwhitelisted) return;
         for (Player player : Bukkit.getOnlinePlayers()) {
-            if (!isWhitelisted(player.getName())) {
-                player.kick(prefix.append(kickmessage));
+            try {
+                if (!isWhitelisted(player.getUniqueId())) {
+                    player.kick(prefix.append(kickmessage));
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
         }
     }
