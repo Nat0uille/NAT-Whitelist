@@ -40,8 +40,10 @@ public class PlayerListener implements Listener {
         }.runTaskLater(main, 60);
 
         try {
-            if (whitelistListener.isEnabled() && !whitelistListener.isWhitelisted(playerName)) {
-                event.disallow(PlayerLoginEvent.Result.KICK_WHITELIST, prefix.append(kickmessage));
+            if (!event.getPlayer().hasPermission("natwhitelist.bypass")) {
+                if (whitelistListener.isEnabled() && !whitelistListener.isWhitelisted(playerName) ) {
+                    event.disallow(PlayerLoginEvent.Result.KICK_WHITELIST, prefix.append(kickmessage));
+                }
             }
         } catch (SQLException e) {
             event.disallow(PlayerLoginEvent.Result.KICK_WHITELIST, prefix.append(mm.deserialize("<red>Erreur SQL</red>")));
