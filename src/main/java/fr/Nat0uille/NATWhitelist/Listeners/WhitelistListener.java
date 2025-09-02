@@ -136,13 +136,14 @@ public class WhitelistListener {
         return null;
     }
 
-    public void kickNonWhitelistedPlayers(Main main) throws SQLException {
+    public void kickNoWhitelistedPlayers(Main main) throws SQLException {
         MiniMessage mm = MiniMessage.miniMessage();
         Component prefix = mm.deserialize(main.getConfig().getString("prefix"));
         Component kickmessage = mm.deserialize(main.getConfig().getString("kickmessage"));
-        boolean kicknonwhitelisted = main.getConfig().getBoolean("kicknonwhitelisted");
-        if (!kicknonwhitelisted) return;
+        boolean kicknowhitelisted = main.getConfig().getBoolean("kicknowhitelisted");
+        int count = 0;
         for (Player player : Bukkit.getOnlinePlayers()) {
+            count++;
             try {
                 if (!isWhitelisted(player.getUniqueId())) {
                     player.kick(prefix.append(kickmessage));
@@ -167,5 +168,27 @@ public class WhitelistListener {
 
     public List<String> getRemovedPlayers() {
         return removedPlayers;
+    }
+
+    public String getPlayerNameByUUID(UUID uuid) throws SQLException {
+        String sql = "SELECT player_name FROM nat_whitelist WHERE uuid = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, uuid.toString());
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("player_name");
+                }
+            }
+        }
+        return null;
+    }
+
+    public void updatePlayerName(UUID uuid, String newName) throws SQLException {
+        String sql = "UPDATE nat_whitelist SET player_name = ? WHERE uuid = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, newName);
+            stmt.setString(2, uuid.toString());
+            stmt.executeUpdate();
+        }
     }
 }

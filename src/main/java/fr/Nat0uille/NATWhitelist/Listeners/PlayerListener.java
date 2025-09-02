@@ -26,6 +26,7 @@ public class PlayerListener implements Listener {
         Component prefix = mm.deserialize(main.getConfig().getString("prefix"));
         Component kickmessage = mm.deserialize(main.getConfig().getString("kickmessage"));
         UUID playerUUID = event.getPlayer().getUniqueId();
+        String currentName = event.getPlayer().getName();
 
         new BukkitRunnable() {
             @Override
@@ -41,8 +42,12 @@ public class PlayerListener implements Listener {
         }.runTaskLater(main, 20);
 
         try {
+            String storedName = whitelistListener.getPlayerNameByUUID(playerUUID);
+            if (storedName != null && !storedName.equalsIgnoreCase(currentName)) {
+                whitelistListener.updatePlayerName(playerUUID, currentName);
+            }
             if (!event.getPlayer().hasPermission("natwhitelist.bypass")) {
-                if (whitelistListener.isEnabled() && !whitelistListener.isWhitelisted(playerUUID)) {
+                 if (whitelistListener.isEnabled() && !whitelistListener.isWhitelisted(playerUUID)) {
                     event.disallow(PlayerLoginEvent.Result.KICK_WHITELIST, prefix.append(kickmessage));
                 }
             }

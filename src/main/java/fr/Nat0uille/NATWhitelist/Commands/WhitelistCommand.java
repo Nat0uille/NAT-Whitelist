@@ -76,7 +76,7 @@ public class WhitelistCommand implements CommandExecutor {
 
                     whitelistListener.setEnabled(true);
                     try {
-                        whitelistListener.kickNonWhitelistedPlayers(main);
+                        whitelistListener.kickNoWhitelistedPlayers(main);
                     } catch (SQLException e) {
                         sender.sendMessage(prefix.append(mm.deserialize(main.getConfig().getString("sqlerror"))));
                         e.printStackTrace();
@@ -180,7 +180,7 @@ public class WhitelistCommand implements CommandExecutor {
                     }
                     boolean success = whitelistListener.remove(uuid);
                     if (success) {
-                        whitelistListener.kickNonWhitelistedPlayers(main);
+                        whitelistListener.kickNoWhitelistedPlayers(main);
                         sender.sendMessage(prefix.append(mm.deserialize(main.getConfig().getString("removeinwhoitelist").replace("{player}", playerName))));
                     } else {
                         sender.sendMessage(prefix.append(mm.deserialize(main.getConfig().getString("errorremovingwhitelist").replace("{player}", playerName))));
@@ -247,7 +247,7 @@ public class WhitelistCommand implements CommandExecutor {
                         }
                         boolean success = whitelistListener.remove(uuid);
                         if (success) {
-                            whitelistListener.kickNonWhitelistedPlayers(main);
+                            whitelistListener.kickNoWhitelistedPlayers(main);
                             sender.sendMessage(prefix.append(mm.deserialize(main.getConfig().getString("removeinwhoitelist").replace("{player}", playerName))));
                         } else {
                             sender.sendMessage(prefix.append(mm.deserialize(main.getConfig().getString("errorremovingwhitelist").replace("{player}", playerName))));
