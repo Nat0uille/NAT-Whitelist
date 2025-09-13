@@ -73,8 +73,9 @@ public class WhitelistCommand implements CommandExecutor {
                     sender.sendMessage(prefix.append(mm.deserialize(main.getConfig().getString("whitelistalreadyon"))));
                     return true;
                 } else {
-
-                    whitelistListener.setEnabled(true);
+                    if (main.getConfig().getBoolean("kicknowhitelisted")) {
+                        whitelistListener.setEnabled(true);
+                    }
                     try {
                         whitelistListener.kickNoWhitelistedPlayers(main);
                     } catch (SQLException e) {
@@ -113,7 +114,7 @@ public class WhitelistCommand implements CommandExecutor {
                     sender.sendMessage(prefix.append(noPermission));
                 }
                 try {
-                     whitelistListener.removeNonWhitelistedPlayers(main);
+                     whitelistListener.removeNoWhitelistedPlayers(main);
                     List<String> removed = whitelistListener.getRemovedPlayers();
                     String removedList = removed.isEmpty() ? "No players retired." : String.join(", ", removed);
                     sender.sendMessage(prefix.append(mm.deserialize(main.getConfig().getString("removeoffline").replace("{players}", removedList))));
