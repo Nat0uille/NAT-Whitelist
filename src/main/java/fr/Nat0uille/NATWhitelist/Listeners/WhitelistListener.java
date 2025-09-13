@@ -27,33 +27,6 @@ public class WhitelistListener {
         this.conn = conn;
     }
 
-    public boolean add(String playerName) throws SQLException {
-        UUID uuid = null;
-        String correctName = getCorrectUsernameFromMojang(playerName);
-        if (correctName != null) {
-            OfflinePlayer player = Bukkit.getOfflinePlayer(correctName);
-            uuid = player.getUniqueId();
-            playerName = correctName;
-        } else {
-            Player onlinePlayer = Bukkit.getPlayer(playerName);
-            if (onlinePlayer != null) {
-                uuid = onlinePlayer.getUniqueId();
-            } else {
-
-                return false;
-            }
-        }
-        String type = main.getConfig().getString("database.type");
-        String sql = "MySQL".equalsIgnoreCase(type)
-            ? "INSERT IGNORE INTO nat_whitelist (player_name, uuid) VALUES (?, ?)"
-            : "INSERT OR IGNORE INTO nat_whitelist (player_name, uuid) VALUES (?, ?)";
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, playerName);
-            stmt.setString(2, uuid.toString());
-            return stmt.executeUpdate() > 0;
-        }
-    }
-
     public boolean add(UUID uuid, String playerName) throws SQLException {
         String type = main.getConfig().getString("database.type");
         String sql = "MySQL".equalsIgnoreCase(type)
@@ -66,13 +39,6 @@ public class WhitelistListener {
         }
     }
 
-    public boolean remove(String playerName) throws SQLException {
-        String sql = "DELETE FROM nat_whitelist WHERE player_name = ?";
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, playerName);
-            return stmt.executeUpdate() > 0;
-        }
-    }
 
     public boolean remove(UUID uuid) throws SQLException {
         String sql = "DELETE FROM nat_whitelist WHERE uuid = ?";
@@ -159,12 +125,24 @@ public class WhitelistListener {
         for (String playerName : getWhitelistedPlayers()) {
             Player player = Bukkit.getPlayerExact(playerName);
             if (player == null || !player.isOnline()) {
-                remove(playerName);
-                removedPlayers.add(playerName);
+                String uuidStr = null;
+                String sql = "SELECT uuid FROM nat_whitelist WHERE player_name = ?";
+                try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+                    stmt.setString(1, playerName);
+                    try (ResultSet rs = stmt.executeQuery()) {
+                        if (rs.next()) {
+                            uuidStr = rs.getString("uuid");
+                        }
+                    }
+                }
+                if (uuidStr != null) {
+                    UUID uuid = UUID.fromString(uuidStr);
+                    remove(uuid);
+                    removedPlayers.add(playerName);
+                }
             }
         }
     }
-
 
     public List<String> getRemovedPlayers() {
         return removedPlayers;
