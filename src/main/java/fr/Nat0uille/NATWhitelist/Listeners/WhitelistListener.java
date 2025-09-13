@@ -4,7 +4,6 @@ import com.google.gson.JsonParser;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import fr.Nat0uille.NATWhitelist.Main;
 import java.net.URL;
@@ -106,7 +105,6 @@ public class WhitelistListener {
         MiniMessage mm = MiniMessage.miniMessage();
         Component prefix = mm.deserialize(main.getConfig().getString("prefix"));
         Component kickmessage = mm.deserialize(main.getConfig().getString("kickmessage"));
-        boolean kicknowhitelisted = main.getConfig().getBoolean("kicknowhitelisted");
         int count = 0;
         for (Player player : Bukkit.getOnlinePlayers()) {
             count++;
@@ -120,7 +118,7 @@ public class WhitelistListener {
         }
     }
 
-    public void removeNonWhitelistedPlayers(Main main) throws SQLException {
+    public void removeNoWhitelistedPlayers(Main main) throws SQLException {
         removedPlayers.clear();
         for (String playerName : getWhitelistedPlayers()) {
             Player player = Bukkit.getPlayerExact(playerName);
