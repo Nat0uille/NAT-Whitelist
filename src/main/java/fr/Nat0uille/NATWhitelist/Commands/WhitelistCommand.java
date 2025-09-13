@@ -74,14 +74,9 @@ public class WhitelistCommand implements CommandExecutor {
                     return true;
                 } else {
                     if (main.getConfig().getBoolean("kicknowhitelisted")) {
-                        whitelistListener.setEnabled(true);
-                    }
-                    try {
                         whitelistListener.kickNoWhitelistedPlayers(main);
-                    } catch (SQLException e) {
-                        sender.sendMessage(prefix.append(mm.deserialize(main.getConfig().getString("sqlerror"))));
-                        e.printStackTrace();
                     }
+                    whitelistListener.setEnabled(true);
                     sender.sendMessage(prefix.append(mm.deserialize(main.getConfig().getString("whiteliston"))));
                     return true;
                 }

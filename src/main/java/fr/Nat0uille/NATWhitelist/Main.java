@@ -3,7 +3,6 @@ package fr.Nat0uille.NATWhitelist;
 import fr.Nat0uille.NATWhitelist.Commands.*;
 import fr.Nat0uille.NATWhitelist.TabCompleter.*;
 import fr.Nat0uille.NATWhitelist.Listeners.*;
-import fr.Nat0uille.NATWhitelist.CheckVersion;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 

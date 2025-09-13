@@ -101,7 +101,7 @@ public class WhitelistListener {
         return null;
     }
 
-    public void kickNoWhitelistedPlayers(Main main) throws SQLException {
+    public void kickNoWhitelistedPlayers(Main main) {
         MiniMessage mm = MiniMessage.miniMessage();
         Component prefix = mm.deserialize(main.getConfig().getString("prefix"));
         Component kickmessage = mm.deserialize(main.getConfig().getString("kickmessage"));
@@ -112,7 +112,7 @@ public class WhitelistListener {
                 if (!isWhitelisted(player.getUniqueId())) {
                     player.kick(prefix.append(kickmessage));
                 }
-            } catch (SQLException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
