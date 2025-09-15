@@ -22,7 +22,7 @@ dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21.8-R0.1-SNAPSHOT")
     implementation 'org.xerial:sqlite-jdbc:3.50.3.0'
     implementation 'mysql:mysql-connector-java:8.0.33'
-    implementation 'com.google.code.gson:gson:2.13.1'
+    implementation 'com.google.code.gson:gson:2.13.2'
 }
 
 tasks {
