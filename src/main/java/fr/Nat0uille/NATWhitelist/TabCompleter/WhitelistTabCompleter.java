@@ -53,7 +53,7 @@ public class WhitelistTabCompleter implements TabCompleter {
             }
             if (args[0].equalsIgnoreCase("remove")) {
                 for (String player : cachedPlayers) {
-                    if (!alreadyTyped.contains(player) && (prefix.isEmpty() || player.toLowerCase().startsWith(prefix))) {
+                    if (!alreadyTyped.contains(player) && (prefix.isEmpty() || player.toLowerCase().contains(prefix))) {
                         result.add(player);
                     }
                 }
