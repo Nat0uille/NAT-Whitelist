@@ -34,12 +34,13 @@ NAT-Whitelist is a powerful and flexible whitelist management plugin for Minecra
 
 | Permission                   | Description                                      |
 |------------------------------|--------------------------------------------------|
-| `natwhitelist.reload`          | Allows you to reload the configuration             |
-| `natwhitelist.add`             | Allows you to add a player to the whitelist        | 
-| `natwhitelist.remove`          | Allows you to remove a player from the whitelist      | 
-| `natwhitelist.on`              | Enables the whitelist                    | 
-| `natwhitelist.off`             | Allows you to disable the whitelist                | 
-| `natwhitelist.removeoffline`   | Allows offline players to be removed         | 
-| `natwhitelist.bypass`          | Allows joining even without being whitelisted    |
-| `natwhitelist.list`            | Allows you to list whitelisted players         |
-| `natwhitelist.admin`           | Grants all NAT-Whitelist rights (inherits all of the above permissions) |
+| `natwhitelist.reload`        | Allows you to reload the configuration           |
+| `natwhitelist.add`           | Allows you to add a player to the whitelist      | 
+| `natwhitelist.remove`        | Allows you to remove a player from the whitelist | 
+| `natwhitelist.on`            | Enables the whitelist                            | 
+| `natwhitelist.off`           | Allows you to disable the whitelist              | 
+| `natwhitelist.removeoffline` | Allows offline players to be removed             | 
+| `natwhitelist.bypass`        | Allows joining even without being whitelisted    |
+| `natwhitelist.list`          | Allows you to list whitelisted players           |
+| `natwhitelist.admin`         | Grants all NAT-Whitelist rights (inherits all of the above permissions) |
+| `natwhitelist.*`             | Same as natwhitelist.admin                       |
