@@ -9,25 +9,25 @@ commands:
     aliases:
       - wl
       - nat-whitelist
-    usage: /<command> <add|remove|list|> [<player>]
 permissions:
   natwhitelist.reload:
-    default: op
+    description: Reload the plugin configuration
   natwhitelist.add:
-    default: op
+    description: Add players to whitelist
   natwhitelist.remove:
-    default: op
+    description: Remove players from whitelist
   natwhitelist.on:
-    default: op
+    description: Enable the whitelist
   natwhitelist.off:
-    default: op
+    description: Disable the whitelist
   natwhitelist.removeoffline:
-    default: op
+    description: Remove offline players from whitelist
   natwhitelist.bypass:
-    default: op
+    description: Bypass the whitelist
   natwhitelist.list:
-    default: op
+    description: List all whitelisted players
   natwhitelist.admin:
+    description: All permissions
     default: op
     children:
       natwhitelist.reload: true
@@ -38,3 +38,7 @@ permissions:
       natwhitelist.removeoffline: true
       natwhitelist.bypass: true
       natwhitelist.list: true
+  natwhitelist.*:
+    description: All permissions
+    children:
+      - natwhitelist.admin

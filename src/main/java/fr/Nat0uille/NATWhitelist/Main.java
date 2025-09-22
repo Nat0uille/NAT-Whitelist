@@ -21,6 +21,7 @@ public final class Main extends JavaPlugin {
     public void onEnable() {
         saveDefaultConfig();
 
+        // Database connection setup
         String type = getConfig().getString("database.type");
         String host = getConfig().getString("database.host");
         int port = getConfig().getInt("database.port");
@@ -59,6 +60,7 @@ public final class Main extends JavaPlugin {
             return;
         }
 
+        // Commands and TabCompleter
         tabCompleter = new WhitelistTabCompleter(whitelistListener);
 
         getCommand("whitelist").setExecutor(new WhitelistCommand(this, whitelistListener));
@@ -66,8 +68,10 @@ public final class Main extends JavaPlugin {
 
         Bukkit.getScheduler().runTaskTimer(this, tabCompleter::updateCache, 0L, 20L);
 
+        // Listeners
         getServer().getPluginManager().registerEvents(new PlayerListener(whitelistListener, this), this);
 
+        // Check version
         checkVersion = new CheckVersion();
         CheckVersion.startVersionCheck(this, checkVersion);
     }

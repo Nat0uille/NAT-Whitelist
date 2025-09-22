@@ -18,7 +18,6 @@ import java.util.ArrayList;
 public class WhitelistListener {
     private final Connection conn;
     private Main main;
-    private boolean enabled = false;
     private final List<String> removedPlayers = new ArrayList<>();
 
     public WhitelistListener(Main main, Connection conn) {
@@ -61,7 +60,7 @@ public class WhitelistListener {
         List<String> players = new ArrayList<>();
         String sql = "SELECT player_name FROM nat_whitelist";
         try (Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
+            ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
                 players.add(rs.getString("player_name"));
             }
