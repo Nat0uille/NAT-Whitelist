@@ -1,10 +1,13 @@
 package fr.Nat0uille.NATWhitelist;
 
+import fr.Nat0uille.NATWhitelist.API.*;
 import fr.Nat0uille.NATWhitelist.Commands.*;
 import fr.Nat0uille.NATWhitelist.TabCompleter.*;
 import fr.Nat0uille.NATWhitelist.Listeners.*;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.plugin.ServicePriority;
+
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -74,10 +77,15 @@ public final class Main extends JavaPlugin {
         // Check version
         checkVersion = new CheckVersion();
         CheckVersion.startVersionCheck(this, checkVersion);
+
+        // API
+        NATWhitelistAPI api = new NATWhitelistImpl(this);
+        getServer().getServicesManager().register(NATWhitelistAPI.class, api, this, ServicePriority.Normal);
     }
 
     @Override
     public void onDisable() {
+        getServer().getServicesManager().unregister(this);
         getLogger().info(getDescription().getName() + " désactivé !");
     }
 
@@ -88,4 +96,9 @@ public final class Main extends JavaPlugin {
     public CheckVersion getCheckVersion() {
         return checkVersion;
     }
+    
+    public WhitelistListener getWhitelistListener() {
+    return whitelistListener;
+}
+
 }
