@@ -2,7 +2,7 @@ package fr.Nat0uille.NATWhitelist.API;
 
 import fr.Nat0uille.NATWhitelist.Main;
 import fr.Nat0uille.NATWhitelist.Listeners.WhitelistListener;
-import java.sql.SQLException;
+
 import java.util.UUID;
 
 public class NATWhitelistImpl implements NATWhitelistAPI {
@@ -16,7 +16,11 @@ public class NATWhitelistImpl implements NATWhitelistAPI {
     }
 
     @Override
-    public boolean add(UUID uuid, String playerName) throws SQLException {
-        return whitelistListener.add(uuid, playerName);
+    public boolean add(UUID uuid, String playerName) {
+        try {
+            return whitelistListener.add(uuid, playerName);
+        } catch (Exception e) {
+            return false;
+        }
     }
 }
