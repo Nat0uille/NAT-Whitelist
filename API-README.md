@@ -31,15 +31,3 @@ public class MyPlugin extends JavaPlugin {
  }
 }
 ```
-
-## ⚠️ Error Handling
-
-The API can throw a `SQLException` during database operations. It is important to properly handle these exceptions:
-
-```java
-catch (SQLException e) {
-    // Log the complete error for debugging
-    plugin.getLogger().severe("NAT-Whitelist API SQL Error message: " + e.getMessage());
-    e.printStackTrace();
-}
-```
