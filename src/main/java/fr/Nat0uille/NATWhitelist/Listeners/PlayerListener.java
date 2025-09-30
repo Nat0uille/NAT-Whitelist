@@ -23,8 +23,8 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onPlayerLogin(PlayerLoginEvent event) {
         MiniMessage mm = MiniMessage.miniMessage();
-        Component prefix = mm.deserialize(main.getConfig().getString("prefix"));
-        Component kickmessage = mm.deserialize(main.getConfig().getString("kickmessage"));
+        Component prefix = mm.deserialize(main.getLangMessage("prefix"));
+        Component kickmessage = mm.deserialize(main.getLangMessage("kickmessage"));
         UUID playerUUID = event.getPlayer().getUniqueId();
         String currentName = event.getPlayer().getName();
 
@@ -33,7 +33,7 @@ public class PlayerListener implements Listener {
             public void run() {
                 if (event.getPlayer().hasPermission("natwhitelist.admin")) {
                     if (main.getCheckVersion().outdated()) {
-                        event.getPlayer().sendMessage(prefix.append(mm.deserialize(main.getConfig().getString("outdated")
+                        event.getPlayer().sendMessage(prefix.append(mm.deserialize(main.getLangMessage("outdated")
                                 .replace("{latest}", main.getCheckVersion().getRemoteVersion())
                                 .replace("{local}", main.getCheckVersion().getLocalVersion()))));
                     }
@@ -52,7 +52,7 @@ public class PlayerListener implements Listener {
                 }
             }
         } catch (SQLException e) {
-            event.disallow(PlayerLoginEvent.Result.KICK_WHITELIST, prefix.append(mm.deserialize("<red>Erreur SQL</red>")));
+            event.disallow(PlayerLoginEvent.Result.KICK_WHITELIST, prefix.append(mm.deserialize("<red>SQL error</red>")));
             e.printStackTrace();
         }
     }

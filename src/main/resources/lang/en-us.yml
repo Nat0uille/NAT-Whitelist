@@ -1,0 +1,51 @@
+prefix: "<bold><gradient:#C70000:#951919>NAT-Whitelist</gradient></bold> <gray>• "
+# message when a player does not have the required permission
+nopermission: "<#C70000><bold>✖</bold> You do not have permission to execute this command."
+# message when the player is not whitelisted
+kickmessage: "<#C70000><bold>✖</bold> You are not whitelisted on this server."
+# message from /nat-whitelist
+help: "<#ffc369><bold>HELP</bold> <newline>/whitelist add <player> - Add a player to the whitelist<newline>/whitelist remove <player> - Remove players from the whitelist<newline>/whitelist list - Display whitelisted players"
+# message when there is an SQL error
+sqlerror: "<#C70000>SQL error while retrieving the list."
+# message from /nat-whitelist list
+list: "<#ffc369><bold>LIST</bold> <newline>"
+# message when whitelist is already on
+whitelistalreadyon: "<#C70000>The whitelist is already enabled."
+# message when whitelist is turned on
+whiteliston: "<#ffc369>The whitelist is now <#63c74d>enabled<#ffc369>."
+# message when whitelist is already off
+whitelistalreadyoff: "<#C70000>The whitelist is already disabled."
+# message when whitelist is turned off
+whitelistoff: "<#ffc369>The whitelist is now <#63c74d>disabled<#ffc369>."
+# message when the player's name is too long
+playertoolong: "<#C70000>The username must not exceed 16 characters."
+# message when the player is not found
+playernotfound: "<#C70000>The player was not found."
+# message when the player is already in the whitelist
+# variables : {player} = player name
+alreadyinwhitelist: "<#C70000>The player {player} is already in the whitelist."
+# message when the player is added to the whitelist
+# variables : {player} = player name
+addinwhitelist: "<#ffc369>The player <bold>{player}</bold> has been added to the whitelist."
+# message when the player is cracked or never connected to the server
+crackedneverconnected: "<#C70000>The player {player} is either cracked or has never connected to the server."
+# message when an error occurs when adding the player to the whitelist
+# variables : {player} = player name
+erroraddingwhitelist: "<#C70000>An error occurred while adding the player {player} to the whitelist."
+# message when a player wants to be removed but is not on the whitelist
+# variables : {player} = player name
+notinwhitelist: "<#C70000>The player {player} is not in the whitelist."
+# message when the player is removed from the whitelist
+# variables : {player} = player name
+removeinwhoitelist: "<#ffc369>The player <bold>{player}</bold> has been removed from the whitelist."
+# message when /nat-whitelist removeoffline
+# variables : {players} = list of players removed
+removeoffline: "<#ffc369>The players <bold>{players}</bold> have been removed from the whitelist."
+# message when an error occurs when removing the player from the whitelist
+# variables : {player} = player name
+errorremovingwhitelist: "<#C70000>Unable to remove the player {player}."
+# message when the config is reloaded
+reload: "<#ffc369>The configuration has been successfully reloaded."
+# message when the plugin is not in the last version
+# variables : {local} = plugin version in server, {latest} = latest plugin version
+outdated: "<#C70000>The plugin is not up to date. Local version: <bold>{local}</bold>, latest version: <bold>{latest}</bold>"

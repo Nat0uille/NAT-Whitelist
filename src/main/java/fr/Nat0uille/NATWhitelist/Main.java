@@ -5,10 +5,13 @@ import fr.Nat0uille.NATWhitelist.Commands.*;
 import fr.Nat0uille.NATWhitelist.TabCompleter.*;
 import fr.Nat0uille.NATWhitelist.Listeners.*;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.ServicePriority;
 
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -19,10 +22,13 @@ public final class Main extends JavaPlugin {
     private WhitelistTabCompleter tabCompleter;
     private Connection sqlConnection;
     private CheckVersion checkVersion;
+    private FileConfiguration langConfig;
 
     @Override
     public void onEnable() {
         saveDefaultConfig();
+        saveAllLangResources();
+        loadLang();
 
         // Database connection setup
         String type = getConfig().getString("database.type");
@@ -101,4 +107,28 @@ public final class Main extends JavaPlugin {
     return whitelistListener;
 }
 
+    public void loadLang() {
+        String lang = getConfig().getString("lang");
+        File langFile = new File(getDataFolder(), "lang/" + lang + ".yml");
+        if (!langFile.exists()) {
+            saveResource("lang/" + lang + ".yml", false);
+        }
+        langConfig = YamlConfiguration.loadConfiguration(langFile);
+    }
+
+    public String getLangMessage(String key) {
+        return langConfig.getString(key, "Message not found, please check your language file!");
+    }
+
+    private void saveAllLangResources() {
+        String[] langs = {"en-us.yml", "fr-fr.yml"};
+        File langDir = new File(getDataFolder(), "lang");
+        if (!langDir.exists()) langDir.mkdirs();
+        for (String langFile : langs) {
+            File outFile = new File(langDir, langFile);
+            if (!outFile.exists()) {
+                saveResource("lang/" + langFile, false);
+            }
+        }
+    }
 }
