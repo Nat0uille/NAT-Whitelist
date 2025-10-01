@@ -19,7 +19,6 @@ import java.sql.Statement;
 
 public final class Main extends JavaPlugin {
     private WhitelistListener whitelistListener;
-    private WhitelistTabCompleter tabCompleter;
     private Connection sqlConnection;
     private CheckVersion checkVersion;
     private FileConfiguration langConfig;
@@ -70,7 +69,7 @@ public final class Main extends JavaPlugin {
         }
 
         // Commands and TabCompleter
-        tabCompleter = new WhitelistTabCompleter(whitelistListener);
+        WhitelistTabCompleter tabCompleter = new WhitelistTabCompleter(whitelistListener);
 
         getCommand("whitelist").setExecutor(new WhitelistCommand(this, whitelistListener));
         getCommand("whitelist").setTabCompleter(tabCompleter);
@@ -93,10 +92,6 @@ public final class Main extends JavaPlugin {
     public void onDisable() {
         getServer().getServicesManager().unregister(this);
         getLogger().info(getDescription().getName() + " désactivé !");
-    }
-
-    public Connection getSqlConnection() {
-        return sqlConnection;
     }
 
     public CheckVersion getCheckVersion() {

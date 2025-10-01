@@ -71,15 +71,14 @@ public class WhitelistCommand implements CommandExecutor {
                 }
                 if (whitelistListener.isEnabled()) {
                     sender.sendMessage(prefix.append(mm.deserialize(main.getLangMessage("whitelistalreadyon"))));
-                    return true;
                 } else {
                     if (main.getConfig().getBoolean("kicknowhitelisted")) {
                         whitelistListener.kickNoWhitelistedPlayers(main);
                     }
                     whitelistListener.setEnabled(true);
                     sender.sendMessage(prefix.append(mm.deserialize(main.getLangMessage("whiteliston"))));
-                    return true;
                 }
+                return true;
             }
             if (args[0].equalsIgnoreCase("off")) {
                 if (!sender.hasPermission("natwhitelist.off")) {
@@ -88,12 +87,11 @@ public class WhitelistCommand implements CommandExecutor {
                 }
                 if (!whitelistListener.isEnabled()) {
                     sender.sendMessage(prefix.append(mm.deserialize(main.getLangMessage("whitelistalreadyoff"))));
-                    return true;
                 } else {
                     whitelistListener.setEnabled(false);
                     sender.sendMessage(prefix.append(mm.deserialize(main.getLangMessage("whitelistoff"))));
-                    return true;
                 }
+                return true;
             }
             if (args[0].equalsIgnoreCase("reload")) {
                 if (!sender.hasPermission("natwhitelist.reload")) {
@@ -128,7 +126,7 @@ public class WhitelistCommand implements CommandExecutor {
                 sender.sendMessage(prefix.append(mm.deserialize(main.getLangMessage("playertoolong"))));
                 return true;
             }
-            UUID uuid = null;
+            UUID uuid;
             String correctName = WhitelistListener.getCorrectUsernameFromMojang(playerName);
             if (correctName != null) {
                 playerName = correctName;
@@ -197,7 +195,7 @@ public class WhitelistCommand implements CommandExecutor {
                     sender.sendMessage(prefix.append(mm.deserialize(main.getLangMessage("playertoolong"))));
                     continue;
                 }
-                UUID uuid = null;
+                UUID uuid;
                 String correctName = WhitelistListener.getCorrectUsernameFromMojang(playerName);
                 if (correctName != null) {
                     playerName = correctName;

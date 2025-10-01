@@ -104,9 +104,7 @@ public class WhitelistListener {
         MiniMessage mm = MiniMessage.miniMessage();
         Component prefix = mm.deserialize(main.getLangMessage("prefix"));
         Component kickmessage = mm.deserialize(main.getLangMessage("kickmessage"));
-        int count = 0;
         for (Player player : Bukkit.getOnlinePlayers()) {
-            count++;
             try {
                 if (!isWhitelisted(player.getUniqueId()) || !player.hasPermission("natwhitelist.bypass")) {
                     player.kick(prefix.append(kickmessage));
