@@ -1,15 +1,17 @@
 # NAT-Whitelist API Documentation
 ```
-⚠️This part of the documentation is currently being written, sorry if anything is missing.
+⚠️ This part of the documentation is currently being written. Sorry if anything is missing.
 ```
+
 ## 🚀 Installation
-Add NAT-Whitelist as a dependency in your `plugin.yml` :
+Add NAT-Whitelist as a dependency in your `plugin.yml`:
 ```yaml
 depend: [NAT-Whitelist]
 # or
 softdepend: [NAT-Whitelist]
 ```
-## 🔧 Get the API instance
+
+## 🔧 Getting the API instance
 
 ```java
 import fr.Nat0uille.NATWhitelist.API.NATWhitelistAPI;
@@ -20,58 +22,57 @@ public class MyPlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        
-    // Get the API instance
-    whitelistAPI = Bukkit.getServer().getServicesManager().getRegistration(NATWhitelistAPI.class).getProvider();
-    if (whitelistAPI == null) {
-        getLogger().severe("Unable to get NAT-Whitelist API!");
-        return;
+        // Get the API instance
+        whitelistAPI = Bukkit.getServer().getServicesManager().getRegistration(NATWhitelistAPI.class).getProvider();
+        if (whitelistAPI == null) {
+            getLogger().severe("Unable to get NAT-Whitelist API!");
+            return;
+        }
+        getLogger().info("NAT-Whitelist API loaded successfully!");
     }
-    getLogger().info("NAT-Whitelist API loaded successfully!");
- }
 }
 ```
 
-## ✨ Méthodes de l'API
+## ✨ API Methods
 
-### Ajouter un joueur à la whitelist
+### Add a player to the whitelist
 ```java
-boolean add(UUID uuid);
+boolean add(UUID uuid, String playerName);
 ```
-Ajoute le joueur à la whitelist. Retourne `true` si le joueur a été ajouté.
+Adds the player to the whitelist. Returns `true` if the player was added.
 
-### Retirer un joueur de la whitelist
+### Remove a player from the whitelist
 ```java
 boolean remove(UUID uuid);
 ```
-Retire le joueur de la whitelist. Retourne `true` si le joueur a été retiré.
+Removes the player from the whitelist. Returns `true` if the player was removed.
 
-### Vérifier si un joueur est whitelisté
+### Check if a player is whitelisted
 ```java
 boolean isWhitelisted(UUID uuid);
 ```
-Retourne `true` si le joueur est dans la whitelist.
+Returns `true` if the player is whitelisted.
 
-### Obtenir la liste des joueurs whitelistés
+### Get the list of whitelisted players
 ```java
 List<String> getWhitelistedPlayers();
 ```
-Retourne une liste des noms des joueurs whitelistés.
+Returns a list of whitelisted player names.
 
-### Obtenir la liste formatée des joueurs whitelistés
+### Get a formatted list of whitelisted players
 ```java
 String listWhitelistedPlayers();
 ```
-Retourne une chaîne contenant tous les joueurs whitelistés séparés par des virgules.
+Returns a string containing all whitelisted players separated by commas.
 
-### Activer ou désactiver la whitelist
+### Enable or disable the whitelist
 ```java
 void setEnabled(boolean enabled);
 ```
-Active (`true`) ou désactive (`false`) la whitelist.
+Enables (`true`) or disables (`false`) the whitelist.
 
-### Vérifier si la whitelist est activée
+### Check if the whitelist is enabled
 ```java
 boolean isEnabled();
 ```
-Retourne `true` si la whitelist est activée.
+Returns `true` if the whitelist is enabled.
