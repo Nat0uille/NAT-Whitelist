@@ -91,7 +91,6 @@ public final class Main extends JavaPlugin {
     @Override
     public void onDisable() {
         getServer().getServicesManager().unregister(this);
-        getLogger().info(getDescription().getName() + " désactivé !");
     }
 
     public CheckVersion getCheckVersion() {
