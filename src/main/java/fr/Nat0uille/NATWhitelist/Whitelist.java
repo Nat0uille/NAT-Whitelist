@@ -1,11 +1,11 @@
-package fr.Nat0uille.NATWhitelist.Listeners;
+package fr.Nat0uille.NATWhitelist;
 
 import com.google.gson.JsonParser;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import fr.Nat0uille.NATWhitelist.Main;
+
 import java.net.URL;
 import java.net.HttpURLConnection;
 import com.google.gson.JsonObject;
@@ -15,12 +15,12 @@ import java.util.UUID;
 import java.util.List;
 import java.util.ArrayList;
 
-public class WhitelistListener {
+public class Whitelist {
     private final Connection conn;
     private Main main;
     private final List<String> removedPlayers = new ArrayList<>();
 
-    public WhitelistListener(Main main, Connection conn) {
+    public Whitelist(Main main, Connection conn) {
         this.main = main;
         this.conn = conn;
     }

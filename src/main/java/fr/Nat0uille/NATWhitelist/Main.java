@@ -18,7 +18,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public final class Main extends JavaPlugin {
-    private WhitelistListener whitelistListener;
+    private Whitelist whitelist;
     private Connection sqlConnection;
     private CheckVersion checkVersion;
     private FileConfiguration langConfig;
@@ -61,7 +61,7 @@ public final class Main extends JavaPlugin {
                     getLogger().severe("Error creating table nat_whitelist: " + e.getMessage());
                 }
             }
-            whitelistListener = new WhitelistListener(this, sqlConnection);
+            whitelist = new Whitelist(this, sqlConnection);
         } catch (Exception e) {
             getLogger().severe("Unable to connect to the SQL database: " + e.getMessage());
             getServer().getPluginManager().disablePlugin(this);
@@ -69,15 +69,15 @@ public final class Main extends JavaPlugin {
         }
 
         // Commands and TabCompleter
-        WhitelistTabCompleter tabCompleter = new WhitelistTabCompleter(whitelistListener);
+        WhitelistTabCompleter tabCompleter = new WhitelistTabCompleter(whitelist);
 
-        getCommand("whitelist").setExecutor(new WhitelistCommand(this, whitelistListener));
+        getCommand("whitelist").setExecutor(new WhitelistCommand(this, whitelist));
         getCommand("whitelist").setTabCompleter(tabCompleter);
 
         Bukkit.getScheduler().runTaskTimer(this, tabCompleter::updateCache, 0L, 20L);
 
         // Listeners
-        getServer().getPluginManager().registerEvents(new PlayerListener(whitelistListener, this), this);
+        getServer().getPluginManager().registerEvents(new PlayerListener(whitelist, this), this);
 
         // Check version
         checkVersion = new CheckVersion();
@@ -98,8 +98,8 @@ public final class Main extends JavaPlugin {
         return checkVersion;
     }
     
-    public WhitelistListener getWhitelistListener() {
-    return whitelistListener;
+    public Whitelist getWhitelistListener() {
+    return whitelist;
 }
 
     public void loadLang() {

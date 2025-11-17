@@ -1,6 +1,6 @@
 package fr.Nat0uille.NATWhitelist.Commands;
 
-import fr.Nat0uille.NATWhitelist.Listeners.WhitelistListener;
+import fr.Nat0uille.NATWhitelist.Whitelist;
 import fr.Nat0uille.NATWhitelist.Main;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -16,11 +16,11 @@ import java.util.UUID;
 
 public class WhitelistCommand implements CommandExecutor {
     private final Main main;
-    private final WhitelistListener whitelistListener;
+    private final Whitelist whitelist;
 
-    public WhitelistCommand(Main main, WhitelistListener whitelistListener) {
+    public WhitelistCommand(Main main, Whitelist whitelist) {
         this.main = main;
-        this.whitelistListener = whitelistListener;
+        this.whitelist = whitelist;
     }
 
     @Override
@@ -41,7 +41,7 @@ public class WhitelistCommand implements CommandExecutor {
                     return true;
                 }
                 try {
-                    sender.sendMessage(prefix.append(mm.deserialize(main.getLangMessage("list") + whitelistListener.listWhitelistedPlayers())));
+                    sender.sendMessage(prefix.append(mm.deserialize(main.getLangMessage("list") + whitelist.listWhitelistedPlayers())));
                 } catch (SQLException e) {
                     sender.sendMessage(prefix.append(mm.deserialize(main.getLangMessage("sqlerror"))));
                     e.printStackTrace();
@@ -69,13 +69,13 @@ public class WhitelistCommand implements CommandExecutor {
                     sender.sendMessage(prefix.append(noPermission));
                     return true;
                 }
-                if (whitelistListener.isEnabled()) {
+                if (whitelist.isEnabled()) {
                     sender.sendMessage(prefix.append(mm.deserialize(main.getLangMessage("whitelistalreadyon"))));
                 } else {
                     if (main.getConfig().getBoolean("kicknowhitelisted")) {
-                        whitelistListener.kickNoWhitelistedPlayers(main);
+                        whitelist.kickNoWhitelistedPlayers(main);
                     }
-                    whitelistListener.setEnabled(true);
+                    whitelist.setEnabled(true);
                     sender.sendMessage(prefix.append(mm.deserialize(main.getLangMessage("whiteliston"))));
                 }
                 return true;
@@ -85,10 +85,10 @@ public class WhitelistCommand implements CommandExecutor {
                     sender.sendMessage(prefix.append(noPermission));
                     return true;
                 }
-                if (!whitelistListener.isEnabled()) {
+                if (!whitelist.isEnabled()) {
                     sender.sendMessage(prefix.append(mm.deserialize(main.getLangMessage("whitelistalreadyoff"))));
                 } else {
-                    whitelistListener.setEnabled(false);
+                    whitelist.setEnabled(false);
                     sender.sendMessage(prefix.append(mm.deserialize(main.getLangMessage("whitelistoff"))));
                 }
                 return true;
@@ -108,8 +108,8 @@ public class WhitelistCommand implements CommandExecutor {
                     sender.sendMessage(prefix.append(noPermission));
                 }
                 try {
-                     whitelistListener.removeNoWhitelistedPlayers(main);
-                    List<String> removed = whitelistListener.getRemovedPlayers();
+                     whitelist.removeNoWhitelistedPlayers(main);
+                    List<String> removed = whitelist.getRemovedPlayers();
                     String removedList = removed.isEmpty() ? "No players retired." : String.join(", ", removed);
                     sender.sendMessage(prefix.append(mm.deserialize(main.getLangMessage("removeoffline").replace("{players}", removedList))));
                 } catch (SQLException e) {
@@ -127,7 +127,7 @@ public class WhitelistCommand implements CommandExecutor {
                 return true;
             }
             UUID uuid;
-            String correctName = WhitelistListener.getCorrectUsernameFromMojang(playerName);
+            String correctName = Whitelist.getCorrectUsernameFromMojang(playerName);
             if (correctName != null) {
                 playerName = correctName;
                 uuid = Bukkit.getOfflinePlayer(correctName).getUniqueId();
@@ -147,11 +147,11 @@ public class WhitelistCommand implements CommandExecutor {
                     return true;
                 }
                 try {
-                    if (whitelistListener.isWhitelisted(uuid)) {
+                    if (whitelist.isWhitelisted(uuid)) {
                         sender.sendMessage(prefix.append(mm.deserialize(main.getLangMessage("alreadyinwhitelist").replace("{player}", playerName))));
                         return true;
                     }
-                    boolean success = whitelistListener.add(uuid, playerName);
+                    boolean success = whitelist.add(uuid, playerName);
                     if (success) {
                         sender.sendMessage(prefix.append(mm.deserialize(main.getLangMessage("addinwhitelist").replace("{player}", playerName))));
                     } else {
@@ -169,13 +169,13 @@ public class WhitelistCommand implements CommandExecutor {
                     return true;
                 }
                 try {
-                    if (!whitelistListener.isWhitelisted(uuid)) {
+                    if (!whitelist.isWhitelisted(uuid)) {
                         sender.sendMessage(prefix.append(mm.deserialize(main.getLangMessage("notinwhitelist").replace("{player}", playerName))));
                         return true;
                     }
-                    boolean success = whitelistListener.remove(uuid);
+                    boolean success = whitelist.remove(uuid);
                     if (success) {
-                        whitelistListener.kickNoWhitelistedPlayers(main);
+                        whitelist.kickNoWhitelistedPlayers(main);
                         sender.sendMessage(prefix.append(mm.deserialize(main.getLangMessage("removeinwhoitelist").replace("{player}", playerName))));
                     } else {
                         sender.sendMessage(prefix.append(mm.deserialize(main.getLangMessage("errorremovingwhitelist").replace("{player}", playerName))));
@@ -196,7 +196,7 @@ public class WhitelistCommand implements CommandExecutor {
                     continue;
                 }
                 UUID uuid;
-                String correctName = WhitelistListener.getCorrectUsernameFromMojang(playerName);
+                String correctName = Whitelist.getCorrectUsernameFromMojang(playerName);
                 if (correctName != null) {
                     playerName = correctName;
                     uuid = Bukkit.getOfflinePlayer(correctName).getUniqueId();
@@ -216,11 +216,11 @@ public class WhitelistCommand implements CommandExecutor {
                         continue;
                     }
                     try {
-                        if (whitelistListener.isWhitelisted(uuid)) {
+                        if (whitelist.isWhitelisted(uuid)) {
                             sender.sendMessage(prefix.append(mm.deserialize(main.getLangMessage("alreadyinwhitelist").replace("{player}", playerName))));
                             continue;
                         }
-                        boolean success = whitelistListener.add(uuid, playerName);
+                        boolean success = whitelist.add(uuid, playerName);
                         if (success) {
                             sender.sendMessage(prefix.append(mm.deserialize(main.getLangMessage("addinwhitelist").replace("{player}", playerName))));
                         } else {
@@ -236,13 +236,13 @@ public class WhitelistCommand implements CommandExecutor {
                         continue;
                     }
                     try {
-                        if (!whitelistListener.isWhitelisted(uuid)) {
+                        if (!whitelist.isWhitelisted(uuid)) {
                             sender.sendMessage(prefix.append(mm.deserialize(main.getLangMessage("notinwhitelist").replace("{player}", playerName))));
                             continue;
                         }
-                        boolean success = whitelistListener.remove(uuid);
+                        boolean success = whitelist.remove(uuid);
                         if (success) {
-                            whitelistListener.kickNoWhitelistedPlayers(main);
+                            whitelist.kickNoWhitelistedPlayers(main);
                             sender.sendMessage(prefix.append(mm.deserialize(main.getLangMessage("removeinwhoitelist").replace("{player}", playerName))));
                         } else {
                             sender.sendMessage(prefix.append(mm.deserialize(main.getLangMessage("errorremovingwhitelist").replace("{player}", playerName))));

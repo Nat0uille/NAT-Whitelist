@@ -4,4 +4,10 @@ import java.util.UUID;
 
 public interface NATWhitelistAPI {
     boolean add(UUID uuid, String playerName);
+    boolean remove(UUID uuid);
+    boolean isWhitelisted(UUID uuid);
+    java.util.List<String> getWhitelistedPlayers();
+    String listWhitelistedPlayers();
+    void setEnabled(boolean enabled);
+    boolean isEnabled();
 }

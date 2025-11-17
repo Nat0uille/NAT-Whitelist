@@ -1,6 +1,7 @@
 package fr.Nat0uille.NATWhitelist.Listeners;
 
 import fr.Nat0uille.NATWhitelist.Main;
+import fr.Nat0uille.NATWhitelist.Whitelist;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.event.Listener;
@@ -12,11 +13,11 @@ import java.sql.SQLException;
 import java.util.UUID;
 
 public class PlayerListener implements Listener {
-    private final WhitelistListener whitelistListener;
+    private final Whitelist whitelist;
     private final Main main;
 
-    public PlayerListener(WhitelistListener whitelistListener, Main main) {
-        this.whitelistListener = whitelistListener;
+    public PlayerListener(Whitelist whitelist, Main main) {
+        this.whitelist = whitelist;
         this.main = main;
     }
 
@@ -42,12 +43,12 @@ public class PlayerListener implements Listener {
         }.runTaskLater(main, 20);
 
         try {
-            String storedName = whitelistListener.getPlayerNameByUUID(playerUUID);
+            String storedName = whitelist.getPlayerNameByUUID(playerUUID);
             if (storedName != null && !storedName.equalsIgnoreCase(currentName)) {
-                whitelistListener.updatePlayerName(playerUUID, currentName);
+                whitelist.updatePlayerName(playerUUID, currentName);
             }
             if (!event.getPlayer().hasPermission("natwhitelist.bypass")) {
-                 if (whitelistListener.isEnabled() && !whitelistListener.isWhitelisted(playerUUID)) {
+                 if (whitelist.isEnabled() && !whitelist.isWhitelisted(playerUUID)) {
                     event.disallow(PlayerLoginEvent.Result.KICK_WHITELIST, prefix.append(kickmessage));
                 }
             }

@@ -8,22 +8,22 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.ArrayList;
-import fr.Nat0uille.NATWhitelist.Listeners.WhitelistListener;
+import fr.Nat0uille.NATWhitelist.Whitelist;
 import org.bukkit.entity.Player;
 import java.sql.SQLException;
 
 public class WhitelistTabCompleter implements TabCompleter {
-    private final WhitelistListener whitelistListener;
+    private final Whitelist whitelist;
     private List<String> cachedPlayers = new ArrayList<>();
 
-    public WhitelistTabCompleter(WhitelistListener whitelistListener) {
-        this.whitelistListener = whitelistListener;
+    public WhitelistTabCompleter(Whitelist whitelist) {
+        this.whitelist = whitelist;
         updateCache();
     }
 
     public void updateCache() {
         try {
-            cachedPlayers = whitelistListener.getWhitelistedPlayers();
+            cachedPlayers = whitelist.getWhitelistedPlayers();
         } catch (SQLException e) {
             cachedPlayers = new ArrayList<>();
             e.printStackTrace();
