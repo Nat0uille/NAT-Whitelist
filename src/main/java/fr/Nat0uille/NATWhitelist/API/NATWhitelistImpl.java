@@ -16,9 +16,9 @@ public class NATWhitelistImpl implements NATWhitelistAPI {
     }
 
     @Override
-    public boolean add(UUID uuid, String playerName) {
+    public boolean add(UUID uuid) {
         try {
-            return whitelist.add(uuid, playerName);
+            return whitelist.add(uuid);
         } catch (Exception e) {
             return false;
         }

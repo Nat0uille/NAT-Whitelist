@@ -3,7 +3,7 @@ package fr.Nat0uille.NATWhitelist.API;
 import java.util.UUID;
 
 public interface NATWhitelistAPI {
-    boolean add(UUID uuid, String playerName);
+    boolean add(UUID uuid);
     boolean remove(UUID uuid);
     boolean isWhitelisted(UUID uuid);
     java.util.List<String> getWhitelistedPlayers();

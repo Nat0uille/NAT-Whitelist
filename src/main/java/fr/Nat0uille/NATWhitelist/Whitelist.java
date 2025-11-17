@@ -25,11 +25,21 @@ public class Whitelist {
         this.conn = conn;
     }
 
-    public boolean add(UUID uuid, String playerName) throws SQLException {
+    public boolean add(UUID uuid) throws SQLException {
         String type = main.getConfig().getString("database.type");
         String sql = "MySQL".equalsIgnoreCase(type)
-            ? "INSERT IGNORE INTO nat_whitelist (player_name, uuid) VALUES (?, ?)"
-            : "INSERT OR IGNORE INTO nat_whitelist (player_name, uuid) VALUES (?, ?)";
+                ? "INSERT IGNORE INTO nat_whitelist (player_name, uuid) VALUES (?, ?)"
+                : "INSERT OR IGNORE INTO nat_whitelist (player_name, uuid) VALUES (?, ?)";
+        String playerName = null;
+        Player online = Bukkit.getPlayer(uuid);
+        if (online != null) {
+            playerName = online.getName();
+        } else {
+            playerName = Bukkit.getOfflinePlayer(uuid).getName();
+        }
+        if (playerName == null) {
+            playerName = uuid.toString();
+        }
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, playerName);
             stmt.setString(2, uuid.toString());

@@ -31,3 +31,47 @@ public class MyPlugin extends JavaPlugin {
  }
 }
 ```
+
+## ✨ Méthodes de l'API
+
+### Ajouter un joueur à la whitelist
+```java
+boolean add(UUID uuid);
+```
+Ajoute le joueur à la whitelist. Retourne `true` si le joueur a été ajouté.
+
+### Retirer un joueur de la whitelist
+```java
+boolean remove(UUID uuid);
+```
+Retire le joueur de la whitelist. Retourne `true` si le joueur a été retiré.
+
+### Vérifier si un joueur est whitelisté
+```java
+boolean isWhitelisted(UUID uuid);
+```
+Retourne `true` si le joueur est dans la whitelist.
+
+### Obtenir la liste des joueurs whitelistés
+```java
+List<String> getWhitelistedPlayers();
+```
+Retourne une liste des noms des joueurs whitelistés.
+
+### Obtenir la liste formatée des joueurs whitelistés
+```java
+String listWhitelistedPlayers();
+```
+Retourne une chaîne contenant tous les joueurs whitelistés séparés par des virgules.
+
+### Activer ou désactiver la whitelist
+```java
+void setEnabled(boolean enabled);
+```
+Active (`true`) ou désactive (`false`) la whitelist.
+
+### Vérifier si la whitelist est activée
+```java
+boolean isEnabled();
+```
+Retourne `true` si la whitelist est activée.

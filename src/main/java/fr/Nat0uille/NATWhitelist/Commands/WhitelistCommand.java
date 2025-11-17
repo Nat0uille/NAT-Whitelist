@@ -151,7 +151,7 @@ public class WhitelistCommand implements CommandExecutor {
                         sender.sendMessage(prefix.append(mm.deserialize(main.getLangMessage("alreadyinwhitelist").replace("{player}", playerName))));
                         return true;
                     }
-                    boolean success = whitelist.add(uuid, playerName);
+                    boolean success = whitelist.add(uuid);
                     if (success) {
                         sender.sendMessage(prefix.append(mm.deserialize(main.getLangMessage("addinwhitelist").replace("{player}", playerName))));
                     } else {
@@ -220,7 +220,7 @@ public class WhitelistCommand implements CommandExecutor {
                             sender.sendMessage(prefix.append(mm.deserialize(main.getLangMessage("alreadyinwhitelist").replace("{player}", playerName))));
                             continue;
                         }
-                        boolean success = whitelist.add(uuid, playerName);
+                        boolean success = whitelist.add(uuid);
                         if (success) {
                             sender.sendMessage(prefix.append(mm.deserialize(main.getLangMessage("addinwhitelist").replace("{player}", playerName))));
                         } else {
