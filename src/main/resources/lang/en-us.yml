@@ -4,19 +4,19 @@ nopermission: "<#C70000><bold>✖</bold> You do not have permission to execute t
 # message when the player is not whitelisted
 kickmessage: "<#C70000><bold>✖</bold> You are not whitelisted on this server."
 # message from /nat-whitelist
-help: "<#ffc369><bold>HELP</bold> <newline>/whitelist add <player> - Add a player to the whitelist<newline>/whitelist remove <player> - Remove players from the whitelist<newline>/whitelist list - Display whitelisted players"
+help: "<#C70000><bold>HELP</bold><br><br><#ff6e6e>/whitelist <#951919>add <player> <#d43535>Add a player to the whitelist<newline><#ff6e6e>/whitelist <#951919>remove <player> <#d43535>Remove players from the whitelist<newline><#ff6e6e>/whitelist <#951919>list <#d43535>Display whitelisted players<#ff6e6e><br>/whitelist <#951919>reload <#d43535>Reloads the plugin configuration<newline><#ff6e6e>/whitelist <#951919>enable <#d43535>Enables the whitelist<newline><#ff6e6e>/whitelist <#951919>disable <#d43535>Disables the whitelist<newline><#ff6e6e>/whitelist <#951919>removeoffline <#d43535>Remove offline players"
 # message when there is an SQL error
 sqlerror: "<#C70000>SQL error while retrieving the list."
 # message from /nat-whitelist list
-list: "<#ffc369><bold>LIST</bold> <newline>"
+list: "<#C70000><bold>LIST</bold> <newline>"
 # message when whitelist is already on
 whitelistalreadyon: "<#C70000>The whitelist is already enabled."
 # message when whitelist is turned on
-whiteliston: "<#ffc369>The whitelist is now <#63c74d>enabled<#ffc369>."
+whiteliston: "<#ff6e6e>The whitelist is now <#63c74d>enabled<#ffc369>."
 # message when whitelist is already off
 whitelistalreadyoff: "<#C70000>The whitelist is already disabled."
 # message when whitelist is turned off
-whitelistoff: "<#ffc369>The whitelist is now <#63c74d>disabled<#ffc369>."
+whitelistoff: "<#ff6e6e>The whitelist is now <#63c74d>disabled<#ffc369>."
 # message when the player's name is too long
 playertoolong: "<#C70000>The username must not exceed 16 characters."
 # message when the player is not found
@@ -26,7 +26,7 @@ playernotfound: "<#C70000>The player was not found."
 alreadyinwhitelist: "<#C70000>The player {player} is already in the whitelist."
 # message when the player is added to the whitelist
 # variables : {player} = player name
-addinwhitelist: "<#ffc369>The player <bold>{player}</bold> has been added to the whitelist."
+addinwhitelist: "<#ff6e6e>The player <bold><#C70000>{player}</bold> <#ff6e6e>has been added to the whitelist."
 # message when the player is cracked or never connected to the server
 crackedneverconnected: "<#C70000>The player {player} is either cracked or has never connected to the server."
 # message when an error occurs when adding the player to the whitelist
@@ -37,15 +37,15 @@ erroraddingwhitelist: "<#C70000>An error occurred while adding the player {playe
 notinwhitelist: "<#C70000>The player {player} is not in the whitelist."
 # message when the player is removed from the whitelist
 # variables : {player} = player name
-removeinwhoitelist: "<#ffc369>The player <bold>{player}</bold> has been removed from the whitelist."
+removeinwhoitelist: "<#ff6e6e>The player <bold><#C70000>{player}</bold> #ff6e6ehas been removed from the whitelist."
 # message when /nat-whitelist removeoffline
 # variables : {players} = list of players removed
-removeoffline: "<#ffc369>The players <bold>{players}</bold> have been removed from the whitelist."
+removeoffline: "<#ff6e6e>The players <bold><#C70000>{players}</bold><#ff6e6e>have been removed from the whitelist."
 # message when an error occurs when removing the player from the whitelist
 # variables : {player} = player name
 errorremovingwhitelist: "<#C70000>Unable to remove the player {player}."
 # message when the config is reloaded
-reload: "<#ffc369>The configuration has been successfully reloaded."
+reload: "<#ff6e6e>The configuration has been successfully reloaded."
 # message when the plugin is not in the last version
 # variables : {local} = plugin version in server, {latest} = latest plugin version
 outdated: "<#C70000>The plugin is not up to date. Local version: <bold>{local}</bold>, latest version: <bold>{latest}</bold>"
