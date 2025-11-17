@@ -44,3 +44,17 @@ NAT-Whitelist is a powerful and flexible whitelist management plugin for Minecra
 | `natwhitelist.list`          | Allows you to list whitelisted players           |
 | `natwhitelist.admin`         | Grants all NAT-Whitelist rights (inherits all of the above permissions) |
 | `natwhitelist.*`             | Same as natwhitelist.admin                       |
+
+##  API
+
+NAT-Whitelist provides a developer API to interact with the whitelist directly from your own plugins. You can add, remove, check, list whitelisted players, and enable/disable the whitelist programmatically.
+
+See the full documentation in [API-README.md](./API-README.md) for all available methods, usage details, and code examples.
+
+Main API features:
+- Add or remove a player from the whitelist
+- Check if a player is whitelisted
+- List all whitelisted players
+- Enable or disable the whitelist
+
+To integrate the API into your plugin, follow the instructions and examples in API-README.md.
