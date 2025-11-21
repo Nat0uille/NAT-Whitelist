@@ -5,6 +5,7 @@ import fr.Nat0uille.NATWhitelist.Commands.*;
 import fr.Nat0uille.NATWhitelist.TabCompleter.*;
 import fr.Nat0uille.NATWhitelist.Listeners.*;
 import org.bukkit.Bukkit;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -28,6 +29,13 @@ public final class Main extends JavaPlugin {
         saveDefaultConfig();
         saveAllLangResources();
         loadLang();
+
+        ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
+        console.sendMessage("");
+        console.sendMessage("          §c___   "+ getDescription().getName());
+        console.sendMessage("§c|\\ |  /\\   |    §4Made by §cNat0uille");
+        console.sendMessage("§c| \\| /~~\\  |    §4Version §c" + getDescription().getVersion());
+        console.sendMessage("");
 
         // Database connection setup
         String type = getConfig().getString("database.type");
