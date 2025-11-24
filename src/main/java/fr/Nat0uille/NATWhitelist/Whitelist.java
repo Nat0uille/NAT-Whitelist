@@ -6,6 +6,7 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import java.io.IOException;
 import java.net.URL;
 import java.net.HttpURLConnection;
 import com.google.gson.JsonObject;
@@ -43,27 +44,67 @@ public class Whitelist {
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, playerName);
             stmt.setString(2, uuid.toString());
-            return stmt.executeUpdate() > 0;
+            boolean result = stmt.executeUpdate() > 0;
+            if (result) {
+                String title = main.getLangMessage("webhook-add-title");
+                String desc = main.getLangMessage("webhook-add-desc")
+                    .replace("{player}", playerName);
+                SendDiscordWebhook(title, desc);
+            }
+            return result;
         }
     }
-
 
     public boolean remove(UUID uuid) throws SQLException {
-        String sql = "DELETE FROM nat_whitelist WHERE uuid = ?";
+        String type = main.getConfig().getString("database.type");
+        String sql = "MySQL".equalsIgnoreCase(type)
+                ? "DELETE FROM nat_whitelist WHERE uuid = ?"
+                : "DELETE FROM nat_whitelist WHERE uuid = ?";
+        String playerName = getPlayerNameByUUID(uuid);
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, uuid.toString());
-            return stmt.executeUpdate() > 0;
+            boolean result = stmt.executeUpdate() > 0;
+            if (result) {
+                String title = main.getLangMessage("webhook-remove-title");
+                String desc = main.getLangMessage("webhook-remove-desc")
+                    .replace("{player}", playerName);
+                SendDiscordWebhook(title, desc);
+            }
+            return result;
         }
     }
 
-    public boolean isWhitelisted(UUID uuid) throws SQLException {
+    public boolean removeOffline(UUID uuid) throws SQLException {
+        String type = main.getConfig().getString("database.type");
+        String sql = "MySQL".equalsIgnoreCase(type)
+                ? "DELETE FROM nat_whitelist WHERE uuid = ?"
+                : "DELETE FROM nat_whitelist WHERE uuid = ?";
+        String playerName = getPlayerNameByUUID(uuid);
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, uuid.toString());
+            boolean result = stmt.executeUpdate() > 0;
+            if (result) {
+                String title = main.getLangMessage("webhook-removeoffline-title");
+                String desc = main.getLangMessage("webhook-removeoffline-desc")
+                    .replace("{player}", playerName);
+                SendDiscordWebhook(title, desc);
+            }
+            return result;
+        }
+    }
+
+
+    public boolean isWhitelisted(UUID uuid) {
         String sql = "SELECT 1 FROM nat_whitelist WHERE uuid = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, uuid.toString());
             try (ResultSet rs = stmt.executeQuery()) {
                 return rs.next();
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+        return false;
     }
 
     public List<String> getWhitelistedPlayers() throws SQLException {
@@ -116,7 +157,7 @@ public class Whitelist {
         Component kickmessage = mm.deserialize(main.getLangMessage("kickmessage"));
         for (Player player : Bukkit.getOnlinePlayers()) {
             try {
-                if (!isWhitelisted(player.getUniqueId()) || !player.hasPermission("natwhitelist.bypass")) {
+                if (!isWhitelisted(player.getUniqueId()) && !player.hasPermission("natwhitelist.bypass")) {
                     player.kick(prefix.append(kickmessage));
                 }
             } catch (Exception e) {
@@ -142,7 +183,7 @@ public class Whitelist {
                 }
                 if (uuidStr != null) {
                     UUID uuid = UUID.fromString(uuidStr);
-                    remove(uuid);
+                    removeOffline(uuid);
                     removedPlayers.add(playerName);
                 }
             }
@@ -172,6 +213,42 @@ public class Whitelist {
             stmt.setString(1, newName);
             stmt.setString(2, uuid.toString());
             stmt.executeUpdate();
+        }
+    }
+
+    public void SendDiscordWebhook(String title, String description) {
+        String url = main.getConfig().getString("discord-webhook-url");
+        if (url == null) return;
+        try {
+            String jsonPayload = "{"
+                    + "\"embeds\":[{"
+                    + "\"title\":\"" + title.replace("\"", "\\\"") + "\","
+                    + "\"description\":\"" + description.replace("\"", "\\\"") + "\","
+                    + "\"color\":13107200,"
+                    + "\"footer\":{"
+                    +     "\"text\":\"NAT-Whitelist\","
+                    +     "\"icon_url\":\"https://i.imgur.com/qxAdLlM.jpeg\""
+                    + "},"
+                    + "\"timestamp\":\"" + java.time.Instant.now().toString() + "\""
+                    + "}]"
+                    + "}";
+            java.net.URL webhookUrl = new java.net.URL(url);
+            java.net.HttpURLConnection connection = (java.net.HttpURLConnection) webhookUrl.openConnection();
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("Content-Type", "application/json");
+            connection.setDoOutput(true);
+            try (java.io.OutputStream os = connection.getOutputStream()) {
+                byte[] input = jsonPayload.getBytes("utf-8");
+                os.write(input, 0, input.length);
+            }
+            int responseCode = connection.getResponseCode();
+            if (responseCode != 204 && main != null) {
+                main.getLogger().warning("Discord webhook send failed: code " + responseCode);
+            }
+        } catch (IOException e) {
+            if (main != null) {
+                main.getLogger().warning("Error sending Discord webhook: " + e.getMessage());
+            }
         }
     }
 }

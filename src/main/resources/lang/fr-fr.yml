@@ -31,3 +31,12 @@ errorremovingwhitelist: "<#C70000>Impossible de retirer le joueur {player}."
 reload: "<#ff6e6e>La configuration a été rechargée avec succès."
 
 outdated: "<#C70000>Le plugin n'est pas à jour. Version locale : <bold>{local}</bold>, dernière version : <bold>{latest}</bold>"
+
+webhook-add-title: "Ajout dans la whitelist"
+webhook-add-desc: "{player} a été ajouté à la whitelist"
+webhook-remove-title: "Suppression de la whitelist"
+webhook-remove-desc: "{player} a été retiré de la whitelist"
+webhook-removeoffline-title: "Suppression hors-ligne de la whitelist"
+webhook-removeoffline-desc: "{player} a été retiré de la whitelist (hors-ligne)"
+webhook-notwhitelisted-title: "Connexion refusée"
+webhook-notwhitelisted-desc: "{player} a tenté de se connecter sans être whitelist."

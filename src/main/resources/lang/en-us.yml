@@ -37,7 +37,7 @@ erroraddingwhitelist: "<#C70000>An error occurred while adding the player {playe
 notinwhitelist: "<#C70000>The player {player} is not in the whitelist."
 # message when the player is removed from the whitelist
 # variables : {player} = player name
-removeinwhoitelist: "<#ff6e6e>The player <bold><#C70000>{player}</bold> #ff6e6ehas been removed from the whitelist."
+removeinwhoitelist: "<#ff6e6e>The player <bold><#C70000>{player}</bold> has been removed from the whitelist."
 # message when /nat-whitelist removeoffline
 # variables : {players} = list of players removed
 removeoffline: "<#ff6e6e>The players <bold><#C70000>{players}</bold><#ff6e6e>have been removed from the whitelist."
@@ -49,3 +49,11 @@ reload: "<#ff6e6e>The configuration has been successfully reloaded."
 # message when the plugin is not in the last version
 # variables : {local} = plugin version in server, {latest} = latest plugin version
 outdated: "<#C70000>The plugin is not up to date. Local version: <bold>{local}</bold>, latest version: <bold>{latest}</bold>"
+webhook-add-title: "Added to whitelist"
+webhook-add-desc: "{player} was added to the whitelist"
+webhook-remove-title: "Removed from whitelist"
+webhook-remove-desc: "{player} was removed from the whitelist"
+webhook-removeoffline-title: "Offline removal from whitelist"
+webhook-removeoffline-desc: "{player} was removed from the whitelist (offline)"
+webhook-notwhitelisted-title: "Connection refused"
+webhook-notwhitelisted-desc: "{player} tried to connect but is not whitelisted."

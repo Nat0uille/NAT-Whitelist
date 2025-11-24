@@ -48,8 +48,11 @@ public class PlayerListener implements Listener {
                 whitelist.updatePlayerName(playerUUID, currentName);
             }
             if (!event.getPlayer().hasPermission("natwhitelist.bypass")) {
-                 if (whitelist.isEnabled() && !whitelist.isWhitelisted(playerUUID)) {
+                if (whitelist.isEnabled() && !whitelist.isWhitelisted(playerUUID)) {
                     event.disallow(PlayerLoginEvent.Result.KICK_WHITELIST, prefix.append(kickmessage));
+                    String title = main.getLangMessage("webhook-notwhitelisted-title");
+                    String desc = main.getLangMessage("webhook-notwhitelisted-desc").replace("{player}", currentName);
+                    whitelist.SendDiscordWebhook(title, desc);
                 }
             }
         } catch (SQLException e) {
