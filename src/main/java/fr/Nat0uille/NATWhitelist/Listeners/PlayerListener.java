@@ -40,7 +40,7 @@ public class PlayerListener implements Listener {
                     }
                 }
             }
-        }.runTaskLater(main, 20);
+        }.runTaskLater(main, 10);
 
         try {
             String storedName = whitelist.getPlayerNameByUUID(playerUUID);
