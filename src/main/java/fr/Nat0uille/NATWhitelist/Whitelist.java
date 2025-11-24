@@ -127,6 +127,15 @@ public class Whitelist {
     public void setEnabled(boolean enabled) {
         main.getConfig().set("enabled", enabled);
         main.saveConfig();
+        String title, desc;
+        if (enabled) {
+            title = main.getLangMessage("webhook-on-title");
+            desc = main.getLangMessage("webhook-on-desc");
+        } else {
+            title = main.getLangMessage("webhook-off-title");
+            desc = main.getLangMessage("webhook-off-desc");
+        }
+        SendDiscordWebhook(title, desc);
     }
 
     public boolean isEnabled() {
