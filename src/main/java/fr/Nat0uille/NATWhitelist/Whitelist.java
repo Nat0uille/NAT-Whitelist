@@ -11,6 +11,7 @@ import java.net.URL;
 import java.net.HttpURLConnection;
 import com.google.gson.JsonObject;
 
+import java.nio.charset.StandardCharsets;
 import java.sql.*;
 import java.util.UUID;
 import java.util.List;
@@ -57,9 +58,7 @@ public class Whitelist {
 
     public boolean remove(UUID uuid) throws SQLException {
         String type = main.getConfig().getString("database.type");
-        String sql = "MySQL".equalsIgnoreCase(type)
-                ? "DELETE FROM nat_whitelist WHERE uuid = ?"
-                : "DELETE FROM nat_whitelist WHERE uuid = ?";
+        String sql = "DELETE FROM nat_whitelist WHERE uuid = ?";
         String playerName = getPlayerNameByUUID(uuid);
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, uuid.toString());
@@ -76,9 +75,7 @@ public class Whitelist {
 
     public boolean removeOffline(UUID uuid) throws SQLException {
         String type = main.getConfig().getString("database.type");
-        String sql = "MySQL".equalsIgnoreCase(type)
-                ? "DELETE FROM nat_whitelist WHERE uuid = ?"
-                : "DELETE FROM nat_whitelist WHERE uuid = ?";
+        String sql = "DELETE FROM nat_whitelist WHERE uuid = ?";
         String playerName = getPlayerNameByUUID(uuid);
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, uuid.toString());
@@ -92,7 +89,6 @@ public class Whitelist {
             return result;
         }
     }
-
 
     public boolean isWhitelisted(UUID uuid) {
         String sql = "SELECT 1 FROM nat_whitelist WHERE uuid = ?";
@@ -256,7 +252,7 @@ public class Whitelist {
             connection.setRequestProperty("Content-Type", "application/json");
             connection.setDoOutput(true);
             try (java.io.OutputStream os = connection.getOutputStream()) {
-                byte[] input = jsonPayload.getBytes("utf-8");
+                byte[] input = jsonPayload.getBytes(StandardCharsets.UTF_8);
                 os.write(input, 0, input.length);
             }
             int responseCode = connection.getResponseCode();
