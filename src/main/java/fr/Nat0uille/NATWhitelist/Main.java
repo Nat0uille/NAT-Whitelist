@@ -17,6 +17,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Map;
 
 public final class Main extends JavaPlugin {
     private Whitelist whitelist;
@@ -119,7 +120,13 @@ public final class Main extends JavaPlugin {
     }
 
     public String getLangMessage(String key) {
-        return langConfig.getString(key, "Message not found, please check your language file!");
+        String message = langConfig.getString(key);
+        if (message == null) {
+            String lang = getConfig().getString("lang", "en-us");
+            String notFound = notFoundMessages.getOrDefault(lang, notFoundMessages.get("en-us"));
+            return notFound.replace("{key}", key);
+        }
+        return message;
     }
 
     private void saveAllLangResources() {
@@ -133,4 +140,9 @@ public final class Main extends JavaPlugin {
             }
         }
     }
+
+    private final Map<String, String> notFoundMessages = Map.of(
+            "en-us", "Message not found, please check {key} in your language file! (en-us.yml)",
+            "fr-fr", "Message introuvable, vérifiez {key} dans votre fichier de langue ! (fr-fr.yml)"
+    );
 }
