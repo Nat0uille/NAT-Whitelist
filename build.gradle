@@ -50,3 +50,7 @@ processResources {
         expand props
     }
 }
+
+jar {
+    destinationDirectory = file("$rootDir/jar")
+}
