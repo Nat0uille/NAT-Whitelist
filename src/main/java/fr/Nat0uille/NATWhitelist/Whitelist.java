@@ -121,7 +121,16 @@ public class Whitelist {
 
     public String listWhitelistedPlayers() throws SQLException {
         List<String> players = getWhitelistedPlayers();
-        return String.join(", ", players);
+        List<String> coloredPlayers = new ArrayList<>();
+        for (String playerName : players) {
+            Player player = Bukkit.getPlayerExact(playerName);
+            if (player != null && player.isOnline()) {
+                coloredPlayers.add("<#63c74d>" + playerName);
+            } else {
+                coloredPlayers.add("<#951919>" + playerName);
+            }
+        }
+        return String.join(", ", coloredPlayers);
     }
 
     public void setEnabled(boolean enabled) {
