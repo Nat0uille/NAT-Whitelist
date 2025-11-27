@@ -73,7 +73,7 @@ public class Whitelist {
         }
     }
 
-    public boolean removeOffline(UUID uuid) throws SQLException {
+    public void removeOffline(UUID uuid) throws SQLException {
         String type = main.getConfig().getString("database.type");
         String sql = "DELETE FROM nat_whitelist WHERE uuid = ?";
         String playerName = getPlayerNameByUUID(uuid);
@@ -86,7 +86,6 @@ public class Whitelist {
                     .replace("{player}", playerName);
                 SendDiscordWebhook(title, desc);
             }
-            return result;
         }
     }
 
