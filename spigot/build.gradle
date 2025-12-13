@@ -2,8 +2,6 @@ plugins {
     id 'java'
 }
 
-group = 'fr.Nat0uille'
-version = '1.5.1'
 
 repositories {
     mavenCentral()
@@ -54,4 +52,10 @@ processResources {
 
 jar {
     destinationDirectory = file("$rootDir/jar")
+    archiveFileName = "${rootProject.name}-${version}-spigot.jar"
+    from {
+        configurations.runtimeClasspath.findAll { it.name.endsWith('jar') && !it.name.contains('paper-api') }.collect { zipTree(it) }
+    }
+    from(project(':common').sourceSets.main.output)
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
