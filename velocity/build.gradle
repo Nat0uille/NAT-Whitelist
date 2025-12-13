@@ -1,0 +1,44 @@
+plugins {
+    id 'java'
+}
+
+repositories {
+    mavenCentral()
+    maven { url = "https://repo.velocitypowered.com/snapshots/" }
+    maven { url = "https://repo.velocitypowered.com/releases/" }
+}
+
+
+dependencies {
+    implementation project(':common')
+    compileOnly "com.velocitypowered:velocity-api:3.3.0-SNAPSHOT"
+}
+
+def targetJavaVersion = 21
+java {
+    def javaVersion = JavaVersion.toVersion(targetJavaVersion)
+    sourceCompatibility = javaVersion
+    targetCompatibility = javaVersion
+    if (JavaVersion.current() < javaVersion) {
+        toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
+    }
+}
+
+processResources {
+    def props = [version: version]
+    inputs.properties props
+    filteringCharset 'UTF-8'
+    filesMatching('velocity-plugin.json') {
+        expand props
+    }
+}
+
+jar {
+    destinationDirectory = file("$rootDir/jar")
+    archiveFileName = "${rootProject.name}-${version}-velocity.jar"
+    from {
+        configurations.runtimeClasspath.findAll { it.name.endsWith('jar') && !it.name.contains('velocity-api') }.collect { zipTree(it) }
+    }
+    from(project(':common').sourceSets.main.output)
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}

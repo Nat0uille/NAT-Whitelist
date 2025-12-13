@@ -1,0 +1,10 @@
+{
+  "id": "natwhitelist",
+  "name": "Nat-Whitelist",
+  "version": "${version}",
+  "main": "fr.Nat0uille.NATWhitelist.Main",
+  "authors": [
+    "Nat0uille"
+  ],
+  "dependencies": []
+}

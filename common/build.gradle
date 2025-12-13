@@ -1,0 +1,25 @@
+plugins {
+    id "java"
+}
+
+group = "fr.Nat0uille"
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+}
+
+java {
+    def javaVersion = JavaVersion.toVersion(targetJavaVersion)
+    sourceCompatibility = javaVersion
+    targetCompatibility = javaVersion
+    if (JavaVersion.current() < javaVersion) {
+        toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
+    }
+}
+
+jar {
+    destinationDirectory = file("$rootDir/jar")
+}
