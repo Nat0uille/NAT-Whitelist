@@ -2,6 +2,8 @@ plugins {
     id 'java'
 }
 
+group = 'fr.Nat0uille'
+version = '1.5.1'
 
 repositories {
     mavenCentral()
@@ -16,15 +18,14 @@ repositories {
 }
 
 dependencies {
+    implementation 'org.xerial:sqlite-jdbc:3.51.1.0'
     implementation project(':common')
     compileOnly("io.papermc.paper:paper-api:1.21.10-R0.1-SNAPSHOT")
-    implementation 'org.xerial:sqlite-jdbc:3.51.0.0'
     implementation 'mysql:mysql-connector-java:8.0.33'
     implementation 'com.google.code.gson:gson:2.13.2'
 }
 
-targetJavaVersion=21
-
+def targetJavaVersion = 21
 java {
     def javaVersion = JavaVersion.toVersion(targetJavaVersion)
     sourceCompatibility = javaVersion
@@ -53,9 +54,4 @@ processResources {
 
 jar {
     destinationDirectory = file("$rootDir/jar")
-    archiveFileName = "${rootProject.name}-${version}-spigot.jar"
-
-    from(project(':common').sourceSets.main.output) {
-        include '**/*.class'
-    }
 }
