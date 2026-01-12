@@ -7,12 +7,9 @@
 #######################################################################################################
 # Made by Nat0uille & Love                                                                            #
 #######################################################################################################
-# All texts use the MiniMessage format. If you use anything else, it will not work!!!                 #
-# To create your messages, you can use the website https://webui.advntr.dev/                          #
-#######################################################################################################
 
 # Version of the config file.
-config-version: 1.0
+config-version: 2.0
 
 # Language of the plugin (en-us / fr-fr)
 lang: en-us

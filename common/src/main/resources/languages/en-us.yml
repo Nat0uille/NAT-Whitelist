@@ -1,0 +1,19 @@
+#######################################################################################################
+# All texts use the MiniMessage format. If you use anything else, it will not work!!!                 #
+# To create your messages, you can use the website https://webui.advntr.dev/                          #
+#######################################################################################################
+
+# Prefix
+prefix: "<bold><gradient:#C70000:#951919>NAT-Whitelist</gradient></bold> <gray>• "
+
+# No permission
+no-permission: "<#C70000>Sorry, but you don't have the required permission to execute this!"
+
+# Whitelist messages
+add-success: "<#ff6e6e>The player <color:#C70000>{player}</color> has been <color:#63c74d>added</color> to the whitelist!"
+already-on-whitelist: "<#C70000>The player <color:#C70000>{player}</color> is already on the whitelist!"
+remove-success: "<#ff6e6e>The player <color:#C70000>{player}</color> has been <color:#C70000>removed</color> from the whitelist!"
+not-on-whitelist: "<#C70000>The player <color:#C70000>{player}</color> is not on the whitelist!"
+
+# Whitelist commands
+reload-config: "<#63c74d>The config has been reloaded successfully!"
