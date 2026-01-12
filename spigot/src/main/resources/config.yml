@@ -6,20 +6,19 @@
 #  ██   ████ ██   ██    ██           ███ ███  ██   ██ ██    ██    ███████ ███████ ██ ███████    ██    #
 #######################################################################################################
 # Made by Nat0uille & Love                                                                            #
-# Config version : 1.5                                                                                #
 #######################################################################################################
 # All texts use the MiniMessage format. If you use anything else, it will not work!!!                 #
 # To create your messages, you can use the website https://webui.advntr.dev/                          #
 #######################################################################################################
-# SETTINGS                                                                                            #
-#######################################################################################################
+# Version of the config file.
+config-version: 1.0
 # Language of the plugin (en-us / fr-fr)
 lang: en-us
 
 database:
-  # Format: MySQL / SQLite
-  type: "SQLite"
-  # For MySQL, fill in the following fields
+  # Type: H2 / MySQL / MariaDB
+  type: "H2"
+  # For MySQL/MariaDB, fill in the following fields
   host: "localhost"
   port: 3306
   database: "nat_whitelist"
