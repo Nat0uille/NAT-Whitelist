@@ -1,5 +1,6 @@
 package fr.Nat0uille.NATWhitelist.Commands;
 
+import fr.Nat0uille.NATWhitelist.MojangAPIManager;
 import fr.Nat0uille.NATWhitelist.Whitelist;
 import fr.Nat0uille.NATWhitelist.Main;
 import net.kyori.adventure.text.Component;
@@ -15,18 +16,42 @@ import java.util.List;
 import java.util.UUID;
 
 public class WhitelistCommand implements CommandExecutor {
+
     private final Main main;
     private final Whitelist whitelist;
+
+    MiniMessage mm = MiniMessage.miniMessage();
+    private Component prefix;
+
 
     public WhitelistCommand(Main main, Whitelist whitelist) {
         this.main = main;
         this.whitelist = whitelist;
+
+        // Component messages
+        this.prefix = mm.deserialize(main.getLangMessage("prefix"));
+    }
+
+    private boolean addPlayerInWhitelist(CommandSender sender, Player player) {
+    String realName = MojangAPIManager.getCorrectUsernameFromMojang(player.getName());
+    UUID uuid = MojangAPIManager.getUUIDFromUsername(realName);
+    if (uuid == null) {
+        uuid = player.getUniqueId();
+    }
+
+    if (uuid == null) {
+        sender.sendMessage(prefix.append((mm.deserialize(main.getLangMessage("player-never-joined").replace("{player}", player.getName())))));
+    }
+
+    main.getWhitelistManager().add(uuid);
+    sender.sendMessage(prefix.append((mm.deserialize(main.getLangMessage("add-success").replace("{player}", player.getName())))));
+
+    return true;
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         MiniMessage mm = MiniMessage.miniMessage();
-        Component prefix = mm.deserialize(main.getLangMessage("prefix"));
         Component noPermission = mm.deserialize(main.getLangMessage("nopermission"));
 
         if (args.length == 0) {

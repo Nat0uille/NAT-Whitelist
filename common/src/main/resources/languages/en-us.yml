@@ -14,6 +14,6 @@ add-success: "<#ff6e6e>The player <color:#C70000>{player}</color> has been <colo
 already-on-whitelist: "<#C70000>The player <color:#C70000>{player}</color> is already on the whitelist!"
 remove-success: "<#ff6e6e>The player <color:#C70000>{player}</color> has been <color:#C70000>removed</color> from the whitelist!"
 not-on-whitelist: "<#C70000>The player <color:#C70000>{player}</color> is not on the whitelist!"
-
+player-never-joined: "<#C70000>The player <color:#C70000>{player}</color> never joined the server!"
 # Whitelist commands
 reload-config: "<#63c74d>The config has been reloaded successfully!"

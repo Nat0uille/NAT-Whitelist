@@ -18,9 +18,14 @@ import java.util.Map;
 public final class Main extends JavaPlugin {
     private Whitelist whitelist;
     private Connection sqlConnection;
-    private DatabaseManager dbManager;
+
     private CheckVersion checkVersion;
     private FileConfiguration langConfig;
+
+    // NEW VERION 2.0
+    private DatabaseManager dbManager;
+    private DiscordWebhook discordWebhook;
+    private WhitelistManager whitelistManager;
 
     @Override
     public void onEnable() {
@@ -145,4 +150,14 @@ public final class Main extends JavaPlugin {
             "en-us", "Message not found, please check {key} in your language file! (en-us.yml)",
             "fr-fr", "Message introuvable, vérifiez {key} dans votre fichier de langue ! (fr-fr.yml)"
     );
+
+
+    // NEW VERSION 2.0
+        public DiscordWebhook getDiscordWebhook() {
+        return discordWebhook;
+    }
+
+    public WhitelistManager getWhitelistManager() {
+        return whitelistManager;
+    }
 }
