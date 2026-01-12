@@ -231,7 +231,7 @@ public class Whitelist {
 
     public void SendDiscordWebhook(String title, String description) {
         String url = main.getConfig().getString("discord-webhook-url");
-        if (url == null) return;
+        if (url == "none") return;
         try {
             String jsonPayload = "{"
                     + "\"embeds\":[{"

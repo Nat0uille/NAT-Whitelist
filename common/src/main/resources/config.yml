@@ -1,0 +1,37 @@
+#######################################################################################################
+#  ███    ██  █████  ████████       ██     ██ ██   ██ ██ ████████ ███████ ██      ██ ███████ ████████ #
+#  ████   ██ ██   ██    ██          ██     ██ ██   ██ ██    ██    ██      ██      ██ ██         ██    #
+#  ██ ██  ██ ███████    ██    █████ ██  █  ██ ███████ ██    ██    █████   ██      ██ ███████    ██    #
+#  ██  ██ ██ ██   ██    ██          ██ ███ ██ ██   ██ ██    ██    ██      ██      ██      ██    ██    #
+#  ██   ████ ██   ██    ██           ███ ███  ██   ██ ██    ██    ███████ ███████ ██ ███████    ██    #
+#######################################################################################################
+# Made by Nat0uille & Love                                                                            #
+#######################################################################################################
+# All texts use the MiniMessage format. If you use anything else, it will not work!!!                 #
+# To create your messages, you can use the website https://webui.advntr.dev/                          #
+#######################################################################################################
+
+# Version of the config file.
+config-version: 1.0
+
+# Language of the plugin (en-us / fr-fr)
+lang: en-us
+
+database:
+  # Type: H2 / MySQL / MariaDB
+  type: "H2"
+  # For MySQL/MariaDB, fill in the following fields
+  host: "localhost"
+  port: 3306
+  database: "nat_whitelist"
+  username: ""
+  password: ""
+
+# If true, the whitelist is enabled.
+enabled: true
+
+# If true, the player will be kicked when he is not whitelisted.
+kick-not-whitelited-players: true
+
+# Discord webhook URL. If "none" is specified, the plugin will not send messages to Discord.
+discord-webhook-url: ""
