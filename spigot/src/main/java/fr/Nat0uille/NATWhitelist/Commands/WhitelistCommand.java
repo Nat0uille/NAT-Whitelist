@@ -22,6 +22,7 @@ public class WhitelistCommand implements CommandExecutor {
 
     MiniMessage mm = MiniMessage.miniMessage();
     private Component prefix;
+    private Component noPermission;
 
 
     public WhitelistCommand(Main main, Whitelist whitelist) {
@@ -30,6 +31,7 @@ public class WhitelistCommand implements CommandExecutor {
 
         // Component messages
         this.prefix = mm.deserialize(main.getLangMessage("prefix"));
+        this.noPermission = mm.deserialize(main.getLangMessage("no-permission"));
     }
 
     private boolean addPlayerInWhitelist(CommandSender sender, Player player) {
@@ -51,6 +53,38 @@ public class WhitelistCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        // NEW VERSION 2.0
+        if (args[0].equalsIgnoreCase("add")) {
+            if (!sender.hasPermission("natwhitelist.add")) {
+                sender.sendMessage(prefix.append(noPermission));
+                return true;
+            }
+            for (int i = 1; i < args.length; i++) {
+                Player player = Bukkit.getPlayer(args[i]);
+
+                if (player != null) {
+                    // Joueur connecté
+                    addPlayerInWhitelist(sender, player);
+                } else {
+                    // Joueur déconnecté
+                    String playerName = args[i];
+                    String correctName = MojangAPIManager.getCorrectUsernameFromMojang(playerName);
+
+                    if (correctName == null) {
+                        sender.sendMessage(prefix.append(mm.deserialize(main.getLangMessage("player-never-joined").replace("{player}", playerName))));
+                        continue;
+                    }
+
+                    UUID uuid = MojangAPIManager.getUUIDFromUsername(correctName);
+                    main.getWhitelistManager().add(uuid);
+                    sender.sendMessage(prefix.append(mm.deserialize(main.getLangMessage("add-success").replace("{player}", correctName))));
+                }
+            }
+            return true;
+        }
+
+
+        // LEGACY
         MiniMessage mm = MiniMessage.miniMessage();
         Component noPermission = mm.deserialize(main.getLangMessage("nopermission"));
 
