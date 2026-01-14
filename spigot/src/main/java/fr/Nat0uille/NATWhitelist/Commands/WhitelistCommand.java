@@ -85,6 +85,57 @@ public class WhitelistCommand implements CommandExecutor {
         return true;
     }
 
+    private boolean removePlayerInWhitelist(CommandSender sender, String playerName) {
+
+        UUID uuid = null;
+        String finalName = playerName;
+
+        // 1. Vérifier si le joueur est connecté
+        Player onlinePlayer = Bukkit.getPlayer(playerName);
+        if (onlinePlayer != null) {
+            // Joueur premium ou cracké connecté
+            finalName = onlinePlayer.getName();
+            uuid = onlinePlayer.getUniqueId();
+        } else {
+            // 2. Joueur non connecté - vérifier si premium via Mojang API
+            String correctNameFromMojang = MojangAPIManager.getCorrectUsernameFromMojang(playerName);
+
+            if (correctNameFromMojang != null) {
+                // Joueur premium non connecté
+                finalName = correctNameFromMojang;
+                uuid = MojangAPIManager.getUUIDFromUsername(finalName);
+            } else {
+                // 3. Joueur cracké non connecté - vérifier s'il s'est déjà connecté
+                // Utiliser OfflinePlayer pour obtenir l'UUID offline
+                org.bukkit.OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(playerName);
+
+                if (offlinePlayer.hasPlayedBefore()) {
+                    // Joueur cracké qui s'est déjà connecté
+                    finalName = offlinePlayer.getName() != null ? offlinePlayer.getName() : playerName;
+                    uuid = offlinePlayer.getUniqueId();
+                }
+            }
+        }
+
+        // Si l'UUID est toujours null, le joueur n'existe pas
+        if (uuid == null) {
+            sender.sendMessage(prefix.append(
+                    mm.deserialize(main.getLangMessage("player-never-joined")
+                            .replace("{player}", playerName))
+            ));
+            return true;
+        }
+
+        main.getWhitelistManager().remove(uuid);
+
+        sender.sendMessage(prefix.append(
+                mm.deserialize(main.getLangMessage("remove-success")
+                        .replace("{player}", finalName))
+        ));
+
+        return true;
+    }
+
 
 
     @Override
@@ -100,6 +151,20 @@ public class WhitelistCommand implements CommandExecutor {
             for (int i = 1; i < args.length; i++) {
                 addPlayerInWhitelist(sender, args[i]);
             }
+            return true;
+        }
+
+        if (args[0].equalsIgnoreCase("remove")) {
+
+            if (!sender.hasPermission("natwhitelist.remove")) {
+                sender.sendMessage(prefix.append(noPermission));
+                return true;
+            }
+
+            for (int i = 1; i < args.length; i++) {
+                removePlayerInWhitelist(sender, args[i]);
+            }
+            return true;
         }
 
 
