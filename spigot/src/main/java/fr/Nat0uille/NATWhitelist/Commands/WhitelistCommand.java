@@ -136,6 +136,30 @@ public class WhitelistCommand implements CommandExecutor {
         return true;
     }
 
+    private boolean listWhitelistedPlayersFormatted(CommandSender sender) {
+        String formattedList = main.getWhitelistManager().getFormattedList(
+            // Fonction pour obtenir le nom du joueur
+            uuid -> {
+                Player player = Bukkit.getPlayer(uuid);
+                return player != null ? player.getName() : Bukkit.getOfflinePlayer(uuid).getName();
+            },
+            // Fonction pour vérifier si le joueur est en ligne
+            uuid -> Bukkit.getPlayer(uuid) != null
+        );
+
+        if (formattedList.isEmpty()) {
+            sender.sendMessage(prefix.append(
+                    mm.deserialize(main.getLangMessage("list") + "<gray>Aucun joueur whitelisté.</gray>")
+            ));
+        } else {
+            sender.sendMessage(prefix.append(
+                    mm.deserialize(main.getLangMessage("list") + formattedList)
+            ));
+        }
+
+        return true;
+    }
+
 
 
     @Override
@@ -165,6 +189,14 @@ public class WhitelistCommand implements CommandExecutor {
                 removePlayerInWhitelist(sender, args[i]);
             }
             return true;
+        }
+
+        if (args[0].equalsIgnoreCase("list")) {
+            if (!sender.hasPermission("natwhitelist.list")) {
+                sender.sendMessage(prefix.append(noPermission));
+                return true;
+            }
+            return listWhitelistedPlayersFormatted(sender);
         }
 
 
