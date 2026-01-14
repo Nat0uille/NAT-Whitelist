@@ -34,53 +34,72 @@ public class WhitelistCommand implements CommandExecutor {
         this.noPermission = mm.deserialize(main.getLangMessage("no-permission"));
     }
 
-    private boolean addPlayerInWhitelist(CommandSender sender, Player player) {
-    String realName = MojangAPIManager.getCorrectUsernameFromMojang(player.getName());
-    UUID uuid = MojangAPIManager.getUUIDFromUsername(realName);
-    if (uuid == null) {
-        uuid = player.getUniqueId();
+    private boolean addPlayerInWhitelist(CommandSender sender, String playerName) {
+
+        UUID uuid = null;
+        String finalName = playerName;
+
+        // 1. Vérifier si le joueur est connecté
+        Player onlinePlayer = Bukkit.getPlayer(playerName);
+        if (onlinePlayer != null) {
+            // Joueur premium ou cracké connecté
+            finalName = onlinePlayer.getName();
+            uuid = onlinePlayer.getUniqueId();
+        } else {
+            // 2. Joueur non connecté - vérifier si premium via Mojang API
+            String correctNameFromMojang = MojangAPIManager.getCorrectUsernameFromMojang(playerName);
+
+            if (correctNameFromMojang != null) {
+                // Joueur premium non connecté
+                finalName = correctNameFromMojang;
+                uuid = MojangAPIManager.getUUIDFromUsername(finalName);
+            } else {
+                // 3. Joueur cracké non connecté - vérifier s'il s'est déjà connecté
+                // Utiliser OfflinePlayer pour obtenir l'UUID offline
+                org.bukkit.OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(playerName);
+
+                if (offlinePlayer.hasPlayedBefore()) {
+                    // Joueur cracké qui s'est déjà connecté
+                    finalName = offlinePlayer.getName() != null ? offlinePlayer.getName() : playerName;
+                    uuid = offlinePlayer.getUniqueId();
+                }
+            }
+        }
+
+        // Si l'UUID est toujours null, le joueur n'existe pas
+        if (uuid == null) {
+            sender.sendMessage(prefix.append(
+                    mm.deserialize(main.getLangMessage("player-never-joined")
+                            .replace("{player}", playerName))
+            ));
+            return true;
+        }
+
+        main.getWhitelistManager().add(uuid);
+
+        sender.sendMessage(prefix.append(
+                mm.deserialize(main.getLangMessage("add-success")
+                        .replace("{player}", finalName))
+        ));
+
+        return true;
     }
 
-    if (uuid == null) {
-        sender.sendMessage(prefix.append((mm.deserialize(main.getLangMessage("player-never-joined").replace("{player}", player.getName())))));
-    }
 
-    main.getWhitelistManager().add(uuid);
-    sender.sendMessage(prefix.append((mm.deserialize(main.getLangMessage("add-success").replace("{player}", player.getName())))));
-
-    return true;
-    }
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         // NEW VERSION 2.0
         if (args[0].equalsIgnoreCase("add")) {
+
             if (!sender.hasPermission("natwhitelist.add")) {
                 sender.sendMessage(prefix.append(noPermission));
                 return true;
             }
+
             for (int i = 1; i < args.length; i++) {
-                Player player = Bukkit.getPlayer(args[i]);
-
-                if (player != null) {
-                    // Joueur connecté
-                    addPlayerInWhitelist(sender, player);
-                } else {
-                    // Joueur déconnecté
-                    String playerName = args[i];
-                    String correctName = MojangAPIManager.getCorrectUsernameFromMojang(playerName);
-
-                    if (correctName == null) {
-                        sender.sendMessage(prefix.append(mm.deserialize(main.getLangMessage("player-never-joined").replace("{player}", playerName))));
-                        continue;
-                    }
-
-                    UUID uuid = MojangAPIManager.getUUIDFromUsername(correctName);
-                    main.getWhitelistManager().add(uuid);
-                    sender.sendMessage(prefix.append(mm.deserialize(main.getLangMessage("add-success").replace("{player}", correctName))));
-                }
+                addPlayerInWhitelist(sender, args[i]);
             }
-            return true;
         }
 
 
