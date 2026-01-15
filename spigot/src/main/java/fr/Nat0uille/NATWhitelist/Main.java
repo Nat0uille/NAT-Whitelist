@@ -70,6 +70,9 @@ public final class Main extends JavaPlugin {
 
         dbManager.execute("CREATE TABLE IF NOT EXISTS nat_whitelist (player_name VARCHAR(16) PRIMARY KEY, uuid VARCHAR(36))");
 
+        // Initialize WhitelistManager for v2
+        whitelistManager = new WhitelistManager(dbManager);
+
         try {
             sqlConnection = dbManager.getConnection();
             whitelist = new Whitelist(this, sqlConnection);

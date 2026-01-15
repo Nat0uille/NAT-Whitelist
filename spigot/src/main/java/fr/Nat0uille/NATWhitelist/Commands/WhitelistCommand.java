@@ -12,6 +12,7 @@ import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -160,6 +161,49 @@ public class WhitelistCommand implements CommandExecutor {
         return true;
     }
 
+    private boolean removeOfflinePlayerInWhitelist(CommandSender sender) {
+        try {
+            List<UUID> whitelistedUUIDs = main.getWhitelistManager().list();
+            List<String> removedPlayers = new ArrayList<>();
+
+            for (UUID uuid : whitelistedUUIDs) {
+                Player onlinePlayer = Bukkit.getPlayer(uuid);
+
+                // Si le joueur n'est pas en ligne, le retirer
+                if (onlinePlayer == null) {
+                    String playerName = Bukkit.getOfflinePlayer(uuid).getName();
+                    if (playerName == null) {
+                        playerName = uuid.toString();
+                    }
+
+                    main.getWhitelistManager().remove(uuid);
+                    removedPlayers.add(playerName);
+                }
+            }
+
+            // Envoyer le message de résultat
+            if (removedPlayers.isEmpty()) {
+                sender.sendMessage(prefix.append(
+                        mm.deserialize(main.getLangMessage("removeoffline-empty"))
+                ));
+            } else {
+                String removedList = String.join(", ", removedPlayers);
+                sender.sendMessage(prefix.append(
+                        mm.deserialize(main.getLangMessage("removeoffline-success")
+                                .replace("{players}", removedList))
+                ));
+            }
+
+            return true;
+        } catch (Exception e) {
+            sender.sendMessage(prefix.append(
+                    mm.deserialize(main.getLangMessage("error"))
+            ));
+            e.printStackTrace();
+            return true;
+        }
+    }
+
 
 
     @Override
@@ -197,6 +241,14 @@ public class WhitelistCommand implements CommandExecutor {
                 return true;
             }
             return listWhitelistedPlayersFormatted(sender);
+        }
+
+        if (args[0].equalsIgnoreCase("removeoffline")) {
+            if (!sender.hasPermission("natwhitelist.removeoffline")) {
+                sender.sendMessage(prefix.append(noPermission));
+                return true;
+            }
+            return removeOfflinePlayerInWhitelist(sender);
         }
 
 
