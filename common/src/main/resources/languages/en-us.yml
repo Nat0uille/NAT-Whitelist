@@ -11,6 +11,7 @@ no-permission: "<#C70000>Sorry, but you don't have the required permission to ex
 
 # Whitelist messages
 add-success: "<#ff6e6e>The player <color:#C70000>{player}</color> has been <color:#63c74d>added</color> to the whitelist!"
+add-error: "<#C70000>An error occurred while adding <color:#C70000>{player}</color> to the whitelist!"
 already-on-whitelist: "<#C70000>The player <color:#C70000>{player}</color> is already on the whitelist!"
 remove-success: "<#ff6e6e>The player <color:#C70000>{player}</color> has been <color:#C70000>removed</color> from the whitelist!"
 not-on-whitelist: "<#C70000>The player <color:#C70000>{player}</color> is not on the whitelist!"

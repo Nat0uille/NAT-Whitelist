@@ -76,12 +76,29 @@ public class WhitelistCommand implements CommandExecutor {
             return true;
         }
 
-        main.getWhitelistManager().add(uuid, finalName);
+        // Vérifier si le joueur est déjà whitelisté
+        if (main.getWhitelistManager().isWhitelisted(uuid)) {
+            sender.sendMessage(prefix.append(
+                    mm.deserialize(main.getLangMessage("already-on-whitelist")
+                            .replace("{player}", finalName))
+            ));
+            return true;
+        }
 
-        sender.sendMessage(prefix.append(
-                mm.deserialize(main.getLangMessage("add-success")
-                        .replace("{player}", finalName))
-        ));
+        // Ajouter le joueur à la whitelist
+        boolean success = main.getWhitelistManager().add(uuid, finalName);
+
+        if (success) {
+            sender.sendMessage(prefix.append(
+                    mm.deserialize(main.getLangMessage("add-success")
+                            .replace("{player}", finalName))
+            ));
+        } else {
+            sender.sendMessage(prefix.append(
+                    mm.deserialize(main.getLangMessage("add-error")
+                            .replace("{player}", finalName))
+            ));
+        }
 
         return true;
     }

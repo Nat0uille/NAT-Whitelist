@@ -14,8 +14,32 @@ public class WhitelistManager {
         this.databaseManager = databaseManager;
     }
 
+    public boolean isWhitelisted(UUID uuid) {
+        try {
+            List<Map<String, Object>> results = databaseManager.select("nat_whitelist", "uuid = '" + uuid.toString() + "'");
+            return !results.isEmpty();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean isWhitelisted(String playerName) {
+        try {
+            List<Map<String, Object>> results = databaseManager.select("nat_whitelist", "player_name = '" + playerName + "'");
+            return !results.isEmpty();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public boolean add(UUID uuid, String playerName) {
         try {
+            if (isWhitelisted(uuid)) {
+                return false;
+            }
+
             Map<String, Object> data = new HashMap<>();
             data.put("player_name", playerName);
             data.put("uuid", uuid.toString());
