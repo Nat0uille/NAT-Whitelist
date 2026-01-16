@@ -21,9 +21,10 @@ public class DatabaseManager {
     public boolean connectH2(String filePath) {
         try {
             HikariConfig config = new HikariConfig();
-            config.setJdbcUrl("jdbc:h2:" + filePath);
+            config.setJdbcUrl("jdbc:h2:" + filePath + ";DB_CLOSE_ON_EXIT=FALSE");
             config.setDriverClassName("org.h2.Driver");
             config.setMaximumPoolSize(10);
+            config.setAutoCommit(true);
 
             this.dataSource = new HikariDataSource(config);
             this.type = DatabaseType.H2;
@@ -220,7 +221,22 @@ public class DatabaseManager {
 
     public void disconnect() {
         if (dataSource != null && !dataSource.isClosed()) {
-            dataSource.close();
+            try {
+                // Pour H2, exécuter SHUTDOWN COMPACT FALSE pour éviter le compactage lors de la fermeture
+                if (type == DatabaseType.H2) {
+                    try (Connection conn = dataSource.getConnection();
+                         Statement stmt = conn.createStatement()) {
+                        stmt.execute("SHUTDOWN");
+                    } catch (SQLException e) {
+                        // Ignorer les erreurs de fermeture
+                    }
+                }
+            } catch (Exception e) {
+                // Ignorer les erreurs
+            } finally {
+                // Fermer le pool HikariCP
+                dataSource.close();
+            }
         }
     }
 }
