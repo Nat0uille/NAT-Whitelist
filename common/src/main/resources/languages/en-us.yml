@@ -18,5 +18,8 @@ not-on-whitelist: "<#C70000>The player <color:#C70000>{player}</color> is not on
 player-never-joined: "<#C70000>The player <color:#C70000>{player}</color> never joined the server!"
 # Whitelist commands
 reload-config: "<#63c74d>The config has been reloaded successfully!"
-list: "<#ff6e6e>The whitelist contains the following players:"
+list: "<#ff6e6e>The whitelist contains the following players: "
 list-empty: "<#C70000>There are no players on the whitelist!"
+removeoffline-empty: "<#C70000>There are no offline players on the whitelist!"
+removeoffline-success: "<#ff6e6e>The player <color:#C70000>{player}</color> has been <color:#C70000>removed</color> from the whitelist because he is offline!"
+error: "<#C70000>An error occurred while executing this command!"
