@@ -76,7 +76,7 @@ public class WhitelistCommand implements CommandExecutor {
             return true;
         }
 
-        main.getWhitelistManager().add(uuid);
+        main.getWhitelistManager().add(uuid, finalName);
 
         sender.sendMessage(prefix.append(
                 mm.deserialize(main.getLangMessage("add-success")
@@ -138,15 +138,7 @@ public class WhitelistCommand implements CommandExecutor {
     }
 
     private boolean listWhitelistedPlayersFormatted(CommandSender sender) {
-        String formattedList = main.getWhitelistManager().getFormattedList(
-            // Fonction pour obtenir le nom du joueur
-            uuid -> {
-                Player player = Bukkit.getPlayer(uuid);
-                return player != null ? player.getName() : Bukkit.getOfflinePlayer(uuid).getName();
-            },
-            // Fonction pour vérifier si le joueur est en ligne
-            uuid -> Bukkit.getPlayer(uuid) != null
-        );
+        String formattedList = main.getWhitelistManager().getFormattedList();
 
         if (formattedList.isEmpty()) {
             sender.sendMessage(prefix.append(

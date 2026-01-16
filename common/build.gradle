@@ -37,3 +37,11 @@ java {
 jar {
     destinationDirectory = file("$rootDir/jar")
 }
+
+tasks.register('cleanJar', Delete) {
+    delete file("$rootDir/jar")
+}
+
+tasks.named('clean') {
+    dependsOn cleanJar
+}

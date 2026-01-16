@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.function.Function;
 
 public class WhitelistManager {
 
@@ -15,9 +14,10 @@ public class WhitelistManager {
         this.databaseManager = databaseManager;
     }
 
-    public boolean add(UUID uuid) {
+    public boolean add(UUID uuid, String playerName) {
         try {
             Map<String, Object> data = new HashMap<>();
+            data.put("player_name", playerName);
             data.put("uuid", uuid.toString());
             return databaseManager.insert("nat_whitelist", data);
         } catch (Exception e) {
@@ -29,6 +29,15 @@ public class WhitelistManager {
     public boolean remove(UUID uuid) {
         try {
             return databaseManager.delete("nat_whitelist", "uuid = ?", uuid.toString()) > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean remove(String playerName) {
+        try {
+            return databaseManager.delete("nat_whitelist", "player_name = ?", playerName) > 0;
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -52,35 +61,45 @@ public class WhitelistManager {
         }
     }
 
-    public String getFormattedList(Function<UUID, String> getPlayerName, Function<UUID, Boolean> isOnline) {
-        List<UUID> uuids = list();
+    public Map<UUID, String> listWithNames() {
+        try {
+            List<Map<String, Object>> results = databaseManager.select("nat_whitelist", null);
+            Map<UUID, String> players = new HashMap<>();
+            for (Map<String, Object> row : results) {
+                Object uuidObj = row.get("uuid");
+                Object nameObj = row.get("player_name");
+                if (uuidObj != null && nameObj != null) {
+                    players.put(UUID.fromString(uuidObj.toString()), nameObj.toString());
+                }
+            }
+            return players;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new HashMap<>();
+        }
+    }
 
-        if (uuids.isEmpty()) {
+    public String getFormattedList() {
+        Map<UUID, String> players = listWithNames();
+
+        if (players.isEmpty()) {
             return "";
         }
 
         StringBuilder result = new StringBuilder();
+        int i = 0;
 
-        for (int i = 0; i < uuids.size(); i++) {
-            UUID uuid = uuids.get(i);
-            String playerName = getPlayerName.apply(uuid);
-            boolean online = isOnline.apply(uuid);
+        for (Map.Entry<UUID, String> entry : players.entrySet()) {
+            String playerName = entry.getValue();
 
-            // If display name not found, use uuid
-            String displayName = playerName != null ? playerName : uuid.toString();
+            result.append("<gray>")
+                  .append(playerName)
+                  .append("</gray>");
 
-            // Green color if online, gray if offline
-            String color = online ? "<green>" : "<gray>";
-
-            result.append(color)
-                  .append(displayName)
-                  .append("</")
-                  .append(online ? "green" : "gray")
-                  .append(">");
-
-            if (i < uuids.size() - 1) {
+            if (i < players.size() - 1) {
                 result.append("\n");
             }
+            i++;
         }
 
         return result.toString();

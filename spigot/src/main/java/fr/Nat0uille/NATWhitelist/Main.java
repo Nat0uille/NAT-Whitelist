@@ -29,8 +29,7 @@ public final class Main extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        saveDefaultConfig();
-        saveAllLangResources();
+        saveCommonResources();
         loadLang();
 
         ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
@@ -120,9 +119,9 @@ public final class Main extends JavaPlugin {
 
     public void loadLang() {
         String lang = getConfig().getString("lang");
-        File langFile = new File(getDataFolder(), "lang/" + lang + ".yml");
+        File langFile = new File(getDataFolder(), "languages/" + lang + ".yml");
         if (!langFile.exists()) {
-            saveResource("lang/" + lang + ".yml", false);
+            saveResource("languages/" + lang + ".yml", false);
         }
         langConfig = YamlConfiguration.loadConfiguration(langFile);
     }
@@ -130,23 +129,11 @@ public final class Main extends JavaPlugin {
     public String getLangMessage(String key) {
         String message = langConfig.getString(key);
         if (message == null) {
-            String lang = getConfig().getString("lang", "en-us");
+            String lang = getConfig().getString("languages", "en-us");
             String notFound = notFoundMessages.getOrDefault(lang, notFoundMessages.get("en-us"));
             return notFound.replace("{key}", key);
         }
         return message;
-    }
-
-    private void saveAllLangResources() {
-        String[] langs = {"en-us.yml", "fr-fr.yml"};
-        File langDir = new File(getDataFolder(), "lang");
-        if (!langDir.exists()) langDir.mkdirs();
-        for (String langFile : langs) {
-            File outFile = new File(langDir, langFile);
-            if (!outFile.exists()) {
-                saveResource("lang/" + langFile, false);
-            }
-        }
     }
 
     private final Map<String, String> notFoundMessages = Map.of(
@@ -156,11 +143,33 @@ public final class Main extends JavaPlugin {
 
 
     // NEW VERSION 2.0
-        public DiscordWebhook getDiscordWebhook() {
+    public DiscordWebhook getDiscordWebhook() {
         return discordWebhook;
     }
 
     public WhitelistManager getWhitelistManager() {
         return whitelistManager;
+    }
+
+    public void saveCommonResources() {
+        // Sauvegarder config.yml depuis common
+        File configFile = new File(getDataFolder(), "config.yml");
+        if (!configFile.exists()) {
+            saveResource("config.yml", false);
+        }
+
+        // Sauvegarder les fichiers de langues depuis common
+        File langDir = new File(getDataFolder(), "languages");
+        if (!langDir.exists()) {
+            langDir.mkdirs();
+        }
+
+        String[] commonLangs = {"en-us.yml"};
+        for (String langFile : commonLangs) {
+            File outFile = new File(langDir, langFile);
+            if (!outFile.exists()) {
+                saveResource("languages/" + langFile, false);
+            }
+        }
     }
 }
