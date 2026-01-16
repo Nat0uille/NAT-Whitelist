@@ -12,7 +12,7 @@ dependencies {
     // Database drivers
     implementation 'com.h2database:h2:2.4.240'
     implementation 'com.mysql:mysql-connector-j:9.5.0'
-    implementation 'org.mariadb.jdbc:mariadb-java-client:3.3.1'
+    implementation 'org.mariadb.jdbc:mariadb-java-client:3.5.7'
 
     // Connection pooling
     implementation 'com.zaxxer:HikariCP:5.1.0'
