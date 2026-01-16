@@ -9,9 +9,20 @@ import java.util.UUID;
 public class WhitelistManager {
 
     private final DatabaseManager databaseManager;
+    private java.util.function.Function<String, Boolean> onlineChecker;
 
     public WhitelistManager(DatabaseManager databaseManager) {
         this.databaseManager = databaseManager;
+        this.onlineChecker = playerName -> false; // Par défaut, tous les joueurs sont considérés hors ligne
+    }
+
+    public WhitelistManager(DatabaseManager databaseManager, java.util.function.Function<String, Boolean> onlineChecker) {
+        this.databaseManager = databaseManager;
+        this.onlineChecker = onlineChecker;
+    }
+
+    public void setOnlineChecker(java.util.function.Function<String, Boolean> onlineChecker) {
+        this.onlineChecker = onlineChecker;
     }
 
     public boolean isWhitelisted(UUID uuid) {
@@ -89,13 +100,16 @@ public class WhitelistManager {
         try {
             List<Map<String, Object>> results = databaseManager.select("nat_whitelist", null);
             Map<UUID, String> players = new HashMap<>();
+
             for (Map<String, Object> row : results) {
                 Object uuidObj = row.get("uuid");
                 Object nameObj = row.get("player_name");
+
                 if (uuidObj != null && nameObj != null) {
                     players.put(UUID.fromString(uuidObj.toString()), nameObj.toString());
                 }
             }
+
             return players;
         } catch (Exception e) {
             e.printStackTrace();
@@ -103,29 +117,24 @@ public class WhitelistManager {
         }
     }
 
+    public List<String> getWhitelistedPlayers() {
+        Map<UUID, String> playersMap = listWithNames();
+        return new ArrayList<>(playersMap.values());
+    }
+
     public String getFormattedList() {
-        Map<UUID, String> players = listWithNames();
+        List<String> players = getWhitelistedPlayers();
+        List<String> coloredPlayers = new ArrayList<>();
 
-        if (players.isEmpty()) {
-            return "";
-        }
-
-        StringBuilder result = new StringBuilder();
-        int i = 0;
-
-        for (Map.Entry<UUID, String> entry : players.entrySet()) {
-            String playerName = entry.getValue();
-
-            result.append("<gray>")
-                  .append(playerName)
-                  .append("</gray>");
-
-            if (i < players.size() - 1) {
-                result.append("\n");
+        for (String playerName : players) {
+            boolean isOnline = onlineChecker.apply(playerName);
+            if (isOnline) {
+                coloredPlayers.add("<#63c74d>" + playerName);
+            } else {
+                coloredPlayers.add("<#951919>" + playerName);
             }
-            i++;
         }
 
-        return result.toString();
+        return String.join(", ", coloredPlayers);
     }
 }

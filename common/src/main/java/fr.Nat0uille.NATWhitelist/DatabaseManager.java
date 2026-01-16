@@ -207,7 +207,9 @@ public class DatabaseManager {
                 while (rs.next()) {
                     Map<String, Object> row = new HashMap<>();
                     for (int i = 1; i <= columnCount; i++) {
-                        row.put(metaData.getColumnName(i), rs.getObject(i));
+                        // Utiliser getColumnLabel() qui retourne le nom en minuscules pour H2
+                        String columnName = metaData.getColumnLabel(i).toLowerCase();
+                        row.put(columnName, rs.getObject(i));
                     }
                     results.add(row);
                 }
@@ -222,20 +224,8 @@ public class DatabaseManager {
     public void disconnect() {
         if (dataSource != null && !dataSource.isClosed()) {
             try {
-                // Pour H2, exécuter SHUTDOWN COMPACT FALSE pour éviter le compactage lors de la fermeture
-                if (type == DatabaseType.H2) {
-                    try (Connection conn = dataSource.getConnection();
-                         Statement stmt = conn.createStatement()) {
-                        stmt.execute("SHUTDOWN");
-                    } catch (SQLException e) {
-                        // Ignorer les erreurs de fermeture
-                    }
-                }
-            } catch (Exception e) {
-                // Ignorer les erreurs
-            } finally {
-                // Fermer le pool HikariCP
                 dataSource.close();
+            } catch (Exception e) {
             }
         }
     }

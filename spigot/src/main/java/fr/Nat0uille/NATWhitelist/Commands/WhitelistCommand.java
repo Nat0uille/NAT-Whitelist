@@ -54,16 +54,6 @@ public class WhitelistCommand implements CommandExecutor {
                 // Joueur premium non connecté
                 finalName = correctNameFromMojang;
                 uuid = MojangAPIManager.getUUIDFromUsername(finalName);
-            } else {
-                // 3. Joueur cracké non connecté - vérifier s'il s'est déjà connecté
-                // Utiliser OfflinePlayer pour obtenir l'UUID offline
-                org.bukkit.OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(playerName);
-
-                if (offlinePlayer.hasPlayedBefore()) {
-                    // Joueur cracké qui s'est déjà connecté
-                    finalName = offlinePlayer.getName() != null ? offlinePlayer.getName() : playerName;
-                    uuid = offlinePlayer.getUniqueId();
-                }
             }
         }
 
@@ -122,17 +112,8 @@ public class WhitelistCommand implements CommandExecutor {
                 // Joueur premium non connecté
                 finalName = correctNameFromMojang;
                 uuid = MojangAPIManager.getUUIDFromUsername(finalName);
-            } else {
-                // 3. Joueur cracké non connecté - vérifier s'il s'est déjà connecté
-                // Utiliser OfflinePlayer pour obtenir l'UUID offline
-                org.bukkit.OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(playerName);
-
-                if (offlinePlayer.hasPlayedBefore()) {
-                    // Joueur cracké qui s'est déjà connecté
-                    finalName = offlinePlayer.getName() != null ? offlinePlayer.getName() : playerName;
-                    uuid = offlinePlayer.getUniqueId();
-                }
             }
+            // Sinon, le joueur n'existe pas (ni en ligne, ni premium)
         }
 
         // Si l'UUID est toujours null, le joueur n'existe pas
@@ -159,7 +140,7 @@ public class WhitelistCommand implements CommandExecutor {
 
         if (formattedList.isEmpty()) {
             sender.sendMessage(prefix.append(
-                    mm.deserialize(main.getLangMessage("list") + "<gray>Aucun joueur whitelisté.</gray>")
+                    mm.deserialize(main.getLangMessage("list") + main.getLangMessage("list-empty"))
             ));
         } else {
             sender.sendMessage(prefix.append(
@@ -217,7 +198,6 @@ public class WhitelistCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        // NEW VERSION 2.0
         if (args[0].equalsIgnoreCase("add")) {
 
             if (!sender.hasPermission("natwhitelist.add")) {

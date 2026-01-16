@@ -1,6 +1,5 @@
 package fr.Nat0uille.NATWhitelist;
 
-import fr.Nat0uille.NATWhitelist.API.*;
 import fr.Nat0uille.NATWhitelist.Commands.*;
 import fr.Nat0uille.NATWhitelist.TabCompleter.*;
 import fr.Nat0uille.NATWhitelist.Listeners.*;
@@ -9,7 +8,6 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.plugin.ServicePriority;
 
 import java.io.File;
 import java.sql.Connection;
@@ -22,7 +20,6 @@ public final class Main extends JavaPlugin {
     private CheckVersion checkVersion;
     private FileConfiguration langConfig;
 
-    // NEW VERION 2.0
     private DatabaseManager dbManager;
     private DiscordWebhook discordWebhook;
     private WhitelistManager whitelistManager;
@@ -69,8 +66,7 @@ public final class Main extends JavaPlugin {
 
         dbManager.execute("CREATE TABLE IF NOT EXISTS nat_whitelist (player_name VARCHAR(16) PRIMARY KEY, uuid VARCHAR(36))");
 
-        // Initialize WhitelistManager for v2
-        whitelistManager = new WhitelistManager(dbManager);
+        whitelistManager = new WhitelistManager(dbManager, playerName -> Bukkit.getPlayer(playerName) != null);
 
         try {
             sqlConnection = dbManager.getConnection();
@@ -93,8 +89,6 @@ public final class Main extends JavaPlugin {
         checkVersion = new CheckVersion();
         CheckVersion.startVersionCheck(this, checkVersion);
 
-        NATWhitelistAPI api = new NATWhitelistImpl(this);
-        getServer().getServicesManager().register(NATWhitelistAPI.class, api, this, ServicePriority.Normal);
     }
 
     @Override
@@ -142,7 +136,6 @@ public final class Main extends JavaPlugin {
     );
 
 
-    // NEW VERSION 2.0
     public DiscordWebhook getDiscordWebhook() {
         return discordWebhook;
     }
