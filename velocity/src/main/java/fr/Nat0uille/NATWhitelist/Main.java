@@ -47,9 +47,10 @@ public class Main {
     private DatabaseManager dbManager;
     private WhitelistManager whitelistManager;
     private WhitelistHandler whitelistHandler;
+    private final Metrics.Factory metricsFactory;
 
     @Inject
-    public Main(ProxyServer server, PluginContainer pluginContainer, Logger logger, @DataDirectory Path dataDirectory) {
+    public Main(ProxyServer server, PluginContainer pluginContainer, Logger logger, @DataDirectory Path dataDirectory, Metrics.Factory metricsFactory) {
         this.server = server;
         this.pluginContainer = pluginContainer;
         this.logger = logger;
@@ -61,6 +62,7 @@ public class Main {
         }
         this.configPath = dataDirectory.resolve("config.yml");
         this.langDirectory = dataDirectory.resolve("languages");
+        this.metricsFactory = metricsFactory;
     }
 
     @Subscribe
@@ -68,6 +70,9 @@ public class Main {
         boolean firstRun = saveCommonResources();
         migrateConfig();
         loadLang();
+
+        int pluginId = 28892;
+        Metrics metrics = metricsFactory.make(this, pluginId);
 
         server.getConsoleCommandSource().sendMessage(Component.empty());
         server.getConsoleCommandSource().sendMessage(
