@@ -234,7 +234,7 @@ public class WhitelistCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (args.length == 0) {
+        if (args.length == 0 || args[0].equalsIgnoreCase("help")) {
             sender.sendMessage(prefix.append(mm.deserialize(main.getLangMessage("help"))));
             return true;
         }
