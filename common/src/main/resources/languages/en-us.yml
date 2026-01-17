@@ -31,4 +31,7 @@ enable: "<#63c74d>The whitelist has been enabled successfully!"
 already-enabled: "<#C70000>The whitelist is already enabled!"
 disable: "<#63c74d>The whitelist has been disabled successfully!"
 already-disabled: "<#C70000>The whitelist is already disabled!"
+add-usage: "<#C70000>Usage: /whitelist add <player>"
+remove-usage: "<#C70000>Usage: /whitelist remove <player>"
+reload: "<#63c74d>The config has been reloaded successfully!"
 

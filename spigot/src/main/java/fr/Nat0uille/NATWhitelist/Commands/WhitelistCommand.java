@@ -234,6 +234,11 @@ public class WhitelistCommand implements CommandExecutor {
         }
     }
 
+    public void reloadConfig(CommandSender sender) {
+        main.reloadConfig();
+        main.loadLang();
+        sender.sendMessage(prefix.append(mm.deserialize(main.getLangMessage("reload"))));
+    }
 
 
     @Override
@@ -260,6 +265,11 @@ public class WhitelistCommand implements CommandExecutor {
                 return true;
             }
 
+            if (args.length == 1) {
+                sender.sendMessage(prefix.append(mm.deserialize(main.getLangMessage("add-usage"))));
+                return true;
+            }
+
             for (int i = 1; i < args.length; i++) {
                 addPlayerInWhitelist(sender, args[i]);
             }
@@ -270,6 +280,11 @@ public class WhitelistCommand implements CommandExecutor {
 
             if (!sender.hasPermission("natwhitelist.remove")) {
                 sender.sendMessage(prefix.append(noPermission));
+                return true;
+            }
+
+            if (args.length == 1) {
+                sender.sendMessage(prefix.append(mm.deserialize(main.getLangMessage("remove-usage"))));
                 return true;
             }
 
@@ -284,7 +299,8 @@ public class WhitelistCommand implements CommandExecutor {
                 sender.sendMessage(prefix.append(noPermission));
                 return true;
             }
-            return listWhitelistedPlayersFormatted(sender);
+            listWhitelistedPlayersFormatted(sender);
+            return true;
         }
 
         if (args[0].equalsIgnoreCase("removeoffline")) {
@@ -292,90 +308,18 @@ public class WhitelistCommand implements CommandExecutor {
                 sender.sendMessage(prefix.append(noPermission));
                 return true;
             }
-            return removeOfflinePlayerInWhitelist(sender);
+            removeOfflinePlayerInWhitelist(sender);
+            return true;
         }
 
-
-
-
-        // LEGACY
-        MiniMessage mm = MiniMessage.miniMessage();
-        Component noPermission = mm.deserialize(main.getLangMessage("nopermission"));
-
-
-
-        if (args.length == 1) {
-            if (args[0].equalsIgnoreCase("list")) {
-                if (!sender.hasPermission("natwhitelist.list")) {
-                    sender.sendMessage(prefix.append(noPermission));
-                    return true;
-                }
-                try {
-                    sender.sendMessage(prefix.append(mm.deserialize(main.getLangMessage("list") + whitelist.listWhitelistedPlayers())));
-                } catch (SQLException e) {
-                    sender.sendMessage(prefix.append(mm.deserialize(main.getLangMessage("sqlerror"))));
-                    e.printStackTrace();
-                }
+        if (args[0].equalsIgnoreCase("reload")) {
+            if (!sender.hasPermission("natwhitelist.reload")) {
+                sender.sendMessage(prefix.append(noPermission));
                 return true;
             }
-            if (args[0].equalsIgnoreCase("add")) {
-                if (!sender.hasPermission("natwhitelist.add")) {
-                    sender.sendMessage(prefix.append(noPermission));
-                    return true;
-                }
-                sender.sendMessage(prefix.append(mm.deserialize("<#ffc369>/whitelist add <player>")));
-                return true;
-            }
-            if (args[0].equalsIgnoreCase("remove")) {
-                if (!sender.hasPermission("natwhitelist.remove")) {
-                    sender.sendMessage(prefix.append(noPermission));
-                    return true;
-                }
-                sender.sendMessage(prefix.append(mm.deserialize("<#ffc369>/whitelist remove <player>")));
-                return true;
-            }
-            // ///////////////////////////////////////////////
-            if (args[0].equalsIgnoreCase("on")) {
-                if (!sender.hasPermission("natwhitelist.on")) {
-                    sender.sendMessage(prefix.append(noPermission));
-                    return true;
-                }
-                if (whitelist.isEnabled()) {
-                    sender.sendMessage(prefix.append(mm.deserialize(main.getLangMessage("whitelistalreadyon"))));
-                } else {
-                    if (main.getConfig().getBoolean("kicknowhitelisted")) {
-                        whitelist.kickNoWhitelistedPlayers(main);
-                    }
-                    whitelist.setEnabled(true);
-                    sender.sendMessage(prefix.append(mm.deserialize(main.getLangMessage("whiteliston"))));
-                }
-                return true;
-            }
-            if (args[0].equalsIgnoreCase("off")) {
-                if (!sender.hasPermission("natwhitelist.off")) {
-                    sender.sendMessage(prefix.append(noPermission));
-                    return true;
-                }
-                if (!whitelist.isEnabled()) {
-                    sender.sendMessage(prefix.append(mm.deserialize(main.getLangMessage("whitelistalreadyoff"))));
-                } else {
-                    whitelist.setEnabled(false);
-                    sender.sendMessage(prefix.append(mm.deserialize(main.getLangMessage("whitelistoff"))));
-                }
-                return true;
-            }
-            if (args[0].equalsIgnoreCase("reload")) {
-                if (!sender.hasPermission("natwhitelist.reload")) {
-                    sender.sendMessage(prefix.append(noPermission));
-                    return true;
-                }
-                main.reloadConfig();
-                main.loadLang();
-                sender.sendMessage(prefix.append(mm.deserialize(main.getLangMessage("reload"))));
-                return true;
-            }
+            reloadConfig(sender);
+            return true;
         }
-
         return false;
     }
 }
