@@ -1,7 +1,8 @@
 package fr.Nat0uille.NATWhitelist.Listeners;
 
 import fr.Nat0uille.NATWhitelist.Main;
-import fr.Nat0uille.NATWhitelist.Whitelist;
+import fr.Nat0uille.NATWhitelist.WhitelistHandler;
+import fr.Nat0uille.NATWhitelist.WhitelistManager;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.event.Listener;
@@ -9,23 +10,30 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.sql.SQLException;
 import java.util.UUID;
 
 public class PlayerListener implements Listener {
-    private final Whitelist whitelist;
-    private final Main main;
 
-    public PlayerListener(Whitelist whitelist, Main main) {
-        this.whitelist = whitelist;
+    private final Main main;
+    private final WhitelistManager whitelistManager;
+    private final WhitelistHandler whitelistHandler;
+
+    MiniMessage mm = MiniMessage.miniMessage();
+    private Component prefix;
+    private Component kickMessage;
+
+    public PlayerListener(Main main, WhitelistManager whitelistManager, WhitelistHandler whitelistHandler) {
         this.main = main;
+        this.whitelistManager = whitelistManager;
+        this.whitelistHandler = whitelistHandler;
+
+        // Component messages
+        this.prefix = mm.deserialize(main.getLangMessage("prefix"));
+        this.kickMessage = mm.deserialize(main.getLangMessage("kick-message"));
     }
 
     @EventHandler
     public void onPlayerLogin(PlayerLoginEvent event) {
-        MiniMessage mm = MiniMessage.miniMessage();
-        Component prefix = mm.deserialize(main.getLangMessage("prefix"));
-        Component kickmessage = mm.deserialize(main.getLangMessage("kickmessage"));
         UUID playerUUID = event.getPlayer().getUniqueId();
         String currentName = event.getPlayer().getName();
 
@@ -42,22 +50,14 @@ public class PlayerListener implements Listener {
             }
         }.runTaskLater(main, 10);
 
-        try {
-            String storedName = whitelist.getPlayerNameByUUID(playerUUID);
-            if (storedName != null && !storedName.equalsIgnoreCase(currentName)) {
-                whitelist.updatePlayerName(playerUUID, currentName);
+        String storedName = whitelistManager.getPlayerNameByUUID(playerUUID);
+        if (storedName != null && !storedName.equalsIgnoreCase(currentName)) {
+            whitelistManager.updatePlayerName(playerUUID, currentName);
+        }
+        if (!event.getPlayer().hasPermission("natwhitelist.bypass")) {
+            if (whitelistHandler.isEnabled() && !whitelistManager.isWhitelisted(playerUUID)) {
+                event.disallow(PlayerLoginEvent.Result.KICK_WHITELIST, prefix.append(kickMessage));
             }
-            if (!event.getPlayer().hasPermission("natwhitelist.bypass")) {
-                if (whitelist.isEnabled() && !whitelist.isWhitelisted(playerUUID)) {
-                    event.disallow(PlayerLoginEvent.Result.KICK_WHITELIST, prefix.append(kickmessage));
-                    String title = main.getLangMessage("webhook-notwhitelisted-title");
-                    String desc = main.getLangMessage("webhook-notwhitelisted-desc").replace("{player}", currentName);
-                    whitelist.SendDiscordWebhook(title, desc);
-                }
-            }
-        } catch (SQLException e) {
-            event.disallow(PlayerLoginEvent.Result.KICK_WHITELIST, prefix.append(mm.deserialize("<red>SQL error</red>")));
-            e.printStackTrace();
         }
     }
 }

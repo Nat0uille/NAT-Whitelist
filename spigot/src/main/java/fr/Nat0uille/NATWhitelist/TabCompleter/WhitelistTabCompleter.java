@@ -1,5 +1,6 @@
 package fr.Nat0uille.NATWhitelist.TabCompleter;
 
+import fr.Nat0uille.NATWhitelist.WhitelistManager;
 import org.bukkit.Bukkit;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.command.Command;
@@ -8,26 +9,20 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.ArrayList;
-import fr.Nat0uille.NATWhitelist.Whitelist;
+
 import org.bukkit.entity.Player;
-import java.sql.SQLException;
 
 public class WhitelistTabCompleter implements TabCompleter {
-    private final Whitelist whitelist;
+    private final WhitelistManager whitelist;
     private List<String> cachedPlayers = new ArrayList<>();
 
-    public WhitelistTabCompleter(Whitelist whitelist) {
+    public WhitelistTabCompleter(WhitelistManager whitelist) {
         this.whitelist = whitelist;
         updateCache();
     }
 
     public void updateCache() {
-        try {
-            cachedPlayers = whitelist.getWhitelistedPlayers();
-        } catch (SQLException e) {
-            cachedPlayers = new ArrayList<>();
-            e.printStackTrace();
-        }
+        cachedPlayers = whitelist.getWhitelistedPlayers();
     }
 
     @Override

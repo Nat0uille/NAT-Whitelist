@@ -137,4 +137,23 @@ public class WhitelistManager {
 
         return String.join(", ", coloredPlayers);
     }
+
+    public String getPlayerNameByUUID(UUID uuid) {
+        try {
+            List<Map<String, Object>> results = databaseManager.select("nat_whitelist", "uuid = '" + uuid.toString() + "'");
+            if (!results.isEmpty()) {
+                Object nameObj = results.getFirst().get("player_name");
+                return nameObj != null ? nameObj.toString() : null;
+            }
+            return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public void updatePlayerName(UUID uuid, String playerName) {
+        databaseManager.update("nat_whitelist", Map.of("player_name", playerName), "uuid = ?", uuid.toString());
+    }
+
 }

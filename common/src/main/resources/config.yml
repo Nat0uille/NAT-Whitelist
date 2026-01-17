@@ -31,4 +31,4 @@ enabled: true
 kick-not-whitelisted-players: true
 
 # Discord webhook URL. If "none" is specified, the plugin will not send messages to Discord.
-discord-webhook-url: ""
+discord-webhook-url: "none"

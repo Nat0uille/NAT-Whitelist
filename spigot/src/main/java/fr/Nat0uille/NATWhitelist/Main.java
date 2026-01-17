@@ -14,7 +14,6 @@ import java.sql.Connection;
 import java.util.Map;
 
 public final class Main extends JavaPlugin {
-    private Whitelist whitelist;
     private Connection sqlConnection;
 
     private CheckVersion checkVersion;
@@ -23,6 +22,7 @@ public final class Main extends JavaPlugin {
     private DatabaseManager dbManager;
     private DiscordWebhook discordWebhook;
     private WhitelistManager whitelistManager;
+    private WhitelistHandler whitelistHandler;
 
     @Override
     public void onEnable() {
@@ -68,23 +68,15 @@ public final class Main extends JavaPlugin {
 
         whitelistManager = new WhitelistManager(dbManager, playerName -> Bukkit.getPlayer(playerName) != null);
 
-        try {
-            sqlConnection = dbManager.getConnection();
-            whitelist = new Whitelist(this, sqlConnection);
-        } catch (Exception e) {
-            getLogger().severe("Unable to connect to the SQL database: " + e.getMessage());
-            getServer().getPluginManager().disablePlugin(this);
-            return;
-        }
+        getServer().getPluginManager().registerEvents(new PlayerListener(this, whitelistManager, whitelistHandler), this);
 
-        WhitelistTabCompleter tabCompleter = new WhitelistTabCompleter(whitelist);
+        WhitelistTabCompleter tabCompleter = new WhitelistTabCompleter(whitelistManager);
 
-        getCommand("whitelist").setExecutor(new WhitelistCommand(this, whitelist));
+        getCommand("whitelist").setExecutor(new WhitelistCommand(this, whitelistManager, whitelistHandler));
         getCommand("whitelist").setTabCompleter(tabCompleter);
 
         Bukkit.getScheduler().runTaskTimer(this, tabCompleter::updateCache, 0L, 20L);
 
-        getServer().getPluginManager().registerEvents(new PlayerListener(whitelist, this), this);
 
         checkVersion = new CheckVersion();
         CheckVersion.startVersionCheck(this, checkVersion);
@@ -101,10 +93,6 @@ public final class Main extends JavaPlugin {
 
     public CheckVersion getCheckVersion() {
         return checkVersion;
-    }
-    
-    public Whitelist getWhitelistListener() {
-        return whitelist;
     }
 
     public DatabaseManager getDatabaseManager() {
@@ -140,9 +128,6 @@ public final class Main extends JavaPlugin {
         return discordWebhook;
     }
 
-    public WhitelistManager getWhitelistManager() {
-        return whitelistManager;
-    }
 
     public void saveCommonResources() {
         // Sauvegarder config.yml depuis common

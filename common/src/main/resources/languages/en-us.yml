@@ -20,6 +20,8 @@ removeoffline-empty: "<#C70000>There are no offline players on the whitelist!"
 removeoffline-success: "<#ff6e6e>Players <color:#C70000>{players}</color> has been <color:#C70000>removed</color> from the whitelist because he is offline!"
 kick-message: "<#C70000>You are not whitelisted on this server!"
 
+outdated: "<#C70000>The plugin is not up to date. Local version: <bold>{local}</bold>, latest version: <bold>{latest}</bold>"
+
 # Whitelist commands
 reload-config: "<#63c74d>The config has been reloaded successfully!"
 list: "<#ff6e6e>The whitelist contains the following players: "
@@ -35,3 +37,19 @@ add-usage: "<#C70000>Usage: /whitelist add <player>"
 remove-usage: "<#C70000>Usage: /whitelist remove <player>"
 reload: "<#63c74d>The config has been reloaded successfully!"
 
+# Discord Webhook messages
+add:
+  title: "Player added to the whitelist"
+  description: "Player: {player}"
+remove:
+  title: "Player removed from the whitelist"
+  description: "Player: {player}"
+not-whitelisted:
+  title: "Player tried to join but is not whitelisted"
+  description: "Player: {player}"
+enable:
+  title: "Whitelist enabled"
+  description: "The whitelist has been enabled."
+disable:
+  title: "Whitelist disabled"
+  description: "The whitelist has been disabled."
