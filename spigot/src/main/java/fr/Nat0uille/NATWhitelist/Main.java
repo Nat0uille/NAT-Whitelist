@@ -67,6 +67,7 @@ public final class Main extends JavaPlugin {
         dbManager.execute("CREATE TABLE IF NOT EXISTS nat_whitelist (player_name VARCHAR(16) PRIMARY KEY, uuid VARCHAR(36))");
 
         whitelistManager = new WhitelistManager(dbManager, playerName -> Bukkit.getPlayer(playerName) != null);
+        whitelistHandler = new WhitelistHandler(this, whitelistManager);
 
         getServer().getPluginManager().registerEvents(new PlayerListener(this, whitelistManager, whitelistHandler), this);
 

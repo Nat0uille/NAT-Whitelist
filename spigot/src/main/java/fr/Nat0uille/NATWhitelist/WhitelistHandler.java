@@ -99,6 +99,8 @@ public class WhitelistHandler {
         UUID uuid = null;
         String finalName = playerName;
 
+        kickNoWhitelistedPlayers();
+
         // 1. Vérifier si le joueur est connecté
         Player onlinePlayer = Bukkit.getPlayer(playerName);
         if (onlinePlayer != null) {
