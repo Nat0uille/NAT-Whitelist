@@ -183,7 +183,7 @@ public final class Main extends JavaPlugin {
             langDir.mkdirs();
         }
 
-        String[] commonLangs = {"en-us.yml", "fr-fr"};
+        String[] commonLangs = {"en-us.yml", "fr-fr.yml"};
         for (String langFile : commonLangs) {
             File outFile = new File(langDir, langFile);
             if (!outFile.exists()) {
