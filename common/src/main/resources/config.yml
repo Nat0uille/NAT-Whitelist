@@ -28,7 +28,7 @@ database:
 enabled: true
 
 # If true, the player will be kicked when he is not whitelisted.
-kick-not-whitelited-players: true
+kick-not-whitelisted-players: true
 
 # Discord webhook URL. If "none" is specified, the plugin will not send messages to Discord.
 discord-webhook-url: ""

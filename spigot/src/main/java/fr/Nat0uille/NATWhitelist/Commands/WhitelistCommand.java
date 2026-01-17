@@ -194,12 +194,62 @@ public class WhitelistCommand implements CommandExecutor {
         }
     }
 
+    public void setWhitelist(boolean enabled, CommandSender sender) {
+        boolean ancientEnabled = main.getConfig().getBoolean("enabled");
+
+        if (ancientEnabled == enabled) {
+            if (enabled) {
+                sender.sendMessage(prefix.append(mm.deserialize(main.getLangMessage("already-enabled"))));
+            }
+            else {
+                sender.sendMessage(prefix.append(mm.deserialize(main.getLangMessage("already-disabled"))));
+            }
+        }
+        else {
+            if (enabled) {
+                if (main.getConfig().getBoolean("kick-not-whitelisted-players")) {
+                    kickNoWhitelistedPlayers();
+                }
+                sender.sendMessage(prefix.append(mm.deserialize(main.getLangMessage("enabled"))));
+            }
+            else {
+                sender.sendMessage(prefix.append(mm.deserialize(main.getLangMessage("disabled"))));
+            }
+
+            main.getConfig().set("enabled", enabled);
+            main.saveConfig();
+
+        }
+    }
+
+    public void kickNoWhitelistedPlayers() {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            try {
+                if (!main.getWhitelistManager().isWhitelisted(player.getUniqueId()) && !player.hasPermission("natwhitelist.bypass")) {
+                    player.kick(prefix.append(mm.deserialize(main.getLangMessage("kick-message"))));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (args.length == 0) {
             sender.sendMessage(prefix.append(mm.deserialize(main.getLangMessage("help"))));
+            return true;
+        }
+
+        if (args[0].equalsIgnoreCase("on") || args[0].equalsIgnoreCase("enable")) {
+            setWhitelist(true, sender);
+            return true;
+        }
+
+        if (args[0].equalsIgnoreCase("off") || args[0].equalsIgnoreCase("disable")) {
+            setWhitelist(false, sender);
             return true;
         }
 
@@ -284,6 +334,7 @@ public class WhitelistCommand implements CommandExecutor {
                 sender.sendMessage(prefix.append(mm.deserialize("<#ffc369>/whitelist remove <player>")));
                 return true;
             }
+            // ///////////////////////////////////////////////
             if (args[0].equalsIgnoreCase("on")) {
                 if (!sender.hasPermission("natwhitelist.on")) {
                     sender.sendMessage(prefix.append(noPermission));
