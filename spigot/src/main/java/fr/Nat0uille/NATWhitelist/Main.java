@@ -26,8 +26,12 @@ public final class Main extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        saveCommonResources();
+        boolean firstRun = saveCommonResources();
+        migrateConfig();
         loadLang();
+
+        int pluginId = 28891;
+        Metrics metrics = new Metrics(this, pluginId);
 
         ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
         console.sendMessage("");
@@ -35,6 +39,10 @@ public final class Main extends JavaPlugin {
         console.sendMessage("§c|\\ |  /\\   |    §4Made by §cNat0uille");
         console.sendMessage("§c| \\| /~~\\  |    §4Version §c" + getDescription().getVersion());
         console.sendMessage("");
+
+        if (firstRun) {
+            displayFirstRunMessage(console);
+        }
 
         dbManager = new DatabaseManager();
 
@@ -129,11 +137,43 @@ public final class Main extends JavaPlugin {
         return discordWebhook;
     }
 
+    private void displayFirstRunMessage(ConsoleCommandSender console) {
+        console.sendMessage("");
+        console.sendMessage("");
+        console.sendMessage("");
+        console.sendMessage("Thank you very much for installing NAT-Whitelist!");
+        console.sendMessage("");
+        console.sendMessage("IMPORTANT: Be sure to configure your database! ");
+        console.sendMessage("");
+        console.sendMessage("Thank you for using NAT-Whitelist on your server, I'm very grateful and hope you enjoy it!");
+        console.sendMessage("- Nat0uille");
+        console.sendMessage("");
+        console.sendMessage("If you need help with this plugin, come to my Discord: https://nat0uille.com/discord");
+        console.sendMessage("");
+        console.sendMessage("");
+        console.sendMessage("");
+    }
 
-    public void saveCommonResources() {
+    private void migrateConfig() {
+        reloadConfig();
+        FileConfiguration config = getConfig();
+
+        ConfigMigration.migrateToV2(
+                defaultValue -> config.getString("config-version", defaultValue),
+                config::contains,
+                key -> config.getBoolean(key, true),
+                config::set,
+                this::saveConfig
+        );
+    }
+
+
+    public boolean saveCommonResources() {
         // Sauvegarder config.yml depuis common
         File configFile = new File(getDataFolder(), "config.yml");
-        if (!configFile.exists()) {
+        boolean isFirstRun = !configFile.exists();
+
+        if (isFirstRun) {
             saveResource("config.yml", false);
         }
 
@@ -143,12 +183,14 @@ public final class Main extends JavaPlugin {
             langDir.mkdirs();
         }
 
-        String[] commonLangs = {"en-us.yml"};
+        String[] commonLangs = {"en-us.yml", "fr-fr"};
         for (String langFile : commonLangs) {
             File outFile = new File(langDir, langFile);
             if (!outFile.exists()) {
                 saveResource("languages/" + langFile, false);
             }
         }
+
+        return isFirstRun;
     }
 }

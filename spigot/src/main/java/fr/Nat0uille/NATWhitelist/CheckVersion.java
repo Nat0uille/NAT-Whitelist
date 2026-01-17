@@ -10,7 +10,7 @@ import java.net.URL;
 
 public class CheckVersion {
     private static final String REMOTE_URL = "https://raw.githubusercontent.com/Nat0uille/NAT-Whitelist/refs/heads/master/VERSION";
-    private static final long PERIOD_TICKS = 3 * 60 * 60 * 20L;
+    private static final long PERIOD_TICKS = 6 * 60 * 60 * 20L;
 
     public boolean outdated;
     public String remoteVersion;
@@ -24,11 +24,11 @@ public class CheckVersion {
                     checkVersion.remoteVersion = fetchRemoteVersion();
                     checkVersion.localVersion = fetchLocalVersion(plugin);
                     if (!checkVersion.remoteVersion.equals(checkVersion.localVersion)) {
-                        Bukkit.getLogger().warning("[NATWhitelist] The plugin is not up to date. Local version: " + checkVersion.localVersion + ", latest version: " + checkVersion.remoteVersion);
+                        Bukkit.getLogger().warning("[NAT-Whitelist] The plugin is not up to date. Local version: " + checkVersion.localVersion + ", latest version: " + checkVersion.remoteVersion);
                         checkVersion.outdated = true;
                     }
                 } catch (Exception e) {
-                    Bukkit.getLogger().severe("[NATWhitelist] Error while checking version: " + e.getMessage());
+                    Bukkit.getLogger().severe("[NAT-Whitelist] Error while checking version: " + e.getMessage());
                 }
             }
         }.runTaskTimerAsynchronously(plugin, 0L, PERIOD_TICKS);

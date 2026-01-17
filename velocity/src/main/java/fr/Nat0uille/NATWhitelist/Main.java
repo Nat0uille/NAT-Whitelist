@@ -43,6 +43,7 @@ public class Main {
         }
         this.configPath = dataDirectory.resolve("config.yml");
         loadConfig();
+        migrateConfig();
     }
 
     @Subscribe
@@ -75,6 +76,37 @@ public class Main {
 
     public void reloadConfig() {
         loadConfig();
+    }
+
+    /**
+     * Migrates the configuration file from old versions to the current version.
+     */
+    private void migrateConfig() {
+        ConfigMigration.migrateToV2(
+                defaultValue -> {
+                    ConfigurationNode node = config.node("config-version");
+                    return node.isNull() ? defaultValue : node.getString(defaultValue);
+                },
+                key -> !config.node((Object[]) key.split("\\.")).isNull(),
+                key -> config.node((Object[]) key.split("\\.")).getBoolean(true),
+                (key, value) -> {
+                    try {
+                        config.node((Object[]) key.split("\\.")).set(value);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                },
+                this::saveConfig
+        );
+    }
+
+    private void saveConfig() {
+        try {
+            YamlConfigurationLoader loader = createLoader();
+            loader.save(config);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private YamlConfigurationLoader createLoader() {
