@@ -198,6 +198,11 @@ public class WhitelistCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        if (args.length == 0) {
+            sender.sendMessage(prefix.append(mm.deserialize(main.getLangMessage("help"))));
+            return true;
+        }
+
         if (args[0].equalsIgnoreCase("add")) {
 
             if (!sender.hasPermission("natwhitelist.add")) {
@@ -241,14 +246,13 @@ public class WhitelistCommand implements CommandExecutor {
         }
 
 
+
+
         // LEGACY
         MiniMessage mm = MiniMessage.miniMessage();
         Component noPermission = mm.deserialize(main.getLangMessage("nopermission"));
 
-        if (args.length == 0) {
-            sender.sendMessage(prefix.append(mm.deserialize(main.getLangMessage("help"))));
-            return true;
-        }
+
 
         if (args.length == 1) {
             if (args[0].equalsIgnoreCase("list")) {
