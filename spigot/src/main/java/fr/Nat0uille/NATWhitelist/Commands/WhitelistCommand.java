@@ -11,7 +11,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -35,7 +34,7 @@ public class WhitelistCommand implements CommandExecutor {
         this.noPermission = mm.deserialize(main.getLangMessage("no-permission"));
     }
 
-    private boolean addPlayerInWhitelist(CommandSender sender, String playerName) {
+    private void addPlayerInWhitelist(CommandSender sender, String playerName) {
 
         UUID uuid = null;
         String finalName = playerName;
@@ -63,7 +62,7 @@ public class WhitelistCommand implements CommandExecutor {
                     mm.deserialize(main.getLangMessage("player-never-joined")
                             .replace("{player}", playerName))
             ));
-            return true;
+            return;
         }
 
         // Vérifier si le joueur est déjà whitelisté
@@ -72,7 +71,7 @@ public class WhitelistCommand implements CommandExecutor {
                     mm.deserialize(main.getLangMessage("already-on-whitelist")
                             .replace("{player}", finalName))
             ));
-            return true;
+            return;
         }
 
         // Ajouter le joueur à la whitelist
@@ -90,10 +89,9 @@ public class WhitelistCommand implements CommandExecutor {
             ));
         }
 
-        return true;
     }
 
-    private boolean removePlayerInWhitelist(CommandSender sender, String playerName) {
+    private void removePlayerInWhitelist(CommandSender sender, String playerName) {
 
         UUID uuid = null;
         String finalName = playerName;
@@ -122,7 +120,7 @@ public class WhitelistCommand implements CommandExecutor {
                     mm.deserialize(main.getLangMessage("player-never-joined")
                             .replace("{player}", playerName))
             ));
-            return true;
+            return;
         }
 
         main.getWhitelistManager().remove(uuid);
@@ -131,11 +129,9 @@ public class WhitelistCommand implements CommandExecutor {
                 mm.deserialize(main.getLangMessage("remove-success")
                         .replace("{player}", finalName))
         ));
-
-        return true;
     }
 
-    private boolean listWhitelistedPlayersFormatted(CommandSender sender) {
+    private void listWhitelistedPlayersFormatted(CommandSender sender) {
         String formattedList = main.getWhitelistManager().getFormattedList();
 
         if (formattedList.isEmpty()) {
@@ -147,11 +143,9 @@ public class WhitelistCommand implements CommandExecutor {
                     mm.deserialize(main.getLangMessage("list") + formattedList)
             ));
         }
-
-        return true;
     }
 
-    private boolean removeOfflinePlayerInWhitelist(CommandSender sender) {
+    private void removeOfflinePlayerInWhitelist(CommandSender sender) {
         try {
             List<UUID> whitelistedUUIDs = main.getWhitelistManager().list();
             List<String> removedPlayers = new ArrayList<>();
@@ -183,14 +177,11 @@ public class WhitelistCommand implements CommandExecutor {
                                 .replace("{players}", removedList))
                 ));
             }
-
-            return true;
         } catch (Exception e) {
             sender.sendMessage(prefix.append(
                     mm.deserialize(main.getLangMessage("error"))
             ));
             e.printStackTrace();
-            return true;
         }
     }
 
@@ -323,3 +314,4 @@ public class WhitelistCommand implements CommandExecutor {
         return false;
     }
 }
+
