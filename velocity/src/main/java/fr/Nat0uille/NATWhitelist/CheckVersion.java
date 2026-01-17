@@ -23,12 +23,12 @@ public class CheckVersion {
                     checkVersion.remoteVersion = fetchRemoteVersion();
                     checkVersion.localVersion = plugin.getVersion();
                     if (!checkVersion.remoteVersion.equals(checkVersion.localVersion)) {
-                        logger.warn("[NAT-Whitelist] The plugin is not up to date. Local version: " +
+                        logger.warn("The plugin is not up to date. Local version: " +
                             checkVersion.localVersion + ", latest version: " + checkVersion.remoteVersion);
                         checkVersion.outdated = true;
                     }
                 } catch (Exception e) {
-                    logger.error("[NAT-Whitelist] Error while checking version: " + e.getMessage());
+                    logger.error("Error while checking version: " + e.getMessage());
                 }
             })
             .repeat(PERIOD_HOURS, TimeUnit.HOURS)

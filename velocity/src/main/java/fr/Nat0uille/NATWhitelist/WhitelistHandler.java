@@ -230,7 +230,7 @@ public class WhitelistHandler {
 
             try {
                 main.getConfig().node("enabled").set(enabled);
-                main.reloadConfig();
+                main.saveConfig();
             } catch (Exception e) {
                 main.getLogger().error("Failed to update config", e);
             }

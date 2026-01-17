@@ -68,6 +68,7 @@ public class Main {
     @Subscribe
     public void onProxyInitialization(ProxyInitializeEvent event) {
         boolean firstRun = saveCommonResources();
+        loadConfig();
         migrateConfig();
         loadLang();
 
@@ -110,10 +111,10 @@ public class Main {
         } else if ("MariaDB".equalsIgnoreCase(type)) {
             connected = dbManager.connectMariaDB(host, port, dbName, username, password);
         } else if ("H2".equalsIgnoreCase(type)) {
-            String path = dataDirectory.resolve("database").toString();
+            String path = dataDirectory.resolve("database").toAbsolutePath().toString();
             connected = dbManager.connectH2(path);
         } else {
-            String path = dataDirectory.resolve("database").toString();
+            String path = dataDirectory.resolve("database").toAbsolutePath().toString();
             connected = dbManager.connectH2(path);
         }
 
@@ -146,7 +147,6 @@ public class Main {
         checkVersion = new CheckVersion();
         CheckVersion.startVersionCheck(this, checkVersion, server, logger);
 
-        logger.info("NAT-Whitelist has been enabled!");
     }
 
     @Subscribe
@@ -255,7 +255,7 @@ public class Main {
         );
     }
 
-    private void saveConfig() {
+    public void saveConfig() {
         try {
             YamlConfigurationLoader loader = createLoader();
             loader.save(config);
