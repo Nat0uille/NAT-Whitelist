@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public class WhitelistCommand implements CommandExecutor {
@@ -147,18 +148,16 @@ public class WhitelistCommand implements CommandExecutor {
 
     private void removeOfflinePlayerInWhitelist(CommandSender sender) {
         try {
-            List<UUID> whitelistedUUIDs = main.getWhitelistManager().list();
+            Map<UUID, String> whitelistedPlayers = main.getWhitelistManager().listWithNames();
             List<String> removedPlayers = new ArrayList<>();
 
-            for (UUID uuid : whitelistedUUIDs) {
+            for (Map.Entry<UUID, String> entry : whitelistedPlayers.entrySet()) {
+                UUID uuid = entry.getKey();
+                String playerName = entry.getValue();
                 Player onlinePlayer = Bukkit.getPlayer(uuid);
 
                 // Si le joueur n'est pas en ligne, le retirer
                 if (onlinePlayer == null) {
-                    String playerName = Bukkit.getOfflinePlayer(uuid).getName();
-                    if (playerName == null) {
-                        playerName = uuid.toString();
-                    }
 
                     main.getWhitelistManager().remove(uuid);
                     removedPlayers.add(playerName);
