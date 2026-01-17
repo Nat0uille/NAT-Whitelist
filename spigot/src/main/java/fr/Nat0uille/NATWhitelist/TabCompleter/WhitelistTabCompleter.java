@@ -34,7 +34,7 @@ public class WhitelistTabCompleter implements TabCompleter {
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         updateCache();
         if (args.length == 1) {
-            return Arrays.asList("add", "remove", "list", "on", "off", "removeoffilne");
+            return Arrays.asList("add", "remove", "list", "on", "off", "removeoffline", "enable", "disable", "reload", "help");
         }
         if (args.length >= 2) {
             String prefix = args[args.length - 1].toLowerCase();
