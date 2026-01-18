@@ -24,7 +24,7 @@ public class CheckVersion {
                     checkVersion.localVersion = plugin.getVersion();
                     if (!checkVersion.remoteVersion.equals(checkVersion.localVersion)) {
                         logger.warn("The plugin is not up to date. Local version: " +
-                            checkVersion.localVersion + ", latest version: " + checkVersion.remoteVersion);
+                            checkVersion.localVersion + ", latest version: " + checkVersion.remoteVersion + "\\nPlease download the new version on : modrinth.com/plugin/nat-whitelist");
                         checkVersion.outdated = true;
                     }
                 } catch (Exception e) {

@@ -24,7 +24,7 @@ public class CheckVersion {
                     checkVersion.remoteVersion = fetchRemoteVersion();
                     checkVersion.localVersion = fetchLocalVersion(plugin);
                     if (!checkVersion.remoteVersion.equals(checkVersion.localVersion)) {
-                        Bukkit.getLogger().warning("[NAT-Whitelist] The plugin is not up to date. Local version: " + checkVersion.localVersion + ", latest version: " + checkVersion.remoteVersion);
+                        Bukkit.getLogger().warning("[NAT-Whitelist] The plugin is not up to date. Local version: " + checkVersion.localVersion + ", latest version: " + checkVersion.remoteVersion + "\\nPlease download the new version on : modrinth.com/plugin/nat-whitelist");
                         checkVersion.outdated = true;
                     }
                 } catch (Exception e) {
