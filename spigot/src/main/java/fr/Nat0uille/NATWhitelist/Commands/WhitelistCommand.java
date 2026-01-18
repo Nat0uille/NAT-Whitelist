@@ -100,6 +100,16 @@ public class WhitelistCommand implements CommandExecutor {
             whitelistHandler.reloadConfig(sender);
             return true;
         }
+
+        if (args[0].equalsIgnoreCase("addallonlineplayer")) {
+            if (!sender.hasPermission("natwhitelist.addallonlineplayer")) {
+                sender.sendMessage(whitelistHandler.getPrefix().append(whitelistHandler.getNoPermission()));
+                return true;
+            }
+            whitelistHandler.addAllOnlinePlayersToWhitelist(sender);
+            return true;
+        }
+
         return false;
     }
 }

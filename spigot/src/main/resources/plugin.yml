@@ -26,6 +26,8 @@ permissions:
     description: Bypass the whitelist
   natwhitelist.list:
     description: List all whitelisted players
+  natwhitelist.addallonlineplayer:
+    description: Add all online players to whitelist
   natwhitelist.admin:
     description: All permissions
     default: op
@@ -38,6 +40,7 @@ permissions:
       natwhitelist.removeoffline: true
       natwhitelist.bypass: true
       natwhitelist.list: true
+      natwhitelist.addallonlineplayer: true
   natwhitelist.*:
     description: All permissions
     children:

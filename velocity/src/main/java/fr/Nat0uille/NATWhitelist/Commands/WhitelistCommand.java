@@ -109,6 +109,15 @@ public class WhitelistCommand implements SimpleCommand {
             }
             whitelistHandler.reloadConfig(sender);
         }
+
+        if (args[0].equalsIgnoreCase("addallonlineplayer")) {
+            if (!sender.hasPermission("natwhitelist.addallonlineplayer")) {
+                sender.sendMessage(whitelistHandler.getPrefix().append(whitelistHandler.getNoPermission()));
+                return;
+            }
+            whitelistHandler.addAllOnlinePlayersToWhitelist(sender);
+            return;
+        }
     }
 
     @Override
@@ -117,7 +126,7 @@ public class WhitelistCommand implements SimpleCommand {
         String[] args = invocation.arguments();
 
         if (args.length == 0 || args.length == 1) {
-            return Arrays.asList("add", "remove", "list", "on", "off", "removeoffline", "enable", "disable", "reload", "help");
+            return Arrays.asList("add", "remove", "list", "on", "off", "removeoffline", "enable", "disable", "reload", "help", "addallonlineplayer");
         }
 
         // args.length >= 2

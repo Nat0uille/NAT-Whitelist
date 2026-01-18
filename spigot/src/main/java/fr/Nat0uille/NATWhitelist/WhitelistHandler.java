@@ -270,4 +270,12 @@ public class WhitelistHandler {
     public boolean isWhitelisted(UUID uuid) {
         return whitelistManager.isWhitelisted(uuid);
     }
+
+    public void addAllOnlinePlayersToWhitelist(CommandSender sender) {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            whitelistManager.add(player.getUniqueId(), player.getName());
+            sender.sendMessage(prefix.append(mm.deserialize(main.getLangMessage("add-success")
+                    .replace("{player}", player.getName()))));
+        }
+    }
 }

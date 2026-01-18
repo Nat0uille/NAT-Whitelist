@@ -276,4 +276,12 @@ public class WhitelistHandler {
     public boolean isWhitelisted(UUID uuid) {
         return whitelistManager.isWhitelisted(uuid);
     }
+
+    public void addAllOnlinePlayersToWhitelist(CommandSource sender) {
+        for (Player player : server.getAllPlayers()) {
+            whitelistManager.add(player.getUniqueId(), player.getUsername());
+            sender.sendMessage(prefix.append(mm.deserialize(main.getLangMessage("add-success")
+                    .replace("{player}", player.getUsername()))));
+        }
+    }
 }
