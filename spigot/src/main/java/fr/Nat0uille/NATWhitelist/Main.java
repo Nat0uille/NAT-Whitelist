@@ -121,7 +121,8 @@ public final class Main extends JavaPlugin {
 
     private final Map<String, String> notFoundMessages = Map.of(
             "en-us", "Message not found, please check {key} in your language file! (en-us.yml)",
-            "fr-fr", "Message introuvable, vérifiez {key} dans votre fichier de langue ! (fr-fr.yml)"
+            "fr-fr", "Message introuvable, vérifiez {key} dans votre fichier de langue ! (fr-fr.yml)",
+            "es-es", "Mensaje no encontrado, compruebe {key} en su archivo de idioma (es-es.yml)"
     );
 
 
@@ -173,7 +174,7 @@ public final class Main extends JavaPlugin {
             langDir.mkdirs();
         }
 
-        String[] commonLangs = {"en-us.yml", "fr-fr.yml"};
+        String[] commonLangs = {"en-us.yml", "fr-fr.yml", "es-es.yml"};
         for (String langFile : commonLangs) {
             File outFile = new File(langDir, langFile);
             if (!outFile.exists()) {

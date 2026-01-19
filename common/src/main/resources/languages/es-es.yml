@@ -1,0 +1,56 @@
+#######################################################################################################
+# Todos los textos utilizan el formato MiniMessage. Si usas algo más, ¡no funcionará!                #
+# Para crear tus mensajes, puedes usar el sitio web https://webui.advntr.dev/                        #
+#######################################################################################################
+
+# Prefijo
+prefix: "<bold><gradient:#C70000:#951919>NAT-Whitelist</gradient></bold> <gray>• "
+
+# Sin permiso
+no-permission: "<#C70000>¡Lo siento, pero no tienes el permiso requerido para ejecutar esto!"
+
+# Mensajes de whitelist
+add-success: "<#ff6e6e>¡El jugador <color:#C70000>{player}</color> ha sido <color:#63c74d>añadido</color> a la whitelist!"
+add-error: "<#C70000>¡Ocurrió un error al añadir <color:#C70000>{player}</color> a la whitelist!"
+already-on-whitelist: "<#C70000>¡El jugador <color:#C70000>{player}</color> ya está en la whitelist!"
+remove-success: "<#ff6e6e>¡El jugador <color:#C70000>{player}</color> ha sido <color:#C70000>eliminado</color> de la whitelist!"
+not-on-whitelist: "<#C70000>¡El jugador <color:#C70000>{player}</color> no está en la whitelist!"
+player-never-joined: "<#C70000>¡El jugador <color:#C70000>{player}</color> nunca se unió al servidor!"
+removeoffline-empty: "<#C70000>¡No hay jugadores desconectados en la whitelist!"
+removeoffline-success: "<#ff6e6e>¡Los jugadores <color:#C70000>{players}</color> han sido <color:#C70000>eliminados</color> de la whitelist porque están desconectados!"
+kick-message: "<#C70000>¡No estás en la whitelist de este servidor!"
+
+outdated: "<#C70000>El plugin no está actualizado. Versión local: <bold>{local}</bold>, última versión: <bold>{latest}</bold>"
+
+# Comandos de whitelist
+reload-config: "<#63c74d>¡La configuración ha sido recargada exitosamente!"
+list: "<#ff6e6e>La whitelist contiene los siguientes jugadores: "
+list-empty: "<#C70000>¡No hay jugadores en la whitelist!"
+
+error: "<#C70000>¡Ocurrió un error al ejecutar este comando!"
+help: "<#C70000><bold>AYUDA</bold><br><br><#ff6e6e>/whitelist <#951919>add <jugador> <#d43535>Añadir un jugador a la whitelist<newline><#ff6e6e>/whitelist <#951919>remove <jugador> <#d43535>Eliminar jugadores de la whitelist<newline><#ff6e6e>/whitelist <#951919>list <#d43535>Mostrar jugadores en la whitelist<#ff6e6e><br>/whitelist <#951919>reload <#d43535>Recarga la configuración del plugin<newline><#ff6e6e>/whitelist <#951919>enable <#d43535>Activa la whitelist<newline><#ff6e6e>/whitelist <#951919>disable <#d43535>Desactiva la whitelist<newline><#ff6e6e>/whitelist <#951919>removeoffline <#d43535>Eliminar jugadores desconectados<newline><#ff6e6e>/whitelist <#951919>addallonlineplayer <#d43535>Añadir todos los jugadores en línea a la whitelist"
+enabled: "<#63c74d>¡La whitelist ha sido activada exitosamente!"
+already-enabled: "<#C70000>¡La whitelist ya está activada!"
+disabled: "<#63c74d>¡La whitelist ha sido desactivada exitosamente!"
+already-disabled: "<#C70000>¡La whitelist ya está desactivada!"
+add-usage: "<#C70000>Uso: /whitelist add <jugador>"
+remove-usage: "<#C70000>Uso: /whitelist remove <jugador>"
+reload: "<#63c74d>¡La configuración ha sido recargada exitosamente!"
+
+# Mensajes de Discord Webhook
+add:
+  title: "Jugador añadido a la whitelist"
+  description: "Jugador: {player}"
+remove:
+  title: "Jugador eliminado de la whitelist"
+  description: "Jugador: {player}"
+not-whitelisted:
+  title: "Un jugador intentó unirse pero no está en la whitelist"
+  description: "Jugador: {player}"
+enable:
+  title: "Whitelist activada"
+  description: "La whitelist ha sido activada."
+disable:
+  title: "Whitelist desactivada"
+  description: "La whitelist ha sido desactivada."
+
