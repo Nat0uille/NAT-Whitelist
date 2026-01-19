@@ -28,7 +28,7 @@ list: "<#ff6e6e>The whitelist contains the following players: "
 list-empty: "<#C70000>There are no players on the whitelist!"
 
 error: "<#C70000>An error occurred while executing this command!"
-help: "<#C70000><bold>HELP</bold><br><br><#ff6e6e>/whitelist <#951919>add <player> <#d43535>Add a player to the whitelist<newline><#ff6e6e>/whitelist <#951919>remove <player> <#d43535>Remove players from the whitelist<newline><#ff6e6e>/whitelist <#951919>list <#d43535>Display whitelisted players<#ff6e6e><br>/whitelist <#951919>reload <#d43535>Reloads the plugin configuration<newline><#ff6e6e>/whitelist <#951919>enable <#d43535>Enables the whitelist<newline><#ff6e6e>/whitelist <#951919>disable <#d43535>Disables the whitelist<newline><#ff6e6e>/whitelist <#951919>removeoffline <#d43535>Remove offline players"
+help: "<#C70000><bold>HELP</bold><br><br><#ff6e6e>/whitelist <#951919>add <player> <#d43535>Add a player to the whitelist<newline><#ff6e6e>/whitelist <#951919>remove <player> <#d43535>Remove players from the whitelist<newline><#ff6e6e>/whitelist <#951919>list <#d43535>Display whitelisted players<#ff6e6e><br>/whitelist <#951919>reload <#d43535>Reloads the plugin configuration<newline><#ff6e6e>/whitelist <#951919>enable <#d43535>Enables the whitelist<newline><#ff6e6e>/whitelist <#951919>disable <#d43535>Disables the whitelist<newline><#ff6e6e>/whitelist <#951919>removeoffline <#d43535>Remove offline players<newline><#ff6e6e>/whitelist <#951919>addallonlineplayer <#d43535>Add all online players to the whitelist"
 enabled: "<#63c74d>The whitelist has been enabled successfully!"
 already-enabled: "<#C70000>The whitelist is already enabled!"
 disabled: "<#63c74d>The whitelist has been disabled successfully!"
