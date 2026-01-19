@@ -10,19 +10,14 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
-import java.sql.Connection;
 import java.util.Map;
 
 public final class Main extends JavaPlugin {
-    private Connection sqlConnection;
 
     private CheckVersion checkVersion;
     private FileConfiguration langConfig;
 
     private DatabaseManager dbManager;
-    private DiscordWebhook discordWebhook;
-    private WhitelistManager whitelistManager;
-    private WhitelistHandler whitelistHandler;
 
     @Override
     public void onEnable() {
@@ -31,7 +26,7 @@ public final class Main extends JavaPlugin {
         loadLang();
 
         int pluginId = 28891;
-        Metrics metrics = new Metrics(this, pluginId);
+        new Metrics(this, pluginId);
 
         ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
         console.sendMessage("");
@@ -53,7 +48,7 @@ public final class Main extends JavaPlugin {
         String username = getConfig().getString("database.username");
         String password = getConfig().getString("database.password");
 
-        boolean connected = false;
+        boolean connected;
         if ("MySQL".equalsIgnoreCase(type)) {
             connected = dbManager.connectMySQL(host, port, dbName, username, password);
         } else if ("MariaDB".equalsIgnoreCase(type)) {
@@ -74,8 +69,8 @@ public final class Main extends JavaPlugin {
 
         dbManager.execute("CREATE TABLE IF NOT EXISTS nat_whitelist (player_name VARCHAR(16) PRIMARY KEY, uuid VARCHAR(36))");
 
-        whitelistManager = new WhitelistManager(dbManager, playerName -> Bukkit.getPlayer(playerName) != null);
-        whitelistHandler = new WhitelistHandler(this, whitelistManager);
+        WhitelistManager whitelistManager = new WhitelistManager(dbManager, playerName -> Bukkit.getPlayer(playerName) != null);
+        WhitelistHandler whitelistHandler = new WhitelistHandler(this, whitelistManager);
 
         getServer().getPluginManager().registerEvents(new PlayerListener(this, whitelistManager, whitelistHandler), this);
 
@@ -104,9 +99,6 @@ public final class Main extends JavaPlugin {
         return checkVersion;
     }
 
-    public DatabaseManager getDatabaseManager() {
-        return dbManager;
-    }
 
     public void loadLang() {
         String lang = getConfig().getString("lang");
@@ -133,9 +125,7 @@ public final class Main extends JavaPlugin {
     );
 
 
-    public DiscordWebhook getDiscordWebhook() {
-        return discordWebhook;
-    }
+
 
     private void displayFirstRunMessage(ConsoleCommandSender console) {
         console.sendMessage("");
