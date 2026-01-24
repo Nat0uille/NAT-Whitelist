@@ -1,7 +1,6 @@
 apply plugin: 'java'
 
 group = 'fr.Nat0uille'
-version = '1.0'
 
 repositories {
     mavenCentral()
@@ -12,10 +11,17 @@ repositories {
 
 dependencies {
     compileOnly("net.md-5:bungeecord-api:1.21-R0.3")
+    implementation project(':common')
+    implementation 'com.zaxxer:HikariCP:5.0.1'
+    implementation 'com.h2database:h2:2.1.214'
+    implementation 'mysql:mysql-connector-java:8.0.33'
+    implementation 'org.mariadb.jdbc:mariadb-java-client:3.1.4'
+    implementation 'net.kyori:adventure-text-minimessage:4.18.0'
+    implementation 'net.kyori:adventure-platform-bungeecord:4.3.4'
 }
 
 
-def targetJavaVersion = 8
+def targetJavaVersion = 21
 java {
     def javaVersion = JavaVersion.toVersion(targetJavaVersion)
     sourceCompatibility = javaVersion
@@ -41,4 +47,21 @@ processResources {
     filesMatching('bungee.yml') {
         expand props
     }
+
+    // Copier les ressources du module common
+    from('../common/src/main/resources') {
+        include 'config.yml'
+        include 'languages/**'
+    }
 }
+
+jar {
+    destinationDirectory = file("$rootDir/jar")
+    archiveFileName = "${rootProject.name}-${version}-bungee.jar"
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+

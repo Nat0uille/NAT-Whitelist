@@ -13,5 +13,4 @@ rootProject.name = 'NAT-Whitelist'
 include "common"
 include "spigot"
 include "velocity"
-include "fabric"
 include "bungee"

@@ -1,4 +1,5 @@
 name: NAT-Whitelist
-version: '1.0'
+version: '2.0.0'
 main: fr.Nat0uille.NATWhitelist.Main
 author: Nat0uille
+description: Advanced whitelist plugin for BungeeCord
