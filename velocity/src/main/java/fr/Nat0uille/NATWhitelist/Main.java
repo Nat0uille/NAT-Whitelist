@@ -137,8 +137,8 @@ public class Main {
         // Register commands
         CommandManager commandManager = server.getCommandManager();
         commandManager.register(
-            commandManager.metaBuilder("whitelist")
-                .aliases("wl", "natwhitelist")
+            commandManager.metaBuilder("whitelistvelocity")
+                .aliases("wlv", "natwhitelistvelocity")
                 .build(),
             new WhitelistCommand(this, whitelistManager, whitelistHandler, server)
         );
