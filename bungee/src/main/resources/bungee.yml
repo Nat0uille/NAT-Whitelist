@@ -1,0 +1,4 @@
+name: NAT-Whitelist
+version: '1.0'
+main: fr.Nat0uille.NATWhitelist.Main
+author: Nat0uille
