@@ -17,14 +17,29 @@ public class ConfigMigration {
         if (configVersion.equals("1") || !containsKey.apply("config-version")) {
             if (containsKey.apply("kicknowhitelisted")) {
                 boolean oldValue = getBoolean.apply("kicknowhitelisted");
-
                 setConfig.set("kick-not-whitelisted-players", oldValue);
-
                 setConfig.set("kicknowhitelisted", null);
             }
 
             setConfig.set("config-version", "2.0");
+            saveConfig.run();
+        }
+    }
 
+    public static void migrateToV21(
+            Function<String, String> getConfigVersion,
+            Function<String, Boolean> containsKey,
+            ConfigSetter setConfig,
+            Runnable saveConfig) {
+
+        String configVersion = getConfigVersion.apply("2.0");
+
+        if (configVersion.equals("2.0")) {
+            if (!containsKey.apply("auto-update")) {
+                setConfig.set("auto-update", true);
+            }
+
+            setConfig.set("config-version", "2.1");
             saveConfig.run();
         }
     }

@@ -160,6 +160,13 @@ public final class Main extends JavaPlugin {
                 config::set,
                 this::saveConfig
         );
+
+        ConfigMigration.migrateToV21(
+                defaultValue -> config.getString("config-version", defaultValue),
+                config::contains,
+                config::set,
+                this::saveConfig
+        );
     }
 
 

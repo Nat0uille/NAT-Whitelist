@@ -9,7 +9,7 @@
 #######################################################################################################
 
 # Version of the config file.
-config-version: 2.0
+config-version: 2.1
 
 # Language of the plugin (en-us / fr-fr)
 lang: en-us
