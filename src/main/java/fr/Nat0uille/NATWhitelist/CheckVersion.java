@@ -1,7 +1,6 @@
 package fr.Nat0uille.NATWhitelist;
 
 import org.bukkit.Bukkit;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.BufferedReader;
@@ -13,25 +12,31 @@ public class CheckVersion {
     private static final long PERIOD_TICKS = 6 * 60 * 60 * 20L;
 
     public boolean outdated;
+    public boolean updateDownloaded;
     public String remoteVersion;
     public String localVersion;
 
-    public static void startVersionCheck(Plugin plugin, CheckVersion checkVersion) {
+    public static void startVersionCheck(Main main, CheckVersion checkVersion) {
         new BukkitRunnable() {
             @Override
             public void run() {
                 try {
                     checkVersion.remoteVersion = fetchRemoteVersion();
-                    checkVersion.localVersion = fetchLocalVersion(plugin);
+                    checkVersion.localVersion = main.getDescription().getVersion();
                     if (!checkVersion.remoteVersion.equals(checkVersion.localVersion)) {
-                        Bukkit.getLogger().warning("[NAT-Whitelist] The plugin is not up to date. Local version: " + checkVersion.localVersion + ", latest version: " + checkVersion.remoteVersion + "\\nPlease download the new version on : modrinth.com/plugin/nat-whitelist");
                         checkVersion.outdated = true;
+                        main.getLogger().warning("The plugin is not up to date. Local: " + checkVersion.localVersion + ", latest: " + checkVersion.remoteVersion + ". Download: modrinth.com/plugin/nat-whitelist");
+
+                        if (!checkVersion.updateDownloaded && main.getConfig().getBoolean("auto-update", false)) {
+                            checkVersion.updateDownloaded = true;
+                            new AutoUpdater(main).downloadUpdate();
+                        }
                     }
                 } catch (Exception e) {
                     Bukkit.getLogger().severe("[NAT-Whitelist] Error while checking version: " + e.getMessage());
                 }
             }
-        }.runTaskTimerAsynchronously(plugin, 0L, PERIOD_TICKS);
+        }.runTaskTimerAsynchronously(main, 0L, PERIOD_TICKS);
     }
 
     public boolean outdated() {
@@ -51,9 +56,5 @@ public class CheckVersion {
         try (BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()))) {
             return in.readLine().trim();
         }
-    }
-
-    private static String fetchLocalVersion(Plugin plugin) {
-        return plugin.getDescription().getVersion();
     }
 }

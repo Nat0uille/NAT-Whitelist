@@ -99,6 +99,10 @@ public final class Main extends JavaPlugin {
         return checkVersion;
     }
 
+    public java.io.File getPluginFile() {
+        return getFile();
+    }
+
 
     public void loadLang() {
         String lang = getConfig().getString("lang");

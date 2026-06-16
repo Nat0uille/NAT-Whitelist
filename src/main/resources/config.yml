@@ -32,3 +32,7 @@ kick-not-whitelisted-players: true
 
 # Discord webhook URL. If "none" is specified, the plugin will not send messages to Discord.
 discord-webhook-url: none
+
+# If true, the plugin will automatically download the latest version from Modrinth when an update is available.
+# The update will be applied on the next server restart.
+auto-update: true
