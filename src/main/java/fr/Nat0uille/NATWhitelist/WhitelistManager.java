@@ -27,7 +27,7 @@ public class WhitelistManager {
 
     public boolean isWhitelisted(UUID uuid) {
         try {
-            List<Map<String, Object>> results = databaseManager.select("nat_whitelist", "uuid = '" + uuid.toString() + "'");
+            List<Map<String, Object>> results = databaseManager.select("nat_whitelist", "uuid = ?", uuid.toString());
             return !results.isEmpty();
         } catch (Exception e) {
             e.printStackTrace();
@@ -37,7 +37,7 @@ public class WhitelistManager {
 
     public boolean isWhitelisted(String playerName) {
         try {
-            List<Map<String, Object>> results = databaseManager.select("nat_whitelist", "player_name = '" + playerName + "'");
+            List<Map<String, Object>> results = databaseManager.select("nat_whitelist", "player_name = ?", playerName);
             return !results.isEmpty();
         } catch (Exception e) {
             e.printStackTrace();
@@ -140,7 +140,7 @@ public class WhitelistManager {
 
     public String getPlayerNameByUUID(UUID uuid) {
         try {
-            List<Map<String, Object>> results = databaseManager.select("nat_whitelist", "uuid = '" + uuid.toString() + "'");
+            List<Map<String, Object>> results = databaseManager.select("nat_whitelist", "uuid = ?", uuid.toString());
             if (!results.isEmpty()) {
                 Object nameObj = results.getFirst().get("player_name");
                 return nameObj != null ? nameObj.toString() : null;

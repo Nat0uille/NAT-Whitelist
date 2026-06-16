@@ -21,7 +21,7 @@ public final class Main extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        boolean firstRun = saveCommonResources();
+        boolean firstRun = saveDefaultResources();
         migrateConfig();
         loadLang();
 
@@ -159,25 +159,18 @@ public final class Main extends JavaPlugin {
     }
 
 
-    public boolean saveCommonResources() {
-        // Sauvegarder config.yml depuis common
-        File configFile = new File(getDataFolder(), "config.yml");
-        boolean isFirstRun = !configFile.exists();
+    private boolean saveDefaultResources() {
+        boolean isFirstRun = !new File(getDataFolder(), "config.yml").exists();
 
-        if (isFirstRun) {
-            saveResource("config.yml", false);
-        }
+        saveDefaultConfig();
 
-        // Sauvegarder les fichiers de langues depuis common
         File langDir = new File(getDataFolder(), "languages");
         if (!langDir.exists()) {
             langDir.mkdirs();
         }
 
-        String[] commonLangs = {"en-us.yml", "fr-fr.yml", "es-es.yml"};
-        for (String langFile : commonLangs) {
-            File outFile = new File(langDir, langFile);
-            if (!outFile.exists()) {
+        for (String langFile : new String[]{"en-us.yml", "fr-fr.yml", "es-es.yml"}) {
+            if (!new File(langDir, langFile).exists()) {
                 saveResource("languages/" + langFile, false);
             }
         }
