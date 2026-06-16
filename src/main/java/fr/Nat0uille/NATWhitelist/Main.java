@@ -163,7 +163,7 @@ public final class Main extends JavaPlugin {
 
         ConfigMigration.migrateToV21(
                 defaultValue -> config.getString("config-version", defaultValue),
-                config::contains,
+                key -> config.contains(key, true),
                 config::set,
                 this::saveConfig
         );
