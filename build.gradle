@@ -21,7 +21,7 @@ dependencies {
     compileOnly 'com.h2database:h2:2.4.240'
     compileOnly 'com.mysql:mysql-connector-j:9.7.0'
     compileOnly 'org.mariadb.jdbc:mariadb-java-client:3.5.7'
-    compileOnly 'com.zaxxer:HikariCP:7.0.2'
+    compileOnly 'com.zaxxer:HikariCP:7.1.0'
 
     compileOnly("io.papermc.paper:paper-api:26.2-rc-2.build.9-alpha")
 }
