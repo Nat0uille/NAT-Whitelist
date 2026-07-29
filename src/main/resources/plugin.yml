@@ -33,6 +33,8 @@ permissions:
     description: List all whitelisted players
   natwhitelist.addallonlineplayer:
     description: Add all online players to whitelist
+  natwhitelist.adminwhitelist:
+    description: Toggle the admin-only whitelist mode
   natwhitelist.admin:
     description: All permissions
     default: op
@@ -46,6 +48,7 @@ permissions:
       natwhitelist.bypass: true
       natwhitelist.list: true
       natwhitelist.addallonlineplayer: true
+      natwhitelist.adminwhitelist: true
   natwhitelist.*:
     description: All permissions
     children:

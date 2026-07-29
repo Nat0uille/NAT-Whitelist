@@ -29,7 +29,7 @@ public class WhitelistTabCompleter implements TabCompleter {
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         updateCache();
         if (args.length == 1) {
-            return Arrays.asList("add", "remove", "list", "on", "off", "removeoffline", "enable", "disable", "reload", "help", "addallonlineplayer");
+            return Arrays.asList("add", "remove", "list", "on", "off", "admin", "removeoffline", "enable", "disable", "reload", "help", "addallonlineplayer");
         }
         if (args.length >= 2) {
             String prefix = args[args.length - 1].toLowerCase();
@@ -50,6 +50,14 @@ public class WhitelistTabCompleter implements TabCompleter {
                 for (String player : cachedPlayers) {
                     if (!alreadyTyped.contains(player) && (prefix.isEmpty() || player.toLowerCase().contains(prefix))) {
                         result.add(player);
+                    }
+                }
+                return result;
+            }
+            if (args[0].equalsIgnoreCase("admin") && args.length == 2) {
+                for (String option : Arrays.asList("on", "off")) {
+                    if (prefix.isEmpty() || option.startsWith(prefix)) {
+                        result.add(option);
                     }
                 }
                 return result;

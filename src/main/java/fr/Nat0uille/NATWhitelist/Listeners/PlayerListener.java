@@ -21,6 +21,7 @@ public class PlayerListener implements Listener {
     MiniMessage mm = MiniMessage.miniMessage();
     private Component prefix;
     private Component kickMessage;
+    private Component adminKickMessage;
 
     public PlayerListener(Main main, WhitelistManager whitelistManager, WhitelistHandler whitelistHandler) {
         this.main = main;
@@ -30,6 +31,7 @@ public class PlayerListener implements Listener {
         // Component messages
         this.prefix = mm.deserialize(main.getLangMessage("prefix"));
         this.kickMessage = mm.deserialize(main.getLangMessage("kick-message"));
+        this.adminKickMessage = mm.deserialize(main.getLangMessage("admin-kick-message"));
     }
 
     @EventHandler
@@ -54,10 +56,19 @@ public class PlayerListener implements Listener {
         if (storedName != null && !storedName.equalsIgnoreCase(currentName)) {
             whitelistManager.updatePlayerName(playerUUID, currentName);
         }
-        if (!event.getPlayer().hasPermission("natwhitelist.bypass")) {
-            if (whitelistHandler.isEnabled() && !whitelistManager.isWhitelisted(playerUUID)) {
-                event.disallow(PlayerLoginEvent.Result.KICK_WHITELIST, prefix.append(kickMessage));
+        if (event.getPlayer().hasPermission("natwhitelist.bypass")) {
+            return;
+        }
+
+        if (whitelistHandler.isAdminWhitelistEnabled()) {
+            if (!event.getPlayer().hasPermission("natwhitelist.admin")) {
+                event.disallow(PlayerLoginEvent.Result.KICK_WHITELIST, prefix.append(adminKickMessage));
             }
+            return;
+        }
+
+        if (whitelistHandler.isEnabled() && !whitelistManager.isWhitelisted(playerUUID)) {
+            event.disallow(PlayerLoginEvent.Result.KICK_WHITELIST, prefix.append(kickMessage));
         }
     }
 }

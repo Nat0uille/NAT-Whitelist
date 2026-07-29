@@ -9,7 +9,7 @@
 #######################################################################################################
 
 # Version of the config file.
-config-version: 2.1
+config-version: 2.2
 
 # Language of the plugin (en-us / fr-fr)
 lang: en-us
@@ -29,6 +29,10 @@ enabled: true
 
 # If true, the player will be kicked when he is not whitelisted and is on the server.
 kick-not-whitelisted-players: true
+
+# If true, only players with the natwhitelist.admin or natwhitelist.bypass permission can join the server,
+# regardless of the normal whitelist state. Useful to let admins in before opening the server to whitelisted players.
+admin-whitelist-enabled: false
 
 # Discord webhook URL. If "none" is specified, the plugin will not send messages to Discord.
 discord-webhook-url: none

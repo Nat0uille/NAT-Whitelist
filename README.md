@@ -28,6 +28,7 @@ NAT-Whitelist is a powerful and flexible whitelist management plugin for Minecra
 | `/whitelist reload`        | Reloads the plugin configuration           |
 | `/whitelist enable`        | Enables the whitelist                      |
 | `/whitelist disable`       | Disables the whitelist                     |
+| `/whitelist admin <on|off>` | Restricts the server to admins only (`natwhitelist.admin`/`natwhitelist.bypass`), overriding the normal whitelist |
 | `/whitelist removeoffline` | Remove offlines players                    |
 
 ## Permissions
@@ -42,5 +43,6 @@ NAT-Whitelist is a powerful and flexible whitelist management plugin for Minecra
 | `natwhitelist.removeoffline` | Allows offline players to be removed             | 
 | `natwhitelist.bypass`        | Allows joining even without being whitelisted    |
 | `natwhitelist.list`          | Allows you to list whitelisted players           |
-| `natwhitelist.admin`         | Grants all NAT-Whitelist rights (inherits all of the above permissions) |
+| `natwhitelist.adminwhitelist` | Allows you to toggle the admin-only whitelist mode (`/whitelist admin on\|off`) |
+| `natwhitelist.admin`         | Grants all NAT-Whitelist rights (inherits all of the above permissions), and is also the permission checked to let admins join while admin-only mode is active |
 | `natwhitelist.*`             | Same as natwhitelist.admin                       |

@@ -38,6 +38,21 @@ public class WhitelistCommand implements CommandExecutor {
             return true;
         }
 
+        if (args[0].equalsIgnoreCase("admin")) {
+            if (!sender.hasPermission("natwhitelist.adminwhitelist")) {
+                sender.sendMessage(whitelistHandler.getPrefix().append(whitelistHandler.getNoPermission()));
+                return true;
+            }
+
+            if (args.length < 2 || (!args[1].equalsIgnoreCase("on") && !args[1].equalsIgnoreCase("off"))) {
+                sender.sendMessage(whitelistHandler.getPrefix().append(mm.deserialize(main.getLangMessage("admin-whitelist-usage"))));
+                return true;
+            }
+
+            whitelistHandler.setAdminWhitelist(args[1].equalsIgnoreCase("on"), sender);
+            return true;
+        }
+
         if (args[0].equalsIgnoreCase("add")) {
 
             if (!sender.hasPermission("natwhitelist.add")) {

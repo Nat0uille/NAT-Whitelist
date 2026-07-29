@@ -99,8 +99,6 @@ public class WhitelistHandler {
         UUID uuid = null;
         String finalName = playerName;
 
-        kickNoWhitelistedPlayers();
-
         // 1. Vérifier si le joueur est connecté
         Player onlinePlayer = Bukkit.getPlayer(playerName);
         if (onlinePlayer != null) {
@@ -129,6 +127,10 @@ public class WhitelistHandler {
         }
 
         whitelistManager.remove(uuid);
+
+        if (main.getConfig().getBoolean("kick-not-whitelisted-players")) {
+            kickNoWhitelistedPlayers();
+        }
 
         sender.sendMessage(prefix.append(
                 mm.deserialize(main.getLangMessage("remove-success")
@@ -228,6 +230,53 @@ public class WhitelistHandler {
             main.getConfig().set("enabled", enabled);
             main.saveConfig();
 
+        }
+    }
+
+    public void setAdminWhitelist(boolean enabled, CommandSender sender) {
+        boolean ancientEnabled = main.getConfig().getBoolean("admin-whitelist-enabled");
+
+        if (ancientEnabled == enabled) {
+            if (enabled) {
+                sender.sendMessage(prefix.append(mm.deserialize(main.getLangMessage("admin-whitelist-already-enabled"))));
+            } else {
+                sender.sendMessage(prefix.append(mm.deserialize(main.getLangMessage("admin-whitelist-already-disabled"))));
+            }
+            return;
+        }
+
+        if (enabled) {
+            kickNonAdminPlayers();
+            sender.sendMessage(prefix.append(mm.deserialize(main.getLangMessage("admin-whitelist-enabled"))));
+
+            String webhookTitle = main.getLangMessage("admin-whitelist-enable.title");
+            String webhookDescription = main.getLangMessage("admin-whitelist-enable.description");
+            discordWebhook.sendEmbed(webhookTitle, webhookDescription);
+        } else {
+            sender.sendMessage(prefix.append(mm.deserialize(main.getLangMessage("admin-whitelist-disabled"))));
+
+            String webhookTitle = main.getLangMessage("admin-whitelist-disable.title");
+            String webhookDescription = main.getLangMessage("admin-whitelist-disable.description");
+            discordWebhook.sendEmbed(webhookTitle, webhookDescription);
+        }
+
+        main.getConfig().set("admin-whitelist-enabled", enabled);
+        main.saveConfig();
+    }
+
+    public boolean isAdminWhitelistEnabled() {
+        return main.getConfig().getBoolean("admin-whitelist-enabled");
+    }
+
+    private void kickNonAdminPlayers() {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            try {
+                if (!player.hasPermission("natwhitelist.admin") && !player.hasPermission("natwhitelist.bypass")) {
+                    player.kick(prefix.append(mm.deserialize(main.getLangMessage("admin-kick-message"))));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 

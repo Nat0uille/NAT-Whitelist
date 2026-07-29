@@ -109,6 +109,8 @@ public final class Main extends JavaPlugin {
         File langFile = new File(getDataFolder(), "languages/" + lang + ".yml");
         if (!langFile.exists()) {
             saveResource("languages/" + lang + ".yml", false);
+        } else if (ConfigMigration.mergeLangWithLatestDefaults(this, lang)) {
+            getLogger().info("New messages have been added to languages/" + lang + ".yml, please check it out!");
         }
         langConfig = YamlConfiguration.loadConfiguration(langFile);
     }
@@ -151,22 +153,13 @@ public final class Main extends JavaPlugin {
 
     private void migrateConfig() {
         reloadConfig();
-        FileConfiguration config = getConfig();
 
-        ConfigMigration.migrateToV2(
-                defaultValue -> config.getString("config-version", defaultValue),
-                config::contains,
-                key -> config.getBoolean(key, true),
-                config::set,
-                this::saveConfig
-        );
+        boolean addedNewSetting = ConfigMigration.mergeWithLatestDefaults(this);
+        reloadConfig();
 
-        ConfigMigration.migrateToV21(
-                defaultValue -> config.getString("config-version", defaultValue),
-                key -> config.contains(key, true),
-                config::set,
-                this::saveConfig
-        );
+        if (addedNewSetting) {
+            getLogger().info("Your config.yml has been updated with new settings, please check it out!");
+        }
     }
 
 

@@ -19,6 +19,7 @@ player-never-joined: "<#C70000>¡El jugador <color:#C70000>{player}</color> nunc
 removeoffline-empty: "<#C70000>¡No hay jugadores desconectados en la whitelist!"
 removeoffline-success: "<#ff6e6e>¡Los jugadores <color:#C70000>{players}</color> han sido <color:#C70000>eliminados</color> de la whitelist porque están desconectados!"
 kick-message: "<#C70000>¡No estás en la whitelist de este servidor!"
+admin-kick-message: "<#C70000>¡Solo los administradores pueden unirse al servidor en este momento!"
 
 outdated: "<#C70000>El plugin no está actualizado. Versión local: <bold>{local}</bold>, última versión: <bold>{latest}</bold>"
 
@@ -28,14 +29,19 @@ list: "<#ff6e6e>La whitelist contiene los siguientes jugadores: "
 list-empty: "<#C70000>¡No hay jugadores en la whitelist!"
 
 error: "<#C70000>¡Ocurrió un error al ejecutar este comando!"
-help: "<#C70000><bold>AYUDA</bold><br><br><#ff6e6e>/whitelist <#951919>add <jugador> <#d43535>Añadir un jugador a la whitelist<newline><#ff6e6e>/whitelist <#951919>remove <jugador> <#d43535>Eliminar jugadores de la whitelist<newline><#ff6e6e>/whitelist <#951919>list <#d43535>Mostrar jugadores en la whitelist<#ff6e6e><br>/whitelist <#951919>reload <#d43535>Recarga la configuración del plugin<newline><#ff6e6e>/whitelist <#951919>enable <#d43535>Activa la whitelist<newline><#ff6e6e>/whitelist <#951919>disable <#d43535>Desactiva la whitelist<newline><#ff6e6e>/whitelist <#951919>removeoffline <#d43535>Eliminar jugadores desconectados<newline><#ff6e6e>/whitelist <#951919>addallonlineplayer <#d43535>Añadir todos los jugadores en línea a la whitelist"
+help: "<#C70000><bold>AYUDA</bold><br><br><#ff6e6e>/whitelist <#951919>add <jugador> <#d43535>Añadir un jugador a la whitelist<newline><#ff6e6e>/whitelist <#951919>remove <jugador> <#d43535>Eliminar jugadores de la whitelist<newline><#ff6e6e>/whitelist <#951919>list <#d43535>Mostrar jugadores en la whitelist<#ff6e6e><br>/whitelist <#951919>reload <#d43535>Recarga la configuración del plugin<newline><#ff6e6e>/whitelist <#951919>enable <#d43535>Activa la whitelist<newline><#ff6e6e>/whitelist <#951919>disable <#d43535>Desactiva la whitelist<newline><#ff6e6e>/whitelist <#951919>admin <on|off> <#d43535>Restringe el servidor solo a administradores<newline><#ff6e6e>/whitelist <#951919>removeoffline <#d43535>Eliminar jugadores desconectados<newline><#ff6e6e>/whitelist <#951919>addallonlineplayer <#d43535>Añadir todos los jugadores en línea a la whitelist"
 enabled: "<#63c74d>¡La whitelist ha sido activada exitosamente!"
 already-enabled: "<#C70000>¡La whitelist ya está activada!"
 disabled: "<#63c74d>¡La whitelist ha sido desactivada exitosamente!"
 already-disabled: "<#C70000>¡La whitelist ya está desactivada!"
 add-usage: "<#C70000>Uso: /whitelist add <jugador>"
 remove-usage: "<#C70000>Uso: /whitelist remove <jugador>"
+admin-whitelist-usage: "<#C70000>Uso: /whitelist admin <on|off>"
 reload: "<#63c74d>¡La configuración ha sido recargada exitosamente!"
+admin-whitelist-enabled: "<#63c74d>¡La whitelist de administradores ha sido activada exitosamente! Solo los administradores pueden unirse al servidor."
+admin-whitelist-already-enabled: "<#C70000>¡La whitelist de administradores ya está activada!"
+admin-whitelist-disabled: "<#63c74d>¡La whitelist de administradores ha sido desactivada exitosamente!"
+admin-whitelist-already-disabled: "<#C70000>¡La whitelist de administradores ya está desactivada!"
 
 # Mensajes de Discord Webhook
 add:
@@ -53,4 +59,10 @@ enable:
 disable:
   title: "Whitelist desactivada"
   description: "La whitelist ha sido desactivada."
+admin-whitelist-enable:
+  title: "Whitelist de administradores activada"
+  description: "Solo los administradores pueden unirse al servidor ahora."
+admin-whitelist-disable:
+  title: "Whitelist de administradores desactivada"
+  description: "La whitelist de administradores ha sido desactivada."
 
